@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>StudentHub - Contact Us</title>
+
+    <link rel="stylesheet"
+          href="css/contact.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header class="site-header">
+
+
+    <!-- =================================================
+         3-LINE DROPDOWN MENU
+         ================================================= -->
+
+    <div class="menu-container">
+
+        <details class="menu-details">
+
+
+            <!-- 3 LINE MENU BUTTON -->
+
+            <summary class="menu-button"
+                     aria-label="Open navigation menu">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </summary>
+
+
+            <!-- =================================================
+                 DROPDOWN NAVIGATION
+                 ================================================= -->
+
+            <nav class="dropdown-menu"
+                 aria-label="Main navigation">
+
+
+                <a href="index.html">
+
+                    <span class="menu-icon">
+                        🏠
+                    </span>
+
+                    <span>
+                        Home
+                    </span>
+
+                </a>
+
+
+                <a href="about.html">
+
+                    <span class="menu-icon">
+                        ⓘ
+                    </span>
+
+                    <span>
+                        About
+                    </span>
+
+                </a>
+
+
+                <a href="dashboard.html">
+
+                    <span class="menu-icon">
+                        ▣
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <a href="events.html">
+
+                    <span class="menu-icon">
+                        ▦
+                    </span>
+
+                    <span>
+                        Events
+                    </span>
+
+                </a>
+
+
+                <a href="profile.html">
+
+                    <span class="menu-icon">
+                        👤
+                    </span>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+
+                <a href="contact.html"
+                   aria-current="page">
+
+                    <span class="menu-icon">
+                        ✉
+                    </span>
+
+                    <span>
+                        Contact
+                    </span>
+
+                </a>
+
+
+                <a href="admin.html">
+
+                    <span class="menu-icon">
+                        ◉
+                    </span>
+
+                    <span>
+                        Admin
+                    </span>
+
+                </a>
+
+
+                <a href="faq.html">
+
+                    <span class="menu-icon">
+                        ?
+                    </span>
+
+                    <span>
+                        FAQ
+                    </span>
+
+                </a>
+
+            </nav>
+
+        </details>
+
+    </div>
+
+
+
+    <!-- =================================================
+         STUDENTHUB LOGO
+         ================================================= -->
+
+    <a href="index.html"
+       class="logo"
+       aria-label="StudentHub Home">
+
+
+        <span class="logo-icon">
+            🎓
+        </span>
+
+
+        <span class="logo-text">
+            StudentHub
+        </span>
+
+
+    </a>
+
+
+
+    <!-- =================================================
+         LOGIN / REGISTER
+         ================================================= -->
+
+    <div class="auth-buttons">
+
+
+        <a href="login.html">
+            Login
+        </a>
+
+
+        <a href="register.html">
+            Register
+        </a>
+
+
+    </div>
+
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+     ===================================================== -->
+
+<main class="main-content">
+
+
+    <!-- =================================================
+         CONTACT SECTION
+         ================================================= -->
+
+    <section class="contact-section"
+             aria-labelledby="contact-title">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="contact-heading">
+
+
+            <p class="section-label">
+                Get In Touch
+            </p>
+
+
+            <h1 id="contact-title">
+                Contact Us
+            </h1>
+
+
+            <p class="contact-intro">
+
+                Have a question or need assistance?
+                Send us a message and our team will
+                get back to you.
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             CONTACT FORM
+             ================================================= -->
+
+        <form class="contact-form"
+              action="#"
+              method="post">
+
+
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label for="contact-name">
+                    Your Name
+                </label>
+
+
+                <input
+                    type="text"
+                    id="contact-name"
+                    name="name"
+                    placeholder="Enter your name"
+                    autocomplete="name"
+                    required>
+
+            </div>
+
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="contact-email">
+                    Email Address
+                </label>
+
+
+                <input
+                    type="email"
+                    id="contact-email"
+                    name="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required>
+
+            </div>
+
+
+
+            <!-- SUBJECT -->
+
+            <div class="form-group">
+
+                <label for="contact-subject">
+                    Subject
+                </label>
+
+
+                <input
+                    type="text"
+                    id="contact-subject"
+                    name="subject"
+                    placeholder="Enter subject"
+                    required>
+
+            </div>
+
+
+
+            <!-- MESSAGE -->
+
+            <div class="form-group">
+
+                <label for="contact-message">
+                    Message
+                </label>
+
+
+                <textarea
+                    id="contact-message"
+                    name="message"
+                    rows="6"
+                    placeholder="Write your message..."
+                    required></textarea>
+
+            </div>
+
+
+
+            <!-- SUBMIT -->
+
+            <button type="submit"
+                    class="send-message">
+
+                Send Message
+
+            </button>
+
+
+        </form>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         CONTACT INFORMATION
+         ================================================= -->
+
+    <section class="contact-information"
+             aria-labelledby="contact-info-title">
+
+
+        <h2 id="contact-info-title"
+            class="visually-hidden">
+
+            Contact Information
+
+        </h2>
+
+
+
+        <!-- EMAIL CARD -->
+
+        <article class="contact-card">
+
+
+            <div class="contact-icon"
+                 aria-hidden="true">
+
+                ✉
+
+            </div>
+
+
+            <div class="contact-card-content">
+
+                <h3>
+                    Email
+                </h3>
+
+
+                <p>
+                    info@studenthub.com
+                </p>
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- PHONE CARD -->
+
+        <article class="contact-card">
+
+
+            <div class="contact-icon"
+                 aria-hidden="true">
+
+                ☎
+
+            </div>
+
+
+            <div class="contact-card-content">
+
+                <h3>
+                    Phone
+                </h3>
+
+
+                <p>
+                    123-456-7890
+                </p>
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- LOCATION CARD -->
+
+        <article class="contact-card">
+
+
+            <div class="contact-icon"
+                 aria-hidden="true">
+
+                📍
+
+            </div>
+
+
+            <div class="contact-card-content">
+
+                <h3>
+                    Location
+                </h3>
+
+
+                <p>
+                    City, Country
+                </p>
+
+            </div>
+
+
+        </article>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer class="site-footer">
+
+
+    <p>
+
+        &copy; 2026 StudentHub.
+        All rights reserved.
+
+    </p>
+
+
+</footer>
+
+
+</body>
+
+</html>

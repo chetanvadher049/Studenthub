@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>StudentHub - Admin Panel</title>
+
+    <link rel="stylesheet"
+          href="css/admin.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header class="site-header">
+
+
+    <!-- =================================================
+         3-LINE DROPDOWN MENU
+         ================================================= -->
+
+    <div class="menu-container">
+
+        <details class="menu-details">
+
+
+            <!-- THREE LINE BUTTON -->
+
+            <summary class="menu-button"
+                     aria-label="Open navigation menu">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </summary>
+
+
+            <!-- =================================================
+                 DROPDOWN MENU
+                 ================================================= -->
+
+            <nav class="dropdown-menu"
+                 aria-label="Main navigation">
+
+
+                <a href="index.html">
+
+                    <span class="menu-icon">
+                        🏠
+                    </span>
+
+                    <span>
+                        Home
+                    </span>
+
+                </a>
+
+
+                <a href="about.html">
+
+                    <span class="menu-icon">
+                        ⓘ
+                    </span>
+
+                    <span>
+                        About
+                    </span>
+
+                </a>
+
+
+                <a href="dashboard.html">
+
+                    <span class="menu-icon">
+                        ▣
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <a href="events.html">
+
+                    <span class="menu-icon">
+                        ▦
+                    </span>
+
+                    <span>
+                        Events
+                    </span>
+
+                </a>
+
+
+                <a href="profile.html">
+
+                    <span class="menu-icon">
+                        👤
+                    </span>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+
+                <a href="contact.html">
+
+                    <span class="menu-icon">
+                        ✉
+                    </span>
+
+                    <span>
+                        Contact
+                    </span>
+
+                </a>
+
+
+                <a href="admin.html"
+                   aria-current="page">
+
+                    <span class="menu-icon">
+                        ◉
+                    </span>
+
+                    <span>
+                        Admin
+                    </span>
+
+                </a>
+
+
+                <a href="faq.html">
+
+                    <span class="menu-icon">
+                        ?
+                    </span>
+
+                    <span>
+                        FAQ
+                    </span>
+
+                </a>
+
+
+                <a href="feedback.html">
+
+                    <span class="menu-icon">
+                        ♡
+                    </span>
+
+                    <span>
+                        Feedback
+                    </span>
+
+                </a>
+
+
+            </nav>
+
+        </details>
+
+    </div>
+
+
+
+    <!-- =================================================
+         STUDENTHUB LOGO
+         ================================================= -->
+
+    <a href="index.html"
+       class="logo"
+       aria-label="StudentHub Home">
+
+
+        <span class="logo-icon">
+            🎓
+        </span>
+
+
+        <span class="logo-text">
+            StudentHub
+        </span>
+
+
+    </a>
+
+
+
+    <!-- =================================================
+         LOGIN / REGISTER
+         ================================================= -->
+
+    <div class="auth-buttons">
+
+
+        <a href="login.html">
+            Login
+        </a>
+
+
+        <a href="register.html">
+            Register
+        </a>
+
+
+    </div>
+
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+     ===================================================== -->
+
+<main class="main-content">
+
+
+    <section class="admin-section"
+             aria-labelledby="admin-title">
+
+
+        <!-- PAGE TITLE -->
+
+        <div class="page-heading">
+
+            <p class="section-label">
+                Administration
+            </p>
+
+            <h1 id="admin-title">
+                Admin Panel
+            </h1>
+
+            <p class="page-description">
+                Manage students, events, feedback and
+                monitor StudentHub activity.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ADMIN SUMMARY
+             ================================================= -->
+
+        <section class="admin-summary"
+                 aria-labelledby="summary-title">
+
+
+            <h2 id="summary-title"
+                class="visually-hidden">
+
+                Admin Summary
+
+            </h2>
+
+
+
+            <!-- USERS -->
+
+            <article class="admin-card">
+
+
+                <div class="admin-icon"
+                     aria-hidden="true">
+
+                    👥
+
+                </div>
+
+
+                <div class="admin-card-content">
+
+                    <span class="admin-card-label">
+                        Total Users
+                    </span>
+
+
+                    <strong>
+                        120
+                    </strong>
+
+
+                    <a href="#">
+                        Manage Users
+                    </a>
+
+                </div>
+
+
+            </article>
+
+
+
+            <!-- EVENTS -->
+
+            <article class="admin-card">
+
+
+                <div class="admin-icon"
+                     aria-hidden="true">
+
+                    📅
+
+                </div>
+
+
+                <div class="admin-card-content">
+
+                    <span class="admin-card-label">
+                        Total Events
+                    </span>
+
+
+                    <strong>
+                        45
+                    </strong>
+
+
+                    <a href="events.html">
+                        Manage Events
+                    </a>
+
+                </div>
+
+
+            </article>
+
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             RECENT ACTIVITY
+             ================================================= -->
+
+        <section class="recent-activity"
+                 aria-labelledby="activity-title">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <p class="section-label">
+                        Latest Updates
+                    </p>
+
+
+                    <h2 id="activity-title">
+                        Recent Activity
+                    </h2>
+
+                </div>
+
+
+                <span class="activity-status">
+                    Live
+                </span>
+
+
+            </div>
+
+
+
+            <ul class="activity-list">
+
+
+                <li>
+
+                    <span class="activity-dot"
+                          aria-hidden="true">
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            New student registered
+                        </strong>
+
+                        <small>
+                            A new student joined StudentHub.
+                        </small>
+
+                    </div>
+
+                </li>
+
+
+
+                <li>
+
+                    <span class="activity-dot"
+                          aria-hidden="true">
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            New event added
+                        </strong>
+
+                        <small>
+                            A new event has been published.
+                        </small>
+
+                    </div>
+
+                </li>
+
+
+
+                <li>
+
+                    <span class="activity-dot"
+                          aria-hidden="true">
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            New feedback received
+                        </strong>
+
+                        <small>
+                            A student submitted new feedback.
+                        </small>
+
+                    </div>
+
+                </li>
+
+
+
+                <li>
+
+                    <span class="activity-dot"
+                          aria-hidden="true">
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            Student profile updated
+                        </strong>
+
+                        <small>
+                            Student information was updated.
+                        </small>
+
+                    </div>
+
+                </li>
+
+
+            </ul>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             SYSTEM OVERVIEW
+             ================================================= -->
+
+        <section class="system-overview"
+                 aria-labelledby="overview-title">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <p class="section-label">
+                        System Status
+                    </p>
+
+
+                    <h2 id="overview-title">
+                        System Overview
+                    </h2>
+
+                </div>
+
+
+                <span class="system-status">
+                    ● Operational
+                </span>
+
+
+            </div>
+
+
+
+            <div class="overview-grid">
+
+
+                <!-- SYSTEM USERS -->
+
+                <article class="overview-item">
+
+                    <span>
+                        Registered Users
+                    </span>
+
+                    <strong>
+                        120
+                    </strong>
+
+                </article>
+
+
+
+                <!-- SYSTEM EVENTS -->
+
+                <article class="overview-item">
+
+                    <span>
+                        Published Events
+                    </span>
+
+                    <strong>
+                        45
+                    </strong>
+
+                </article>
+
+
+
+                <!-- SYSTEM FEEDBACK -->
+
+                <article class="overview-item">
+
+                    <span>
+                        Feedback
+                    </span>
+
+                    <strong>
+                        23
+                    </strong>
+
+                </article>
+
+
+
+                <!-- SYSTEM STATUS -->
+
+                <article class="overview-item">
+
+                    <span>
+                        System Status
+                    </span>
+
+                    <strong class="online">
+                        Online
+                    </strong>
+
+                </article>
+
+
+            </div>
+
+
+        </section>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer class="site-footer">
+
+
+    <p>
+
+        &copy; 2026 StudentHub.
+        All rights reserved.
+
+    </p>
+
+
+</footer>
+
+
+</body>
+
+</html>

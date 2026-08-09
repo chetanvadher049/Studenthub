@@ -1,0 +1,39 @@
+StudentHub/
+│
+├── README.md
+├── FRONTEND_FOLDER_STRUCTURE.txt
+├── SITEMAP.md
+├── LOW_FIDELITY_WIREFRAME.md
+│
+├── html/
+│   ├── index.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── courses.html
+│   ├── course_workspace.html
+│   ├── assignments.html
+│   ├── assignment-details.html
+│   ├── grades.html
+│   ├── discussions.html
+│   └── profile.html
+│
+├── html/css/
+│   ├── index.css
+│   ├── login.css
+│   ├── dashboard.css
+│   ├── courses.css
+│   ├── course_workspace.css
+│   ├── assignments.css
+│   ├── assignments-details.css
+│   ├── grades.css
+│   ├── discussions.css
+│   └── profile.css
+│
+└── wireframe/
+
+Notes:
+- This project is a frontend-only static prototype.
+- HTML5 and CSS3 are used for structure and design.
+- No JavaScript files are required for the current version.
+- No backend files or database files are included.
+- Each HTML page links to its matching CSS file in the html/css folder.
