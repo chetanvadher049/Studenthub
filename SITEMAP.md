@@ -1,90 +1,290 @@
-# StudentHub Sitemap
+StudentHub – Sitemap
 
-This sitemap reflects the pages and navigation links implemented in the current StudentHub frontend prototype.
+This sitemap is based on the actual HTML pages and navigation structure present in the uploaded StudentHub project.
 
-## Page Structure
+1. Main Website Hierarchy
 
-```text
-StudentHub Portal
+StudentHub
 │
-├── Landing Page (html/index.html)
-│   └── Links to Login, Dashboard, Courses, Assignments, Grades, Discussions, and Profile
+├── Home
+│   └── html/index.html
 │
-├── Authentication (html/login.html)
-│   ├── Login Form
-│   └── Sign Up Form
+├── About
+│   └── html/about.html
 │
-├── Dashboard (html/dashboard.html)
-│   ├── Upcoming Deadlines
-│   ├── Course Progress
-│   ├── Recent Announcements
-│   └── Quick Navigation to other sections
+├── Authentication
+│   ├── Login
+│   │   └── html/login.html
+│   └── Register
+│       └── html/register.html
 │
-├── Courses (html/courses.html)
-│   ├── Enrolled Courses
-│   │   └── View Course
-│   └── Available Courses
-│       └── Enroll Now
+├── Student Portal
+│   ├── Dashboard
+│   │   └── html/dashboard.html
+│   ├── Events
+│   │   └── html/events.html
+│   └── Profile
+│       └── html/profile.html
 │
-├── Course Workspace (html/course_workspace.html)
-│   ├── Syllabus
-│   ├── Materials
-│   ├── Announcements
-│   └── Module Actions (Watch / View / Start)
+├── Support
+│   ├── Contact
+│   │   └── html/contact.html
+│   └── FAQ
+│       └── html/faq.html
 │
-├── Assignments (html/assignments.html)
-│   ├── All
-│   ├── Pending
-│   ├── Submitted
-│   └── Graded
-│
-├── Assignment Details (html/assignment-details.html)
-│   ├── Instructions
-│   ├── Upload Submission
-│   ├── Comments
-│   └── Submit Assignment
-│
-├── Grades (html/grades.html)
-│   ├── GPA Summary
-│   └── Course Grade Table
-│
-├── Discussions (html/discussions.html)
-│   ├── Categories
-│   ├── Threads
-│   ├── Search Action
-│   └── Replies / Discussion Entries
-│
-└── Profile & Settings (html/profile.html)
-    ├── Profile Information
-    ├── Notification Preferences
-    └── Privacy & Security Preferences
-```
+└── Administration
+    └── Admin Panel
+        └── html/admin.html
 
-## Main Navigation Flow
+2. Main Navigation Flow
 
-```text
-Landing Page
-    │
-    ▼
-Login / Sign Up
-    │
-    ▼
+                         ┌──────────────┐
+                         │     HOME     │
+                         │ index.html   │
+                         └──────┬───────┘
+                                │
+       ┌────────────┬───────────┼───────────┬────────────┐
+       ▼            ▼           ▼           ▼            ▼
+     About      Dashboard     Events      Profile      Contact
+       │            │           │           │            │
+       │            └───────────┴───────────┘            │
+       │                                                 ▼
+       │                                                FAQ
+       │
+       ├──────────────► Login ───────────► Register
+       │
+       └──────────────► Admin Panel
+
+3. Page Descriptions
+
+Home
+
+html/index.html
+
+Main entry page containing the StudentHub introduction, navigation, feature/resource sections and links to other portal pages.
+
+About
+
+html/about.html
+
+Provides information about the StudentHub platform and its purpose.
+
 Dashboard
-    │
-    ├── Courses ─────────────► Course Catalog ─────► Course Workspace
-    │
-    ├── Assignments ─────────► Assignments Hub ────► Assignment Details
-    │
-    ├── Grades ─────────────► Gradebook
-    │
-    ├── Discussions ─────────► Discussion Forum
-    │
-    └── Profile ─────────────► Profile & Settings
-```
 
-## Navigation Notes
+html/dashboard.html
 
-- The landing page links to the main functional sections.
-- The sidebar on most pages provides direct access to Dashboard, Courses, Assignments, Grades, Discussions, and Profile.
-- The browser-style top bar on each page links back to earlier sections and refreshes the current page.
-- The current prototype is static and uses direct HTML links rather than dynamic routing.
+Central student area containing dashboard-style information and quick access to student activities/events.
+
+Events
+
+html/events.html
+
+Displays campus activities and event information such as workshops, hackathons and sports-related events.
+
+Profile
+
+html/profile.html
+
+Displays student profile information and includes navigation toward profile editing.
+
+Contact
+
+html/contact.html
+
+Provides a contact/enquiry interface for users.
+
+FAQ
+
+html/faq.html
+
+Provides frequently asked questions and student help information.
+
+Login
+
+html/login.html
+
+Provides the user login interface and a link to registration.
+
+Register
+
+html/register.html
+
+Provides the user registration interface and a link back to login.
+
+Admin Panel
+
+html/admin.html
+
+Provides an administrative dashboard/interface for portal management.
+
+4. Existing HTML Pages
+
+#
+
+Page
+
+File
+
+1
+
+Home
+
+html/index.html
+
+2
+
+About
+
+html/about.html
+
+3
+
+Dashboard
+
+html/dashboard.html
+
+4
+
+Events
+
+html/events.html
+
+5
+
+Profile
+
+html/profile.html
+
+6
+
+Contact
+
+html/contact.html
+
+7
+
+FAQ
+
+html/faq.html
+
+8
+
+Admin Panel
+
+html/admin.html
+
+9
+
+Login
+
+html/login.html
+
+10
+
+Register
+
+html/register.html
+
+5. CSS Relationship
+
+HTML Page                 CSS File
+────────────────────────────────────────────
+index.html          ───►  css/index.css
+about.html          ───►  css/about.css
+dashboard.html      ───►  css/dashboard.css
+events.html         ───►  css/events.css
+profile.html        ───►  css/profile.css
+contact.html        ───►  css/contact.css
+faq.html            ───►  css/faq.css
+admin.html          ───►  css/admin.css
+login.html          ───►  css/login.css
+register.html       ───►  css/register.css
+
+6. Recommended Complete Sitemap
+
+The following is the recommended final structure if all links already referenced by the project are implemented:
+
+StudentHub
+│
+├── Home
+├── About
+│
+├── Authentication
+│   ├── Login
+│   └── Register
+│
+├── Student Portal
+│   ├── Dashboard
+│   ├── Academic
+│   ├── Resources
+│   │   ├── Notes
+│   │   ├── Papers
+│   │   ├── Videos
+│   │   └── E-books
+│   ├── Events
+│   ├── Notifications
+│   ├── Timetable
+│   ├── Calendar
+│   └── Profile
+│       └── Edit Profile
+│
+├── Support
+│   ├── Contact
+│   ├── FAQ
+│   └── Feedback
+│
+├── Administration
+│   └── Admin Panel
+│
+└── Legal
+    ├── Privacy Policy
+    └── Terms & Conditions
+
+7. Referenced but Currently Missing Pages
+
+The existing navigation references these files, but they are not present in the uploaded project:
+
+feedback.html
+resources.html
+notes.html
+papers.html
+videos.html
+ebooks.html
+academic.html
+notifications.html
+timetable.html
+calendar.html
+privacy.html
+terms.html
+edit-profile.html
+
+Recommendation: either create these pages for the complete StudentHub portal or remove their links from the current navigation.
+
+8. User Flow
+
+Visitor
+  │
+  ▼
+Home
+  │
+  ├──► About
+  ├──► Events
+  ├──► Contact
+  ├──► FAQ
+  ├──► Login ───► Register
+  ├──► Dashboard
+  ├──► Profile
+  └──► Admin Panel
+
+After future authentication:
+  Login
+    │
+    ▼
+  Dashboard
+    ├──► Academic
+    ├──► Resources
+    ├──► Events
+    ├──► Notifications
+    ├──► Timetable
+    ├──► Calendar
+    └──► Profile
