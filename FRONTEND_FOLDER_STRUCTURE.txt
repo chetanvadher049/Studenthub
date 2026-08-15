@@ -6,34 +6,54 @@ StudentHub/
 ├── LOW_FIDELITY_WIREFRAME.md
 │
 ├── html/
+│   ├── css/
+│   │   ├── about.css
+│   │   ├── admin.css
+│   │   ├── contact.css
+│   │   ├── dashboard.css
+│   │   ├── events.css
+│   │   ├── faq.css
+│   │   ├── index.css
+│   │   ├── login.css
+│   │   ├── profile.css
+│   │   └── register.css
+│   │
+│   ├── about.html
+│   ├── admin.html
+│   ├── contact.html
+│   ├── dashboard.html
+│   ├── events.html
+│   ├── faq.html
+│   ├── hackathon.jpg
+│   ├── img.png
 │   ├── index.html
 │   ├── login.html
-│   ├── dashboard.html
-│   ├── courses.html
-│   ├── course_workspace.html
-│   ├── assignments.html
-│   ├── assignment-details.html
-│   ├── grades.html
-│   ├── discussions.html
-│   └── profile.html
-│
-├── html/css/
-│   ├── index.css
-│   ├── login.css
-│   ├── dashboard.css
-│   ├── courses.css
-│   ├── course_workspace.css
-│   ├── assignments.css
-│   ├── assignments-details.css
-│   ├── grades.css
-│   ├── discussions.css
-│   └── profile.css
+│   ├── profile.html
+│   ├── register.html
+│   ├── sport.webp
+│   └── workshop.jpg
 │
 └── wireframe/
 
 Notes:
 - This project is a frontend-only static prototype.
 - HTML5 and CSS3 are used for structure and design.
-- No JavaScript files are required for the current version.
+- There are 10 HTML pages and 10 matching CSS files.
+- Each CSS file has the same base name as its corresponding HTML file.
+- All CSS files are stored inside the html/css folder.
+- No JavaScript files are included in the current project structure.
 - No backend files or database files are included.
-- Each HTML page links to its matching CSS file in the html/css folder.
+- The html folder contains the HTML pages and static image assets.
+- The wireframe folder contains wireframe/design files.
+
+HTML → CSS mapping:
+- about.html → css/about.css
+- admin.html → css/admin.css
+- contact.html → css/contact.css
+- dashboard.html → css/dashboard.css
+- events.html → css/events.css
+- faq.html → css/faq.css
+- index.html → css/index.css
+- login.html → css/login.css
+- profile.html → css/profile.css
+- register.html → css/register.css
