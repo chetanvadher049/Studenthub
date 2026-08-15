@@ -137,10 +137,10 @@ The authentication section contains the interface pages for user access.
 
 Authentication
 │
-├── Login
+├── 🔐 Login
 │   └── login.html
 │
-└── Register
+└── 📝 Register
     └── register.html
 ### 🔐 3. Login Page
 
@@ -186,9 +186,14 @@ html/css/register.css
 6. 👨‍🎓 Student Portal Section
 Student Portal
 │
-├── Dashboard
-├── Events
-└── Profile
+├── 📊 Dashboard
+│   └── dashboard.html
+│
+├── 📅 Events
+│   └── events.html
+│
+└── 👤 Profile
+    └── profile.html
 ### 📊 5. Dashboard
 
 File:
@@ -253,8 +258,11 @@ html/css/profile.css
 7. 🆘 Support Section
 Support
 │
-├── Contact
-└── FAQ
+├── 📞 Contact
+│   └── contact.html
+│
+└── ❓ FAQ
+    └── faq.html
 ### 📞 8. Contact
 
 File:
@@ -293,7 +301,7 @@ html/css/faq.css
 8. 🛠️ Administration Section
 Administration
 │
-└── Admin Panel
+└── 🛠️ Admin Panel
     └── admin.html
 ### 🛠️ 10. Admin Panel
 
@@ -328,16 +336,16 @@ Each implemented HTML page has its own corresponding stylesheet.
 
 html/
 │
-├── index.html       ─────► css/index.css
-├── about.html       ─────► css/about.css
-├── login.html       ─────► css/login.css
-├── register.html    ─────► css/register.css
-├── dashboard.html   ─────► css/dashboard.css
-├── events.html      ─────► css/events.css
-├── profile.html     ─────► css/profile.css
-├── contact.html     ─────► css/contact.css
-├── faq.html         ─────► css/faq.css
-└── admin.html       ─────► css/admin.css
+├── 📄 index.html       ─────► css/index.css
+├── 📄 about.html       ─────► css/about.css
+├── 📄 login.html       ─────► css/login.css
+├── 📄 register.html    ─────► css/register.css
+├── 📄 dashboard.html   ─────► css/dashboard.css
+├── 📄 events.html      ─────► css/events.css
+├── 📄 profile.html     ─────► css/profile.css
+├── 📄 contact.html     ─────► css/contact.css
+├── 📄 faq.html         ─────► css/faq.css
+└── 📄 admin.html       ─────► css/admin.css
 **🔹 CSS responsibilities**
 
 The CSS files handle:
@@ -359,10 +367,10 @@ The current project contains these image assets:
 
 html/
 │
-├── hackathon.jpg
-├── img.png
-├── sport.webp
-└── workshop.jpg
+├── 🖼️ hackathon.jpg
+├── 🖼️ img.png
+├── 🖼️ sport.webp
+└── 🖼️ workshop.jpg
 **🔹 Purpose**
 
 These assets can be used for:
@@ -379,42 +387,42 @@ The corrected project structure should be represented as:
 
 StudentHub/
 │
-├── README.md
-├── FRONTEND_FOLDER_STRUCTURE.txt
-├── SITEMAP.md
-├── LOW_FIDELITY_WIREFRAME.md
+├── 📄 README.md
+├── 📄 FRONTEND_FOLDER_STRUCTURE.txt
+├── 📄 SITEMAP.md
+├── 📄 LOW_FIDELITY_WIREFRAME.md
 │
-├── html/
+├── 📁 html/
 │   │
-│   ├── css/
-│   │   ├── about.css
-│   │   ├── admin.css
-│   │   ├── contact.css
-│   │   ├── dashboard.css
-│   │   ├── events.css
-│   │   ├── faq.css
-│   │   ├── index.css
-│   │   ├── login.css
-│   │   ├── profile.css
-│   │   └── register.css
+│   ├── 📁 css/
+│   │   ├── 🎨 about.css
+│   │   ├── 🎨 admin.css
+│   │   ├── 🎨 contact.css
+│   │   ├── 🎨 dashboard.css
+│   │   ├── 🎨 events.css
+│   │   ├── 🎨 faq.css
+│   │   ├── 🎨 index.css
+│   │   ├── 🎨 login.css
+│   │   ├── 🎨 profile.css
+│   │   └── 🎨 register.css
 │   │
-│   ├── about.html
-│   ├── admin.html
-│   ├── contact.html
-│   ├── dashboard.html
-│   ├── events.html
-│   ├── faq.html
-│   ├── index.html
-│   ├── login.html
-│   ├── profile.html
-│   ├── register.html
+│   ├── 🌐 about.html
+│   ├── 🛠️ admin.html
+│   ├── 📞 contact.html
+│   ├── 📊 dashboard.html
+│   ├── 📅 events.html
+│   ├── ❓ faq.html
+│   ├── 🏠 index.html
+│   ├── 🔐 login.html
+│   ├── 👤 profile.html
+│   ├── 📝 register.html
 │   │
-│   ├── hackathon.jpg
-│   ├── img.png
-│   ├── sport.webp
-│   └── workshop.jpg
+│   ├── 🖼️ hackathon.jpg
+│   ├── 🖼️ img.png
+│   ├── 🖼️ sport.webp
+│   └── 🖼️ workshop.jpg
 │
-└── wireframe/
+└── 📁 wireframe/
 12. 📚 Documentation Files
 
 The project also contains supporting documentation.
@@ -461,27 +469,27 @@ The following pages should NOT be shown as currently implemented. They belong un
 
 Future StudentHub
 │
-├── Academic
+├── 📚 Academic
 │
-├── Resources
-│   ├── Notes
-│   ├── Papers
-│   ├── Videos
-│   └── E-books
+├── 📦 Resources
+│   ├── 📝 Notes
+│   ├── 📄 Papers
+│   ├── 🎥 Videos
+│   └── 📚 E-books
 │
-├── Notifications
+├── 🔔 Notifications
 │
-├── Timetable
+├── 🕒 Timetable
 │
-├── Calendar
+├── 📅 Calendar
 │
-├── Feedback
+├── 💬 Feedback
 │
-├── Edit Profile
+├── ✏️ Edit Profile
 │
-└── Legal
-    ├── Privacy Policy
-    └── Terms & Conditions
+└── ⚖️ Legal
+    ├── 🔒 Privacy Policy
+    └── 📜 Terms & Conditions
 
 This distinction is important because these pages are part of the future scope, not the current 10-page implementation.
 
@@ -584,34 +592,38 @@ For your actual project documentation, I recommend keeping the main SITEMAP.md f
 
 StudentHub Portal
 │
-├── Home / Landing
+├── 🏠 Home / Landing
 │   └── index.html
 │
-├── Information
+├── ℹ️ Information
 │   └── About
 │       └── about.html
 │
-├── Authentication
+├── 🔐 Authentication
 │   ├── Login
 │   │   └── login.html
+│   │
 │   └── Register
 │       └── register.html
 │
-├── Student Portal
+├── 👨‍🎓 Student Portal
 │   ├── Dashboard
 │   │   └── dashboard.html
+│   │
 │   ├── Events
 │   │   └── events.html
+│   │
 │   └── Profile
 │       └── profile.html
 │
-├── Support
+├── 🆘 Support
 │   ├── Contact
 │   │   └── contact.html
+│   │
 │   └── FAQ
 │       └── faq.html
 │
-└── Administration
+└── 🛠️ Administration
     └── Admin Panel
         └── admin.html
 
