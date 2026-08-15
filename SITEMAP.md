@@ -1,4 +1,5 @@
 # StudentHub – Sitemap
+<img width="1536" height="1024" alt="ChatGPT Image Aug 15, 2026, 10_38_05 AM" src="https://github.com/user-attachments/assets/03b1fe1a-221d-4a1f-a48d-ba85eea46ac9" />
 
 This sitemap is based on the actual HTML pages and navigation structure present in the uploaded StudentHub project.
 
