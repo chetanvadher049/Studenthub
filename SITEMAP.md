@@ -1,4 +1,5 @@
 # 🎓 StudentHub Portal — Sitemap
+<img width="1536" height="1024" alt="ChatGPT Image Aug 15, 2026, 03_24_25 PM" src="https://github.com/user-attachments/assets/9c51dc3d-7acd-4fb3-b996-2dfcac67f20d" />
 
 ## 📌 Project Overview
 
