@@ -12,206 +12,168 @@
 
     <link rel="stylesheet"
           href="css/events.css">
+    <link rel="stylesheet" href="css/shared.css">
 
 </head>
 
-
 <body>
 
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
-<!-- =====================================================
-     HEADER
-     ===================================================== -->
+    <header class="site-header">
 
-<header class="site-header">
+        <!-- HAMBURGER MENU -->
 
+        <div class="menu-container">
 
-    <!-- =================================================
-         3-LINE DROPDOWN MENU
-         ================================================= -->
-
-    <div class="menu-container">
-
-        <details class="menu-details">
-
-
-            <!-- THREE LINE BUTTON -->
-
-            <summary class="menu-button"
-                     aria-label="Open navigation menu">
+            <button
+                id="menuButton"
+                class="menu-button"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+            >
 
                 <span></span>
                 <span></span>
                 <span></span>
 
-            </summary>
+            </button>
 
 
-            <!-- =================================================
-                 DROPDOWN MENU
-                 ================================================= -->
+            <!-- NAVIGATION -->
 
-            <nav class="dropdown-menu"
-                 aria-label="Main navigation">
-
+            <nav
+                id="dropdownMenu"
+                class="dropdown-menu"
+                aria-label="Main navigation"
+            >
 
                 <a href="index.html">
-
-                    <span class="menu-icon">🏠</span>
-
+                    <span>🏠</span>
                     <span>Home</span>
-
                 </a>
-
 
                 <a href="about.html">
-
-                    <span class="menu-icon">ⓘ</span>
-
+                    <span>ⓘ</span>
                     <span>About</span>
-
                 </a>
 
-
-                <a href="dashboard.html">
-
-                    <span class="menu-icon">▣</span>
-
+                <a href="dashboard.php">
+                    <span>▣</span>
                     <span>Dashboard</span>
-
                 </a>
 
-
-                <a href="events.html"
-                   aria-current="page">
-
-                    <span class="menu-icon">▦</span>
-
+                <a
+                    href="events.html"
+                    aria-current="page"
+                >
+                    <span>▦</span>
                     <span>Events</span>
-
                 </a>
 
-
-                <a href="profile.html">
-
-                    <span class="menu-icon">👤</span>
-
+                <a href="profile.php">
+                    <span>👤</span>
                     <span>Profile</span>
-
                 </a>
-
 
                 <a href="contact.html">
-
-                    <span class="menu-icon">✉</span>
-
+                    <span>✉</span>
                     <span>Contact</span>
-
                 </a>
-
 
                 <a href="admin.html">
-
-                    <span class="menu-icon">◉</span>
-
+                    <span>◉</span>
                     <span>Admin</span>
-
                 </a>
-
 
                 <a href="faq.html">
-
-                    <span class="menu-icon">?</span>
-
+                    <span>?</span>
                     <span>FAQ</span>
-
                 </a>
-
 
             </nav>
 
-        </details>
-
-    </div>
+        </div>
 
 
+        <!-- LOGO -->
 
-    <!-- =================================================
-         STUDENTHUB LOGO
-         ================================================= -->
+        <a
+            href="index.html"
+            class="logo"
+            aria-label="StudentHub Home"
+        >
 
-    <a href="index.html"
-       class="logo"
-       aria-label="StudentHub Home">
+            <span class="logo-icon">
+                🎓
+            </span>
 
+            <span class="logo-text">
+                StudentHub
+            </span>
 
-        <span class="logo-icon">
-            🎓
-        </span>
-
-
-        <span class="logo-text">
-            StudentHub
-        </span>
-
-
-    </a>
-
-
-
-    <!-- =================================================
-         LOGIN / REGISTER
-         ================================================= -->
-
-    <div class="auth-buttons">
-
-
-        <a href="login.html">
-            Login
         </a>
 
 
-        <a href="register.html">
-            Register
-        </a>
+        <!-- HEADER RIGHT -->
+
+        <div class="header-right">
+
+            <!-- LIGHT / DARK THEME -->
+
+            <button
+                id="themeToggle"
+                class="theme-button"
+                type="button"
+                aria-label="Switch to dark mode"
+                title="Toggle light/dark theme"
+            >
+                🌙
+            </button>
 
 
-    </div>
+            <!-- LOGIN / REGISTER -->
+
+            <div class="auth-buttons">
+
+                <a href="login.html">
+                    Login
+                </a>
+
+                <a href="register.html">
+                    Register
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
 
 
-</header>
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content">
+
+        <section class="events-section">
 
 
+            <!-- PAGE HEADER -->
 
-<!-- =====================================================
-     MAIN CONTENT
-     ===================================================== -->
-
-<main class="main-content">
-
-
-    <section class="events-section"
-             aria-labelledby="events-title">
-
-
-        <!-- =================================================
-             PAGE HEADER
-             ================================================= -->
-
-        <div class="events-header">
-
-
-            <div>
+            <div class="events-header">
 
                 <p class="page-label">
                     Student Activities
                 </p>
 
-
                 <h1 id="events-title">
                     Events
                 </h1>
-
 
                 <p class="events-subtitle">
                     Discover upcoming events, workshops,
@@ -221,391 +183,418 @@
             </div>
 
 
-        </div>
+            <!-- =================================================
+                 SEARCH / FILTER
+                 ================================================= -->
+
+            <div class="event-search">
+
+                <div class="search-box">
+
+                    <label for="event-search">
+                        Search Events
+                    </label>
+
+                    <input
+                        type="search"
+                        id="event-search"
+                        placeholder="Search events..."
+                    >
+
+                </div>
 
 
+                <div class="filter-box">
 
-        <!-- =================================================
-             SEARCH / FILTER
-             ================================================= -->
+                    <label for="category-filter">
+                        Category
+                    </label>
 
-        <form class="event-search"
-              action="#"
-              method="get">
+                    <select id="category-filter">
+
+                        <option value="all">
+                            All Categories
+                        </option>
+
+                        <option value="Workshop">
+                            Workshop
+                        </option>
+
+                        <option value="Competition">
+                            Competition
+                        </option>
+
+                        <option value="Sports">
+                            Sports
+                        </option>
+
+                        <option value="Cultural">
+                            Cultural
+                        </option>
+
+                    </select>
+
+                </div>
 
 
-            <div class="search-box">
-
-
-                <label for="event-search"
-                       class="visually-hidden">
-
-                    Search Events
-
-                </label>
-
-
-                <input
-                    type="search"
-                    id="event-search"
-                    name="search"
-                    placeholder="Search events..."
-                    aria-label="Search events">
-
+                <button
+                    id="filterButton"
+                    type="button"
+                >
+                    🔍 Search
+                </button>
 
             </div>
 
 
-            <button type="submit">
+            <!-- RESULT COUNT -->
 
-                Filter
+            <p
+                id="resultCount"
+                class="result-count"
+            >
+                Loading events...
+            </p>
 
+            <p id="eventLoadError" class="event-load-error"
+               role="alert" hidden></p>
+
+
+            <!-- =================================================
+                 EVENT LIST
+                 ================================================= -->
+
+            <div
+                id="eventList"
+                class="event-list"
+            >
+
+
+                <!-- EVENT 1 -->
+
+                <article
+                    class="event-item"
+                    data-category="Workshop"
+                    data-title="Technical Workshop"
+                    data-description="Learn about new technologies and development."
+                    data-date="15 September 2026"
+                >
+
+                    <div class="event-image">
+                        📚
+                    </div>
+
+                    <div class="event-details">
+
+                        <div class="event-category">
+                            Workshop
+                        </div>
+
+                        <h2>
+                            Technical Workshop
+                        </h2>
+
+                        <p>
+                            Learn about new technologies
+                            and development.
+                        </p>
+
+                        <div class="event-meta">
+
+                            <time>
+                                📅 15 September 2026
+                            </time>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="view-details"
+                        type="button"
+                    >
+                        View Details
+                    </button>
+
+                </article>
+
+
+                <!-- EVENT 2 -->
+
+                <article
+                    class="event-item"
+                    data-category="Competition"
+                    data-title="College Hackathon"
+                    data-description="Participate in an exciting coding competition."
+                    data-date="25 September 2026"
+                >
+
+                    <div class="event-image">
+                        💻
+                    </div>
+
+                    <div class="event-details">
+
+                        <div class="event-category">
+                            Competition
+                        </div>
+
+                        <h2>
+                            College Hackathon
+                        </h2>
+
+                        <p>
+                            Participate in an exciting
+                            coding competition.
+                        </p>
+
+                        <div class="event-meta">
+
+                            <time>
+                                📅 25 September 2026
+                            </time>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="view-details"
+                        type="button"
+                    >
+                        View Details
+                    </button>
+
+                </article>
+
+
+                <!-- EVENT 3 -->
+
+                <article
+                    class="event-item"
+                    data-category="Sports"
+                    data-title="Sports Day"
+                    data-description="Annual sports activities for students."
+                    data-date="5 October 2026"
+                >
+
+                    <div class="event-image">
+                        🏆
+                    </div>
+
+                    <div class="event-details">
+
+                        <div class="event-category">
+                            Sports
+                        </div>
+
+                        <h2>
+                            Sports Day
+                        </h2>
+
+                        <p>
+                            Annual sports activities
+                            for students.
+                        </p>
+
+                        <div class="event-meta">
+
+                            <time>
+                                📅 5 October 2026
+                            </time>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="view-details"
+                        type="button"
+                    >
+                        View Details
+                    </button>
+
+                </article>
+
+
+                <!-- EVENT 4 -->
+
+                <article
+                    class="event-item"
+                    data-category="Cultural"
+                    data-title="Cultural Festival"
+                    data-description="Join students for cultural and creative activities."
+                    data-date="15 October 2026"
+                >
+
+                    <div class="event-image">
+                        🎭
+                    </div>
+
+                    <div class="event-details">
+
+                        <div class="event-category">
+                            Cultural
+                        </div>
+
+                        <h2>
+                            Cultural Festival
+                        </h2>
+
+                        <p>
+                            Join students for cultural
+                            and creative activities.
+                        </p>
+
+                        <div class="event-meta">
+
+                            <time>
+                                📅 15 October 2026
+                            </time>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="view-details"
+                        type="button"
+                    >
+                        View Details
+                    </button>
+
+                </article>
+
+            </div>
+
+
+            <!-- =================================================
+                 PAGINATION
+                 ================================================= -->
+
+            <nav
+                class="pagination"
+                aria-label="Events pagination"
+            >
+
+                <button
+                    id="previousPage"
+                    type="button"
+                    aria-label="Previous page"
+                >
+                    ‹
+                </button>
+
+                <div id="pageNumbers"></div>
+
+                <button
+                    id="nextPage"
+                    type="button"
+                    aria-label="Next page"
+                >
+                    ›
+                </button>
+
+            </nav>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         EVENT DETAILS MODAL
+         ===================================================== -->
+
+    <div
+        id="eventModal"
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+    >
+
+        <div class="modal-content">
+
+            <button
+                id="closeModal"
+                class="modal-close"
+                type="button"
+                aria-label="Close event details"
+            >
+                ×
             </button>
 
 
-        </form>
-
-
-
-        <!-- =================================================
-             EVENT LIST
-             ================================================= -->
-
-        <div class="event-list">
-
-
-            <!-- =================================================
-                 EVENT 1
-                 ================================================= -->
-
-            <article class="event-item">
-
-
-                <div class="event-image"
-                     aria-hidden="true">
-
-                    <span>
-                        📚
-                    </span>
-
-                </div>
-
-
-                <div class="event-details">
-
-
-                    <div class="event-category">
-                        Workshop
-                    </div>
-
-
-                    <h2>
-                        Technical Workshop
-                    </h2>
-
-
-                    <p>
-                        Learn about new technologies
-                        and development.
-                    </p>
-
-
-                    <div class="event-meta">
-
-
-                        <time datetime="2026-09-15">
-
-                            📅
-                            15 September 2026
-
-                        </time>
-
-
-                    </div>
-
-
-                </div>
-
-
-                <a href="#"
-                   class="view-details">
-
-                    View Details
-
-                </a>
-
-
-            </article>
-
-
-
-            <!-- =================================================
-                 EVENT 2
-                 ================================================= -->
-
-            <article class="event-item">
-
-
-                <div class="event-image"
-                     aria-hidden="true">
-
-                    <span>
-                        💻
-                    </span>
-
-                </div>
-
-
-                <div class="event-details">
-
-
-                    <div class="event-category">
-                        Competition
-                    </div>
-
-
-                    <h2>
-                        College Hackathon
-                    </h2>
-
-
-                    <p>
-                        Participate in an exciting
-                        coding competition.
-                    </p>
-
-
-                    <div class="event-meta">
-
-
-                        <time datetime="2026-09-25">
-
-                            📅
-                            25 September 2026
-
-                        </time>
-
-
-                    </div>
-
-
-                </div>
-
-
-                <a href="#"
-                   class="view-details">
-
-                    View Details
-
-                </a>
-
-
-            </article>
-
-
-
-            <!-- =================================================
-                 EVENT 3
-                 ================================================= -->
-
-            <article class="event-item">
-
-
-                <div class="event-image"
-                     aria-hidden="true">
-
-                    <span>
-                        🏆
-                    </span>
-
-                </div>
-
-
-                <div class="event-details">
-
-
-                    <div class="event-category">
-                        Sports
-                    </div>
-
-
-                    <h2>
-                        Sports Day
-                    </h2>
-
-
-                    <p>
-                        Annual sports activities
-                        for students.
-                    </p>
-
-
-                    <div class="event-meta">
-
-
-                        <time datetime="2026-10-05">
-
-                            📅
-                            5 October 2026
-
-                        </time>
-
-
-                    </div>
-
-
-                </div>
-
-
-                <a href="#"
-                   class="view-details">
-
-                    View Details
-
-                </a>
-
-
-            </article>
-
-
-
-            <!-- =================================================
-                 EVENT 4
-                 ================================================= -->
-
-            <article class="event-item">
-
-
-                <div class="event-image"
-                     aria-hidden="true">
-
-                    <span>
-                        🎭
-                    </span>
-
-                </div>
-
-
-                <div class="event-details">
-
-
-                    <div class="event-category">
-                        Cultural
-                    </div>
-
-
-                    <h2>
-                        Cultural Festival
-                    </h2>
-
-
-                    <p>
-                        Join students for cultural
-                        and creative activities.
-                    </p>
-
-
-                    <div class="event-meta">
-
-
-                        <time datetime="2026-10-15">
-
-                            📅
-                            15 October 2026
-
-                        </time>
-
-
-                    </div>
-
-
-                </div>
-
-
-                <a href="#"
-                   class="view-details">
-
-                    View Details
-
-                </a>
-
-
-            </article>
-
+            <div
+                id="modalIcon"
+                class="modal-icon"
+            >
+                📚
+            </div>
+
+
+            <div
+                class="event-category"
+                id="modalCategory"
+            >
+                Workshop
+            </div>
+
+
+            <h2 id="modalTitle">
+                Technical Workshop
+            </h2>
+
+
+            <p id="modalDescription">
+                Learn about new technologies and development.
+            </p>
+
+
+            <p
+                id="modalDate"
+                class="modal-date"
+            >
+                📅 15 September 2026
+            </p>
+
+            <p id="eventRegistrationMessage" class="event-registration-message"
+               role="status" hidden></p>
+
+            <button
+                id="registerEvent"
+                class="register-event"
+                type="button"
+            >
+                Register for Event
+            </button>
 
         </div>
 
+    </div>
 
 
-        <!-- =================================================
-             PAGINATION
-             ================================================= -->
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
 
-        <nav class="pagination"
-             aria-label="Events pagination">
+    <footer class="site-footer">
 
+        <p>
+            &copy; 2026 StudentHub.
+            All rights reserved.
+        </p>
 
-            <a href="#"
-               aria-label="Previous page">
-
-                ‹
-
-            </a>
+    </footer>
 
 
-            <a href="#"
-               aria-current="page">
+    <!-- JAVASCRIPT -->
 
-                1
-
-            </a>
-
-
-            <a href="#">
-                2
-            </a>
-
-
-            <a href="#">
-                3
-            </a>
-
-
-            <a href="#"
-               aria-label="Next page">
-
-                ›
-
-            </a>
-
-
-        </nav>
-
-
-    </section>
-
-
-</main>
-
-
-
-<!-- =====================================================
-     FOOTER
-     ===================================================== -->
-
-<footer class="site-footer">
-
-
-    <p>
-
-        &copy; 2026 StudentHub.
-        All rights reserved.
-
-    </p>
-
-
-</footer>
-
+    <script
+        src="../javascript/events.js?v=2"
+        defer
+    ></script>
 
 </body>
 

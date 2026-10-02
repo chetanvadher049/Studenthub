@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^(dashboard|profile)\.html$ $1.php [L]

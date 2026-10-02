@@ -1,59 +1,80 @@
 StudentHub/
-│
-├── README.md
-├── FRONTEND_FOLDER_STRUCTURE.txt
-├── SITEMAP.md
-├── LOW_FIDELITY_WIREFRAME.md
-│
-├── html/
-│   ├── css/
-│   │   ├── about.css
-│   │   ├── admin.css
-│   │   ├── contact.css
-│   │   ├── dashboard.css
-│   │   ├── events.css
-│   │   ├── faq.css
-│   │   ├── index.css
-│   │   ├── login.css
-│   │   ├── profile.css
-│   │   └── register.css
-│   │
-│   ├── about.html
-│   ├── admin.html
-│   ├── contact.html
-│   ├── dashboard.html
-│   ├── events.html
-│   ├── faq.html
-│   ├── hackathon.jpg
-│   ├── img.png
-│   ├── index.html
-│   ├── login.html
-│   ├── profile.html
-│   ├── register.html
-│   ├── sport.webp
-│   └── workshop.jpg
-│
-└── wireframe/
+|
+|-- README.md
+|-- FRONTEND_FOLDER_STRUCTURE.txt
+|-- SITEMAP.md
+|-- LOW_FIDELITY_WIREFRAME.md
+|-- database/
+|   |-- migrations/
+|       |-- 001_profile_and_contact.sql
+|
+|-- html/
+|   |-- css/
+|   |   |-- about.css
+|   |   |-- admin.css
+|   |   |-- contact.css
+|   |   |-- dashboard.css
+|   |   |-- dashboard-dynamic.css
+|   |   |-- events.css
+|   |   |-- faq.css
+|   |   |-- index.css
+|   |   |-- login.css
+|   |   |-- profile.css
+|   |   |-- register.css
+|   |   |-- shared.css
+|   |
+|   |-- json/
+|   |   |-- events.json
+|   |   |-- faq.json
+|   |
+|   |-- about.html
+|   |-- admin.html
+|   |-- contact.html
+|   |-- dashboard.php
+|   |-- dashboard.html  (legacy redirect to dashboard.php)
+|   |-- events.html
+|   |-- faq.html
+|   |-- index.html
+|   |-- login.html
+|   |-- profile.php
+|   |-- profile.html  (legacy redirect to profile.php)
+|   |-- .htaccess
+|   |-- register.html
+|   |-- hackathon.jpg
+|   |-- img.png
+|   |-- sport.webp
+|   |-- workshop.jpg
+|
+|-- javascript/
+|   |-- about.js
+|   |-- admin.js
+|   |-- contact.js
+|   |-- dashboard.js
+|   |-- events.js
+|   |-- faq.js
+|   |-- index.js
+|   |-- login.js
+|   |-- profile.js
+|   |-- register.js
+|
+|-- php/
+|   |-- auth.php
+|   |-- contact.php
+|   |-- dbconnect.php
+|   |-- login.php
+|   |-- logout.php
+|   |-- register.php
+|
+|-- wireframe/
 
 Notes:
-- This project is a frontend-only static prototype.
-- HTML5 and CSS3 are used for structure and design.
-- There are 10 HTML pages and 10 matching CSS files.
-- Each CSS file has the same base name as its corresponding HTML file.
-- All CSS files are stored inside the html/css folder.
-- No JavaScript files are included in the current project structure.
-- No backend files or database files are included.
-- The html folder contains the HTML pages and static image assets.
-- The wireframe folder contains wireframe/design files.
-
-HTML → CSS mapping:
-- about.html → css/about.css
-- admin.html → css/admin.css
-- contact.html → css/contact.css
-- dashboard.html → css/dashboard.css
-- events.html → css/events.css
-- faq.html → css/faq.css
-- index.html → css/index.css
-- login.html → css/login.css
-- profile.html → css/profile.css
-- register.html → css/register.css
+- HTML pages and page-specific styles are kept under html/.
+- Public pages load html/css/shared.css for common branding and accessibility states.
+- Dashboard and profile use PHP session checks and load the signed-in user's database record.
+- Legacy dashboard.html/profile.html paths redirect to their protected PHP pages.
+- Page-specific JavaScript is kept in javascript/.
+- Local registration exports and student sample data are ignored to avoid publishing personal data.
+- Database migrations are documented under database/migrations/.
+- Run through a PHP-enabled server to use login, registration, profile, and contact endpoints.
+- Configure php/dbconnect.php for the local database before using database-backed behavior.
+- Keep all page links and asset references relative to their documented folders.

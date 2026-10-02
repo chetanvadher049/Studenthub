@@ -13,6 +13,209 @@
     <link rel="stylesheet"
           href="css/admin.css">
 
+
+<style>
+    /* ==========================================
+       HEADER
+       ========================================== */
+
+    .site-header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .menu-container {
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    /* ==========================================
+       HAMBURGER BUTTON
+       ========================================== */
+
+    .menu-button {
+        width: 42px;
+        height: 42px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        border-radius: 6px;
+        padding: 0;
+    }
+
+    .menu-button span {
+        display: block;
+        width: 25px;
+        height: 3px;
+        background: currentColor;
+        border-radius: 3px;
+        transition: 0.3s;
+    }
+
+    .menu-button:hover {
+        background: rgba(127, 127, 127, 0.15);
+    }
+
+    /* ==========================================
+       DROPDOWN NAVIGATION
+       ========================================== */
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 48px;
+        left: 0;
+        width: 220px;
+        padding: 10px;
+        flex-direction: column;
+        gap: 5px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.20);
+        z-index: 1000;
+    }
+
+    .dropdown-menu.active {
+        display: flex;
+    }
+
+    .dropdown-menu a {
+        padding: 10px;
+        text-decoration: none;
+        color: #222222;
+        border-radius: 6px;
+    }
+
+    .dropdown-menu a:hover {
+        background: #eeeeee;
+    }
+
+    /* ==========================================
+       RIGHT SIDE CONTROLS
+       ========================================== */
+
+    .header-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+
+    .theme-button {
+        width: 42px;
+        height: 42px;
+        border: none;
+        background: transparent;
+        font-size: 22px;
+        cursor: pointer;
+        border-radius: 6px;
+        padding: 0;
+    }
+
+    .theme-button:hover {
+        background: rgba(127, 127, 127, 0.15);
+    }
+
+    .auth-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .auth-buttons a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 16px;
+        text-decoration: none;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+
+    /* ==========================================
+       DARK THEME
+       ========================================== */
+
+    body {
+        transition: background-color 0.3s ease,
+                    color 0.3s ease;
+    }
+
+    body.dark-theme {
+        background: #111827;
+        color: #f3f4f6;
+    }
+
+    body.dark-theme .site-header,
+    body.dark-theme .admin-section,
+    body.dark-theme .admin-card,
+    body.dark-theme .recent-activity,
+    body.dark-theme .system-overview,
+    body.dark-theme .overview-item,
+    body.dark-theme .site-footer {
+        background: #1f2937;
+        color: #f3f4f6;
+    }
+
+    body.dark-theme .dropdown-menu {
+        background: #1f2937;
+    }
+
+    body.dark-theme .dropdown-menu a {
+        color: #ffffff;
+    }
+
+    body.dark-theme .dropdown-menu a:hover {
+        background: #374151;
+    }
+
+    body.dark-theme h1,
+    body.dark-theme h2,
+    body.dark-theme h3,
+    body.dark-theme p,
+    body.dark-theme span,
+    body.dark-theme strong,
+    body.dark-theme small {
+        color: inherit;
+    }
+
+    /* ==========================================
+       MOBILE
+       ========================================== */
+
+    @media (max-width: 768px) {
+
+        .header-right {
+            gap: 6px;
+        }
+
+        .auth-buttons {
+            gap: 5px;
+        }
+
+        .auth-buttons a {
+            padding: 7px 10px;
+            font-size: 14px;
+        }
+
+        .logo {
+            margin-left: 10px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+        }
+    }
+</style>
+<link rel="stylesheet" href="css/shared.css">
+
 </head>
 
 
@@ -25,204 +228,92 @@
 
 <header class="site-header">
 
-
-    <!-- =================================================
-         3-LINE DROPDOWN MENU
-         ================================================= -->
-
+    <!-- HAMBURGER MENU -->
     <div class="menu-container">
 
-        <details class="menu-details">
+        <button id="menuToggle"
+                class="menu-button"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false">
 
+            <span></span>
+            <span></span>
+            <span></span>
 
-            <!-- THREE LINE BUTTON -->
+        </button>
 
-            <summary class="menu-button"
-                     aria-label="Open navigation menu">
+        <!-- NAVIGATION MENU -->
+        <nav id="sidebar"
+             class="dropdown-menu"
+             aria-label="Main navigation">
 
-                <span></span>
-                <span></span>
-                <span></span>
+            <a href="index.html">🏠 <span>Home</span></a>
 
-            </summary>
+            <a href="about.html">ⓘ <span>About</span></a>
 
+            <a href="dashboard.php">▣ <span>Dashboard</span></a>
 
-            <!-- =================================================
-                 DROPDOWN MENU
-                 ================================================= -->
+            <a href="events.html">▦ <span>Events</span></a>
 
-            <nav class="dropdown-menu"
-                 aria-label="Main navigation">
+            <a href="profile.php">👤 <span>Profile</span></a>
 
+            <a href="contact.html">✉ <span>Contact</span></a>
 
-                <a href="index.html">
+            <a href="admin.html" aria-current="page">
+                ◉ <span>Admin</span>
+            </a>
 
-                    <span class="menu-icon">
-                        🏠
-                    </span>
+            <a href="faq.html">? <span>FAQ</span></a>
 
-                    <span>
-                        Home
-                    </span>
+            <a href="faq.html#feedback">♡ <span>Feedback</span></a>
 
-                </a>
-
-
-                <a href="about.html">
-
-                    <span class="menu-icon">
-                        ⓘ
-                    </span>
-
-                    <span>
-                        About
-                    </span>
-
-                </a>
-
-
-                <a href="dashboard.html">
-
-                    <span class="menu-icon">
-                        ▣
-                    </span>
-
-                    <span>
-                        Dashboard
-                    </span>
-
-                </a>
-
-
-                <a href="events.html">
-
-                    <span class="menu-icon">
-                        ▦
-                    </span>
-
-                    <span>
-                        Events
-                    </span>
-
-                </a>
-
-
-                <a href="profile.html">
-
-                    <span class="menu-icon">
-                        👤
-                    </span>
-
-                    <span>
-                        Profile
-                    </span>
-
-                </a>
-
-
-                <a href="contact.html">
-
-                    <span class="menu-icon">
-                        ✉
-                    </span>
-
-                    <span>
-                        Contact
-                    </span>
-
-                </a>
-
-
-                <a href="admin.html"
-                   aria-current="page">
-
-                    <span class="menu-icon">
-                        ◉
-                    </span>
-
-                    <span>
-                        Admin
-                    </span>
-
-                </a>
-
-
-                <a href="faq.html">
-
-                    <span class="menu-icon">
-                        ?
-                    </span>
-
-                    <span>
-                        FAQ
-                    </span>
-
-                </a>
-
-
-                <a href="feedback.html">
-
-                    <span class="menu-icon">
-                        ♡
-                    </span>
-
-                    <span>
-                        Feedback
-                    </span>
-
-                </a>
-
-
-            </nav>
-
-        </details>
+        </nav>
 
     </div>
 
 
-
-    <!-- =================================================
-         STUDENTHUB LOGO
-         ================================================= -->
-
+    <!-- STUDENTHUB LOGO -->
     <a href="index.html"
        class="logo"
        aria-label="StudentHub Home">
 
+        <span class="logo-icon">🎓</span>
 
-        <span class="logo-icon">
-            🎓
-        </span>
-
-
-        <span class="logo-text">
-            StudentHub
-        </span>
-
+        <span class="logo-text">StudentHub</span>
 
     </a>
 
 
+    <!-- RIGHT SIDE CONTROLS -->
+    <div class="header-right">
 
-    <!-- =================================================
-         LOGIN / REGISTER
-         ================================================= -->
+        <!-- LIGHT / DARK TOGGLE -->
+        <button id="themeToggle"
+                class="theme-button"
+                type="button"
+                aria-label="Switch to dark mode"
+                title="Switch to dark mode">
 
-    <div class="auth-buttons">
+            🌙
+
+        </button>
 
 
-        <a href="login.html">
-            Login
-        </a>
+        <!-- LOGIN / REGISTER -->
+        <div class="auth-buttons">
 
+            <a href="login.html">
+                Login
+            </a>
 
-        <a href="register.html">
-            Register
-        </a>
+            <a href="register.html">
+                Register
+            </a>
 
+        </div>
 
     </div>
-
 
 </header>
 
@@ -302,7 +393,7 @@
                     </strong>
 
 
-                    <a href="#">
+                    <a href="profile.php">
                         Manage Users
                     </a>
 
@@ -618,6 +709,9 @@
 
 </footer>
 
+
+
+<script src="../javascript/admin.js" defer></script>
 
 </body>
 

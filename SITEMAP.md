@@ -2,15 +2,15 @@
 
 ## 📌 Project Overview
 
-StudentHub Portal is a static frontend academic portal prototype developed as a Web Design and Frontend (WDF) project.
+StudentHub Portal is a multi-page student portal prototype developed as a Web Design and Frontend (WDF) project.
 
-- **Project Type:** Static Frontend / WDF Project
-- **Primary Technologies:** HTML5 + CSS3
-- **Implemented HTML Pages:** 10
-- **JavaScript:** ❌ Not implemented
-- **Backend:** ❌ Not implemented
-- **Database:** ❌ Not implemented
-- **Authentication:** UI prototype only
+- **Project Type:** Frontend and PHP prototype / WDF Project
+- **Primary Technologies:** HTML5 + CSS3 + JavaScript + PHP
+- **Implemented Pages:** 10
+- **JavaScript:** Implemented for page interactions
+- **Backend:** PHP login and registration endpoints included
+- **Database:** Local setup/configuration required
+- **Authentication:** Prototype; not production-hardened
 
 ---
 
@@ -26,7 +26,7 @@ StudentHub Portal
 │   └── login.html
 │
 ├── 📊 3. Dashboard
-│   └── dashboard.html
+│   └── dashboard.php
 │
 ├── ℹ️ 4. About
 │   └── about.html
@@ -44,7 +44,7 @@ StudentHub Portal
 │   └── faq.html
 │
 ├── 👤 9. Profile
-│   └── profile.html
+│   └── profile.php
 │
 └── 📝 10. Register
     └── register.html
@@ -70,16 +70,16 @@ StudentHub Portal
 |---:|---|---|---|
 | 1 | 🏠 Home / Landing | `html/index.html` | Main entry point |
 | 2 | 🔐 Login | `html/login.html` | Login interface |
-| 3 | 📊 Dashboard | `html/dashboard.html` | Student overview and portal information |
+| 3 | 📊 Dashboard | `html/dashboard.php` | Authenticated student overview |
 | 4 | ℹ️ About | `html/about.html` | Information about StudentHub |
 | 5 | 🛠️ Admin | `html/admin.html` | Administration interface prototype |
 | 6 | 📞 Contact | `html/contact.html` | Contact interface |
 | 7 | 📅 Events | `html/events.html` | Campus events and activities |
 | 8 | ❓ FAQ | `html/faq.html` | Frequently asked questions |
-| 9 | 👤 Profile | `html/profile.html` | Student profile interface |
+| 9 | 👤 Profile | `html/profile.php` | Authenticated student profile |
 | 10 | 📝 Register | `html/register.html` | Student registration interface |
 
-**Total implemented HTML pages: 10**
+**Total implemented pages: 10**
 
 ---
 
@@ -113,11 +113,11 @@ StudentHub Portal
 
 **CSS:** `html/css/login.css`
 
-**Limitation:** Real authentication is not implemented.
+**Limitation:** A PHP login endpoint is included; configure the local PHP/database environment and harden authentication before deployment.
 
 ---
 
-### 📊 Dashboard — `dashboard.html`
+### 📊 Dashboard — `dashboard.php`
 
 **Purpose:** Provides the main student dashboard interface.
 
@@ -217,7 +217,7 @@ StudentHub Portal
 
 ---
 
-### 👤 Profile — `profile.html`
+### 👤 Profile — `profile.php`
 
 **Purpose:** Provides a student profile interface.
 
@@ -245,7 +245,7 @@ StudentHub Portal
 
 **CSS:** `html/css/register.css`
 
-**Limitation:** Registration data is not stored in a database.
+**Limitation:** A PHP registration endpoint is included; configure and verify the local database/storage setup before use.
 
 ---
 
@@ -261,12 +261,16 @@ html/
     ├── 🎨 admin.css
     ├── 🎨 contact.css
     ├── 🎨 dashboard.css
+    ├── 🎨 dashboard-dynamic.css
+    ├── 🎨 dashboard-dynamic.css
     ├── 🎨 events.css
     ├── 🎨 faq.css
     ├── 🎨 index.css
     ├── 🎨 login.css
     ├── 🎨 profile.css
-    └── 🎨 register.css
+    ├── 🎨 register.css
+    └── 🎨 shared.css
+    └── 🎨 shared.css
 ```
 
 ### CSS Responsibilities
@@ -339,34 +343,56 @@ StudentHub/
 ├── 📄 LOW_FIDELITY_WIREFRAME.md
 │
 ├── 📁 html/
+│   ├── 📁 json/
+│   │   ├── events.json
+│   │   └── faq.json
 │   │
 │   ├── 📁 css/
 │   │   ├── 🎨 about.css
 │   │   ├── 🎨 admin.css
 │   │   ├── 🎨 contact.css
 │   │   ├── 🎨 dashboard.css
+│   │   ├── 🎨 dashboard-dynamic.css
 │   │   ├── 🎨 events.css
 │   │   ├── 🎨 faq.css
 │   │   ├── 🎨 index.css
 │   │   ├── 🎨 login.css
 │   │   ├── 🎨 profile.css
-│   │   └── 🎨 register.css
+│   │   ├── 🎨 register.css
+│   │   └── 🎨 shared.css
 │   │
 │   ├── 🏠 index.html
 │   ├── 🔐 login.html
-│   ├── 📊 dashboard.html
+│   ├── 📊 dashboard.php
 │   ├── ℹ️ about.html
 │   ├── 🛠️ admin.html
 │   ├── 📞 contact.html
 │   ├── 📅 events.html
 │   ├── ❓ faq.html
-│   ├── 👤 profile.html
+│   ├── 👤 profile.php
 │   ├── 📝 register.html
 │   │
 │   ├── 🖼️ hackathon.jpg
 │   ├── 🖼️ img.png
 │   ├── 🖼️ sport.webp
 │   └── 🖼️ workshop.jpg
+│
+├── 📁 javascript/
+│   ├── about.js
+│   ├── admin.js
+│   ├── contact.js
+│   ├── dashboard.js
+│   ├── events.js
+│   ├── faq.js
+│   ├── index.js
+│   ├── login.js
+│   ├── profile.js
+│   └── register.js
+│
+├── 📁 php/
+│   ├── dbconnect.php
+│   ├── login.php
+│   └── register.php
 │
 └── 📁 wireframe/
 ```
@@ -402,19 +428,14 @@ The sitemap's logical navigation structure is:
 
 ## ⚠️ 10. Static Prototype Limitations
 
-The current StudentHub project is a frontend-only prototype.
+The current StudentHub project is an interactive frontend and PHP prototype. The following application features are still prototypes or require environment-specific setup:
 
 ```text
-❌ Backend server
-❌ Database
-❌ JavaScript application logic
-❌ Real authentication
-❌ Persistent user data
-❌ Dynamic dashboard data
-❌ Database-backed profile
-❌ Real admin management
-❌ Dynamic event management
-❌ Backend form processing
+⚠️ PHP server and database configuration
+⚠️ Production-ready authentication and authorization
+⚠️ Persistent, database-backed profile and dashboard data
+⚠️ Live admin, user, and event management
+⚠️ Production contact and feedback delivery
 ```
 
 ---
@@ -467,10 +488,10 @@ These are **future features** and are not part of the current 10-page implementa
 | 🖼️ Image Assets | ✅ Available |
 | 📚 Documentation | ✅ Available |
 | 📱 Responsive CSS | ✅ Implemented |
-| JavaScript | ❌ Not implemented |
-| Backend | ❌ Not implemented |
-| Database | ❌ Not implemented |
-| Real Authentication | ❌ Not implemented |
+| JavaScript interactions | ✅ Implemented |
+| PHP login and registration endpoints | ✅ Included; environment setup required |
+| Database configuration | ⚠️ Local setup required |
+| Production authentication | ⚠️ Not production-hardened |
 
 ---
 

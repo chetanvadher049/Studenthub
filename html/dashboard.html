@@ -10,11 +10,12 @@
 
     <title>StudentHub - Dashboard</title>
 
-    <link rel="stylesheet"
-          href="css/dashboard.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/dashboard-dynamic.css">
+    <link rel="stylesheet" href="css/shared.css">
+    <script src="../javascript/dashboard.js" defer></script>
 
 </head>
-
 
 <body>
 
@@ -73,7 +74,7 @@
                 </a>
 
 
-                <a href="dashboard.html"
+                <a href="dashboard.php"
                    aria-current="page">
 
                     <span class="menu-icon">▣</span>
@@ -92,7 +93,7 @@
                 </a>
 
 
-                <a href="profile.html">
+                <a href="profile.php">
 
                     <span class="menu-icon">👤</span>
 
@@ -163,7 +164,11 @@
          LOGIN / REGISTER
          ================================================= -->
 
-    <div class="auth-buttons">
+    <div class="header-actions">
+        <button id="themeToggle" class="theme-toggle" type="button"
+                aria-label="Switch to dark mode">🌙</button>
+
+        <div class="auth-buttons">
 
 
         <a href="login.html">
@@ -176,10 +181,17 @@
         </a>
 
 
+        </div>
     </div>
 
 
 </header>
+
+<!-- NOTIFICATION BANNER -->
+<div id="notificationBanner" class="notification-banner">
+    <span>📢 You have 5 new notifications and upcoming events.</span>
+    <button id="closeNotification" type="button" aria-label="Close notification">×</button>
+</div>
 
 
 
@@ -400,106 +412,47 @@
 
 
                 <!-- EVENT 1 -->
-
-                <li>
-
-
-                    <div class="list-thumbnail"
-                         aria-hidden="true">
-
+                <li class="event-item" data-event="Technical Workshop">
+                    <div class="list-thumbnail" aria-hidden="true">
                         📚
-
                     </div>
-
 
                     <div class="list-content">
-
-                        <strong>
-                            Technical Workshop
-                        </strong>
-
-                        <span>
-                            Technology & Development
-                        </span>
-
+                        <strong>Technical Workshop</strong>
+                        <span>Technology & Development</span>
                     </div>
 
-
-                    <span class="list-arrow">
-                        ›
-                    </span>
-
-
+                    <span class="list-arrow">›</span>
                 </li>
-
 
 
                 <!-- EVENT 2 -->
-
-                <li>
-
-
-                    <div class="list-thumbnail"
-                         aria-hidden="true">
-
+                <li class="event-item" data-event="College Hackathon">
+                    <div class="list-thumbnail" aria-hidden="true">
                         💻
-
                     </div>
-
 
                     <div class="list-content">
-
-                        <strong>
-                            College Hackathon
-                        </strong>
-
-                        <span>
-                            Coding Competition
-                        </span>
-
+                        <strong>College Hackathon</strong>
+                        <span>Coding Competition</span>
                     </div>
 
-
-                    <span class="list-arrow">
-                        ›
-                    </span>
-
-
+                    <span class="list-arrow">›</span>
                 </li>
 
 
-
                 <!-- EVENT 3 -->
-
-                <li>
-
-
-                    <div class="list-thumbnail"
-                         aria-hidden="true">
-
+                <li class="event-item" data-event="Sports Day">
+                    <div class="list-thumbnail" aria-hidden="true">
                         🏆
-
                     </div>
-
 
                     <div class="list-content">
-
-                        <strong>
-                            Sports Day
-                        </strong>
-
-                        <span>
-                            Annual Sports Activities
-                        </span>
-
+                        <strong>Sports Day</strong>
+                        <span>Annual Sports Activities</span>
                     </div>
 
-
-                    <span class="list-arrow">
-                        ›
-                    </span>
-
-
+                    <span class="list-arrow">›</span>
                 </li>
 
 
@@ -550,10 +503,8 @@
 
                 <!-- ANNOUNCEMENT 1 -->
 
-                <li>
-
-
-                    <span class="announcement-dot"
+                <li class="announcement-item" data-title="New academic schedule" data-text="The latest academic schedule is now available for students.">
+<span class="announcement-dot"
                           aria-hidden="true">
                     </span>
 
@@ -577,10 +528,8 @@
 
                 <!-- ANNOUNCEMENT 2 -->
 
-                <li>
-
-
-                    <span class="announcement-dot"
+                <li class="announcement-item" data-title="Event registration is open" data-text="Registration for upcoming college events is now open.">
+<span class="announcement-dot"
                           aria-hidden="true">
                     </span>
 
@@ -604,10 +553,8 @@
 
                 <!-- ANNOUNCEMENT 3 -->
 
-                <li>
-
-
-                    <span class="announcement-dot"
+                <li class="announcement-item" data-title="Important student notice" data-text="Please check the latest student updates and notices.">
+<span class="announcement-dot"
                           aria-hidden="true">
                     </span>
 
@@ -640,6 +587,22 @@
 </main>
 
 
+
+
+<!-- MODAL POPUP -->
+<div id="dashboardModal" class="dashboard-modal">
+    <div class="modal-box">
+        <button id="modalClose" class="modal-close" type="button"
+                aria-label="Close popup">&times;</button>
+
+        <h2 id="modalTitle">StudentHub</h2>
+        <p id="modalText">
+            Select an event or announcement to see more information.
+        </p>
+
+        <button id="modalOk" class="modal-ok" type="button">OK</button>
+    </div>
+</div>
 
 <!-- =====================================================
      FOOTER

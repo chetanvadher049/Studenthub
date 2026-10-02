@@ -1,0 +1,94 @@
+{
+  "faqs": [
+    {
+      "id": 1,
+      "question": "What is StudentHub?",
+      "answer": "StudentHub is a centralized platform where students can find events, student profiles, notices, FAQs and other important college information.",
+      "category": "General"
+    },
+    {
+      "id": 2,
+      "question": "How can I register as a student?",
+      "answer": "Open the student registration page, enter your personal and academic details, complete the validation and submit the registration form.",
+      "category": "Registration"
+    },
+    {
+      "id": 3,
+      "question": "Can I update my student profile?",
+      "answer": "Yes. Students can update their profile information such as skills, contact details and other permitted information from the profile section.",
+      "category": "Profile"
+    },
+    {
+      "id": 4,
+      "question": "How can I find upcoming events?",
+      "answer": "Open the Events section to view upcoming college events. You can search and filter events by category and other available options.",
+      "category": "Events"
+    },
+    {
+      "id": 5,
+      "question": "Can I search for a specific event?",
+      "answer": "Yes. Use the event search box to search for an event by its title, category or related information.",
+      "category": "Events"
+    },
+    {
+      "id": 6,
+      "question": "Can events be filtered by category?",
+      "answer": "Yes. Events can be filtered using categories such as Workshop, Competition, Seminar, Career, Sports and Cultural.",
+      "category": "Events"
+    },
+    {
+      "id": 7,
+      "question": "How can I search for students?",
+      "answer": "Go to the Students section and enter the student's name, course, city or other available information in the search field.",
+      "category": "Students"
+    },
+    {
+      "id": 8,
+      "question": "What student information is displayed?",
+      "answer": "The student directory can display information such as name, email, course, year, city and skills.",
+      "category": "Students"
+    },
+    {
+      "id": 9,
+      "question": "Does StudentHub support dark mode?",
+      "answer": "Yes. StudentHub includes a light and dark theme switcher that allows users to change the website appearance.",
+      "category": "Features"
+    },
+    {
+      "id": 10,
+      "question": "Does StudentHub work on mobile devices?",
+      "answer": "Yes. The website is designed to be responsive and can be used on desktops, tablets and mobile devices.",
+      "category": "General"
+    },
+    {
+      "id": 11,
+      "question": "What is the hamburger menu used for?",
+      "answer": "The hamburger menu provides easy access to website navigation links on smaller screens and mobile devices.",
+      "category": "Features"
+    },
+    {
+      "id": 12,
+      "question": "How is event data loaded?",
+      "answer": "Event information can be stored in an external JSON file and loaded dynamically using the JavaScript Fetch API.",
+      "category": "Technical"
+    },
+    {
+      "id": 13,
+      "question": "How is student data loaded?",
+      "answer": "Student information can be retrieved from students.json using the Fetch API and dynamically displayed on the StudentHub website.",
+      "category": "Technical"
+    },
+    {
+      "id": 14,
+      "question": "What happens if JSON data cannot be loaded?",
+      "answer": "The website should display a suitable error message when the JSON file cannot be found or the data request fails.",
+      "category": "Technical"
+    },
+    {
+      "id": 15,
+      "question": "Can the FAQ section be searched?",
+      "answer": "Yes. JavaScript can be used to search FAQ questions and dynamically display only the matching questions and answers.",
+      "category": "Features"
+    }
+  ]
+}

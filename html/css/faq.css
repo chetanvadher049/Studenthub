@@ -1,1506 +1,1126 @@
-/* =========================================================
-   STUDENTHUB
-   FAQ & FEEDBACK PAGE
-   PROFESSIONAL RESPONSIVE CSS
-   HTML-ONLY DROPDOWN MENU
-   ========================================================= */
+/* =====================================================
+   STUDENTHUB FAQ PAGE
+   ===================================================== */
 
 
-/* =========================================================
-   01. RESET
-   ========================================================= */
+/* =====================================================
+   GLOBAL
+   ===================================================== */
 
-*,
-*::before,
-*::after {
-
+* {
     box-sizing: border-box;
-
+    margin: 0;
+    padding: 0;
 }
 
 
 html {
-
-    margin: 0;
-
-    padding: 0;
-
-    width: 100%;
-
-    min-height: 100%;
-
     scroll-behavior: smooth;
-
 }
 
 
 body {
-
-    margin: 0;
-
-    padding: 0;
-
-    min-height: 100vh;
-
-    width: 100%;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    color: #1f2937;
+    font-family: Arial, Helvetica, sans-serif;
 
     background: #f4f7fb;
 
-    line-height: 1.6;
+    color: #17213a;
 
+    line-height: 1.5;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
 }
 
 
-/* =========================================================
-   02. HEADER
-   ========================================================= */
-
-.site-header {
-
-    position: relative;
-
-    z-index: 10000;
-
-    width: 100%;
-
-    min-height: 70px;
-
-    display: grid;
-
-    grid-template-columns:
-        1fr
-        auto
-        1fr;
-
-    align-items: center;
-
-    padding: 8px 24px;
-
-    background: #ffffff;
-
-    border-bottom:
-        1px solid #dce3ec;
-
-    box-shadow:
-        0 3px 18px
-        rgba(15, 23, 42, 0.08);
-
-    overflow: visible;
-
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
 }
 
 
-/* =========================================================
-   03. MENU CONTAINER
-   ========================================================= */
+/* =====================================================
+   HEADER
+   ===================================================== */
 
-.menu-container {
+.top-header {
+    background: white;
 
-    position: relative;
+    border-bottom: 1px solid #dce2ea;
 
-    justify-self: start;
+    position: sticky;
 
-    width: 44px;
+    top: 0;
 
-    height: 44px;
-
-    z-index: 99999;
-
+    z-index: 1000;
 }
 
 
-/* =========================================================
-   04. DETAILS
-   ========================================================= */
+.header-content {
+    max-width: 1100px;
 
-.menu-details {
+    margin: auto;
 
-    position: relative;
-
-    width: 44px;
-
-    display: block;
-
-}
-
-
-/* =========================================================
-   05. SUMMARY RESET
-   ========================================================= */
-
-.menu-details > summary {
-
-    list-style: none;
-
-}
-
-
-.menu-details > summary::-webkit-details-marker {
-
-    display: none;
-
-}
-
-
-.menu-details > summary::marker {
-
-    display: none;
-
-}
-
-
-/* =========================================================
-   06. THREE LINE BUTTON
-   ========================================================= */
-
-.menu-button {
-
-    width: 44px;
-
-    height: 44px;
+    padding: 12px 20px;
 
     display: flex;
 
-    flex-direction: column;
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+
+.logo {
+    text-decoration: none;
+
+    color: #1769e0;
+
+    font-size: 22px;
+
+    font-weight: 700;
+}
+
+
+.header-actions {
+    display: flex;
 
     align-items: center;
 
-    justify-content: center;
+    gap: 10px;
+}
 
-    gap: 5px;
 
-    padding: 0;
+.menu-details {
+    position: relative;
+}
 
-    margin: 0;
 
-    background: #ffffff;
+.menu-button,
+.theme-button {
+    border: 1px solid #d5dce5;
 
-    border:
-        1px solid #cbd5e1;
+    background: white;
 
     border-radius: 8px;
 
     cursor: pointer;
 
-    user-select: none;
+    min-width: 40px;
 
-    position: relative;
-
-    z-index: 100000;
-
-}
-
-
-/* =========================================================
-   07. HAMBURGER LINES
-   ========================================================= */
-
-.menu-button span {
-
-    display: block;
-
-    width: 23px;
-
-    height: 3px;
-
-    background: #1f4f9a;
-
-    border-radius: 5px;
-
-    transition:
-        transform 0.25s ease,
-        opacity 0.25s ease;
-
-}
-
-
-/* =========================================================
-   08. BUTTON HOVER
-   ========================================================= */
-
-.menu-button:hover {
-
-    background: #edf3ff;
-
-    border-color: #9bb8e5;
-
-}
-
-
-/* =========================================================
-   09. OPEN BUTTON
-   ========================================================= */
-
-.menu-details[open]
-> .menu-button {
-
-    background: #edf3ff;
-
-    border-color: #9bb8e5;
-
-}
-
-
-/* =========================================================
-   10. ANIMATE TO X
-   ========================================================= */
-
-.menu-details[open]
-> .menu-button
-span:nth-child(1) {
-
-    transform:
-        translateY(8px)
-        rotate(45deg);
-
-}
-
-
-.menu-details[open]
-> .menu-button
-span:nth-child(2) {
-
-    opacity: 0;
-
-}
-
-
-.menu-details[open]
-> .menu-button
-span:nth-child(3) {
-
-    transform:
-        translateY(-8px)
-        rotate(-45deg);
-
-}
-
-
-/* =========================================================
-   11. DROPDOWN
-   ========================================================= */
-
-.dropdown-menu {
-
-    position: absolute;
-
-    top:
-        calc(100% + 10px);
-
-    left: 0;
-
-    width: 270px;
-
-    max-width:
-        calc(100vw - 20px);
-
-    display: none;
-
-    flex-direction: column;
-
-    gap: 3px;
-
-    padding: 8px;
-
-    background: #ffffff;
-
-    border:
-        1px solid #d5deeb;
-
-    border-radius: 12px;
-
-    box-shadow:
-        0 18px 45px
-        rgba(15, 23, 42, 0.20);
-
-    overflow: hidden;
-
-    z-index: 999999;
-
-}
-
-
-/* =========================================================
-   12. SHOW DROPDOWN
-   ========================================================= */
-
-.menu-details[open]
-> .dropdown-menu {
-
-    display: flex;
-
-    animation:
-        dropdown-open
-        0.2s
-        ease-out;
-
-}
-
-
-/* =========================================================
-   13. DROPDOWN ANIMATION
-   ========================================================= */
-
-@keyframes dropdown-open {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(-8px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0);
-
-    }
-
-}
-
-
-/* =========================================================
-   14. DROPDOWN LINKS
-   ========================================================= */
-
-.dropdown-menu a {
-
-    width: 100%;
-
-    min-height: 44px;
+    height: 40px;
 
     display: flex;
 
     align-items: center;
 
-    gap: 11px;
+    justify-content: center;
+}
 
-    padding: 10px 13px;
 
-    color: #243447;
+.menu-button {
+    list-style: none;
+
+    font-size: 20px;
+}
+
+
+.menu-button::-webkit-details-marker {
+    display: none;
+}
+
+
+.theme-button {
+    font-size: 18px;
+}
+
+
+.menu-button:hover,
+.theme-button:hover {
+    background: #f0f5ff;
+}
+
+
+.dropdown-menu {
+    position: absolute;
+
+    right: 0;
+
+    top: 48px;
+
+    width: 180px;
+
+    background: white;
+
+    border: 1px solid #dce2ea;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.12);
+
+    overflow: hidden;
+}
+
+
+.dropdown-menu a {
+    display: block;
+
+    padding: 11px 15px;
+
+    text-decoration: none;
+
+    color: #26334d;
+
+    font-size: 14px;
+}
+
+
+.dropdown-menu a:hover {
+    background: #edf4ff;
+
+    color: #1769e0;
+}
+
+
+/* =====================================================
+   MAIN
+   ===================================================== */
+
+.faq-page {
+    width: 92%;
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 25px 0 40px;
+}
+
+
+/* =====================================================
+   NOTIFICATION
+   ===================================================== */
+
+.notification-banner {
+    border: 1px solid #a8caff;
+
+    background: #edf6ff;
+
+    border-radius: 7px;
+
+    min-height: 42px;
+
+    padding: 8px 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    color: #28548a;
+
+    font-size: 13px;
+
+    margin-bottom: 38px;
+}
+
+
+.notification-banner button {
+    border: none;
 
     background: transparent;
 
+    color: #245b99;
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   HEADING
+   ===================================================== */
+
+.faq-heading {
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+
+.section-label {
+    display: block;
+
+    color: #1769e0;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 6px;
+}
+
+
+.faq-heading h1 {
+    font-size: 30px;
+
+    margin-bottom: 8px;
+
+    color: #121d36;
+}
+
+
+.faq-heading p {
+    color: #6b768c;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+.faq-search-section {
+    margin-bottom: 18px;
+}
+
+
+.search-box {
+    position: relative;
+}
+
+
+.search-icon {
+    position: absolute;
+
+    left: 14px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 14px;
+}
+
+
+.search-box input {
+    width: 100%;
+
+    height: 44px;
+
+    border: 1px solid #cbd3df;
+
+    border-radius: 7px;
+
+    padding: 0 15px 0 38px;
+
+    background: white;
+
+    outline: none;
+
+    font-size: 13px;
+}
+
+
+.search-box input:focus {
+    border-color: #1769e0;
+
+    box-shadow:
+        0 0 0 3px rgba(23, 105, 224, 0.1);
+}
+
+
+/* =====================================================
+   LOADING
+   ===================================================== */
+
+.faq-loading {
+    text-align: center;
+
+    padding: 20px;
+
+    color: #1769e0;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   ERROR
+   ===================================================== */
+
+.faq-error {
+    padding: 15px;
+
+    background: #fff0f0;
+
+    border: 1px solid #ffc4c4;
+
     border-radius: 8px;
+
+    color: #b42323;
+
+    margin-bottom: 15px;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   FAQ CONTROLS
+   ===================================================== */
+
+.faq-controls {
+    margin-bottom: 18px;
+}
+
+
+.faq-filter-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 14px;
+}
+
+
+.filter-box {
+    background: white;
+
+    border: 1px solid #dce3ed;
+
+    border-radius: 9px;
+
+    padding: 4px 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    min-height: 50px;
+
+    box-shadow:
+        0 3px 12px rgba(31, 55, 88, 0.05);
+}
+
+
+.filter-box select {
+    border: none;
+
+    outline: none;
+
+    width: 100%;
+
+    background: transparent;
+
+    color: #25334d;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+
+.faq-result-count {
+    margin-top: 10px;
+
+    color: #6a7487;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   FAQ CONTAINER
+   ===================================================== */
+
+.faq-container {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+
+    min-height: 20px;
+}
+
+
+/* =====================================================
+   FAQ ITEM
+   ===================================================== */
+
+.faq-item {
+    background: white;
+
+    border: 1px solid #d5dce6;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.faq-item:hover {
+    box-shadow:
+        0 5px 18px rgba(30, 60, 100, 0.08);
+}
+
+
+.faq-question {
+    width: 100%;
+
+    border: none;
+
+    background: white;
+
+    min-height: 55px;
+
+    padding: 0 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    cursor: pointer;
+
+    color: #1c2943;
+
+    text-align: left;
 
     font-size: 14px;
 
     font-weight: 600;
-
-    text-decoration: none;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        padding-left 0.2s ease;
-
 }
 
 
-/* =========================================================
-   15. MENU ICON
-   ========================================================= */
-
-.menu-icon {
-
-    width: 23px;
-
-    min-width: 23px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 15px;
-
+.faq-question:hover {
+    background: #f8fbff;
 }
 
 
-/* =========================================================
-   16. DROPDOWN HOVER
-   ========================================================= */
-
-.dropdown-menu a:hover {
-
-    color: #1f4f9a;
-
-    background: #edf3ff;
-
-    padding-left: 17px;
-
+.faq-question-text {
+    padding-right: 15px;
 }
 
 
-/* =========================================================
-   17. ACTIVE PAGE
-   ========================================================= */
+.faq-icon {
+    color: #1769e0;
 
-.dropdown-menu a[aria-current="page"] {
-
-    color: #1f4f9a;
-
-    background: #e7efff;
-
-    font-weight: 800;
-
-}
-
-
-/* =========================================================
-   18. LOGO
-   ========================================================= */
-
-.logo {
-
-    justify-self: center;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 6px;
-
-    color: #173f7a;
-
-    text-decoration: none;
-
-}
-
-
-/* =========================================================
-   19. LOGO ICON
-   ========================================================= */
-
-.logo-icon {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 23px;
-
-}
-
-
-/* =========================================================
-   20. LOGO TEXT
-   ========================================================= */
-
-.logo-text {
-
-    font-size: 15px;
-
-    font-weight: 800;
-
-}
-
-
-/* =========================================================
-   21. AUTH BUTTONS
-   ========================================================= */
-
-.auth-buttons {
-
-    justify-self: end;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-}
-
-
-/* =========================================================
-   22. AUTH LINKS
-   ========================================================= */
-
-.auth-buttons a {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    min-height: 34px;
-
-    padding: 7px 13px;
-
-    color: #374151;
-
-    background: #ffffff;
-
-    border:
-        1px solid #cbd5e1;
-
-    border-radius: 6px;
-
-    font-size: 12px;
+    font-size: 18px;
 
     font-weight: 700;
 
-    text-decoration: none;
+    min-width: 20px;
 
-    transition:
-        all 0.2s ease;
-
+    text-align: center;
 }
 
 
-/* =========================================================
-   23. AUTH HOVER
-   ========================================================= */
+.faq-answer {
+    border-top: 1px solid #e3e7ee;
 
-.auth-buttons a:hover {
+    padding: 15px 18px;
 
-    color: #1f4f9a;
+    background: #fbfcfe;
 
-    background: #edf3ff;
+    color: #626d80;
 
-    border-color: #9bb8e5;
-
+    font-size: 13px;
 }
 
 
-/* =========================================================
-   24. REGISTER BUTTON
-   ========================================================= */
-
-.auth-buttons a:last-child {
-
-    color: #ffffff;
-
-    background: #1f4f9a;
-
-    border-color: #1f4f9a;
-
+.faq-answer p {
+    margin-bottom: 8px;
 }
 
 
-.auth-buttons a:last-child:hover {
-
-    background: #173f7a;
-
-    border-color: #173f7a;
-
-}
-
-
-/* =========================================================
-   25. MAIN CONTENT
-   ========================================================= */
-
-.main-content {
-
-    width: 100%;
-
-    max-width: 1000px;
-
-    margin: 0 auto;
-
-    padding:
-        45px 25px 60px;
-
-}
-
-
-/* =========================================================
-   26. PAGE HEADING
-   ========================================================= */
-
-.page-heading {
-
-    margin-bottom: 24px;
-
-}
-
-
-/* =========================================================
-   27. SECTION LABEL
-   ========================================================= */
-
-.section-label {
-
-    margin:
-        0 0 5px;
-
-    color: #2563eb;
+.faq-category {
+    color: #1769e0;
 
     font-size: 11px;
 
-    font-weight: 800;
-
-    text-transform: uppercase;
-
-    letter-spacing: 1px;
-
+    font-weight: 600;
 }
 
 
-/* =========================================================
-   28. FAQ HEADING
-   ========================================================= */
+/* =====================================================
+   NO RESULTS
+   ===================================================== */
 
-.faq-section h1 {
+.no-results {
+    text-align: center;
 
-    margin: 0;
+    background: white;
 
-    color: #111827;
+    border: 1px solid #dce2ea;
 
-    font-size: 32px;
+    border-radius: 10px;
 
-    font-weight: 800;
+    padding: 35px 20px;
 
-    line-height: 1.25;
-
+    margin-top: 10px;
 }
 
 
-/* =========================================================
-   29. FEEDBACK HEADING
-   ========================================================= */
+.no-results-icon {
+    font-size: 30px;
 
-.feedback-section h2 {
-
-    margin: 0;
-
-    color: #111827;
-
-    font-size: 25px;
-
-    font-weight: 800;
-
-    line-height: 1.3;
-
+    margin-bottom: 8px;
 }
 
 
-/* =========================================================
-   30. DESCRIPTION
-   ========================================================= */
+.no-results h3 {
+    margin-bottom: 5px;
+}
 
-.page-description {
 
-    max-width: 650px;
-
-    margin:
-        8px 0 0;
-
-    color: #6b7280;
+.no-results p {
+    color: #727c8d;
 
     font-size: 13px;
-
 }
 
 
-/* =========================================================
-   31. FAQ SECTION
-   ========================================================= */
+/* =====================================================
+   FEEDBACK
+   ===================================================== */
 
-.faq-section {
+.feedback-section {
+    background: white;
 
-    width: 100%;
-
-    margin-bottom: 35px;
-
-    padding: 28px;
-
-    background: #ffffff;
-
-    border:
-        1px solid #e1e7ef;
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 8px 28px
-        rgba(15, 23, 42, 0.06);
-
-}
-
-
-/* =========================================================
-   32. FAQ ITEM
-   ========================================================= */
-
-.faq-item {
-
-    margin-bottom: 10px;
-
-    background: #f8fafc;
-
-    border:
-        1px solid #e2e8f0;
+    border: 1px solid #d5dce6;
 
     border-radius: 9px;
 
-    overflow: hidden;
+    margin-top: 28px;
 
+    padding: 25px 30px;
+
+    text-align: center;
+
+    box-shadow:
+        0 4px 15px rgba(31, 55, 88, 0.04);
 }
 
 
-/* =========================================================
-   33. LAST FAQ
-   ========================================================= */
+.feedback-icon {
+    color: #1769e0;
 
-.faq-item:last-child {
+    font-size: 23px;
 
-    margin-bottom: 0;
-
+    margin-bottom: 3px;
 }
 
 
-/* =========================================================
-   34. FAQ SUMMARY
-   ========================================================= */
+.feedback-section .section-label {
+    margin-bottom: 4px;
+}
 
-.faq-item summary {
 
-    position: relative;
+.feedback-section h2 {
+    font-size: 22px;
+
+    color: #17213a;
+
+    margin-bottom: 6px;
+}
+
+
+.feedback-description {
+    color: #737d8f;
+
+    font-size: 13px;
+
+    margin-bottom: 20px;
+}
+
+
+.feedback-form {
+    text-align: left;
+}
+
+
+.form-group {
+    margin-bottom: 13px;
+}
+
+
+.form-group label {
+    display: block;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    margin-bottom: 6px;
+
+    color: #26334b;
+}
+
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+
+    border: 1px solid #cbd3df;
+
+    border-radius: 5px;
+
+    padding: 10px;
+
+    font-size: 12px;
+
+    outline: none;
+
+    background: white;
+
+    color: #202c42;
+}
+
+
+.form-group input {
+    height: 40px;
+}
+
+
+.form-group textarea {
+    resize: vertical;
+
+    min-height: 95px;
+}
+
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #1769e0;
+
+    box-shadow:
+        0 0 0 3px rgba(23, 105, 224, 0.08);
+}
+
+
+.error-text {
+    display: block;
+
+    color: #d52b2b;
+
+    font-size: 11px;
+
+    margin-top: 4px;
+
+    min-height: 13px;
+}
+
+
+.submit-feedback {
+    width: 100%;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    background: #2468e8;
+
+    color: white;
+
+    font-weight: 600;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+
+.submit-feedback:hover {
+    background: #1556cf;
+}
+
+
+/* =====================================================
+   PAGINATION
+   ===================================================== */
+
+.faq-pagination {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 6px;
+
+    margin-top: 25px;
+}
+
+
+.faq-pagination button {
+    min-width: 38px;
+
+    height: 36px;
+
+    padding: 0 10px;
+
+    border: 1px solid #d3dbe7;
+
+    border-radius: 6px;
+
+    background: white;
+
+    color: #2b3850;
+
+    cursor: pointer;
+
+    font-size: 13px;
+}
+
+
+.faq-pagination button:hover:not(:disabled) {
+    border-color: #1769e0;
+
+    color: #1769e0;
+}
+
+
+.faq-pagination button.active {
+    background: #2468e8;
+
+    border-color: #2468e8;
+
+    color: white;
+
+    font-weight: 600;
+}
+
+
+.faq-pagination button:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+
+/* =====================================================
+   MODAL
+   ===================================================== */
+
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(15, 25, 45, 0.55);
 
     display: flex;
 
     align-items: center;
 
-    min-height: 55px;
+    justify-content: center;
 
-    padding:
-        15px 45px 15px 17px;
+    z-index: 5000;
 
-    color: #26364a;
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    list-style: none;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease;
-
+    padding: 20px;
 }
 
 
-/* =========================================================
-   35. FAQ SUMMARY MARKER
-   ========================================================= */
-
-.faq-item summary::-webkit-details-marker {
-
-    display: none;
-
-}
-
-
-/* =========================================================
-   36. FAQ CUSTOM ICON
-   ========================================================= */
-
-.faq-item summary::after {
-
-    content: "+";
-
-    position: absolute;
-
-    right: 17px;
-
-    top: 50%;
-
-    transform:
-        translateY(-50%);
-
-    color: #2563eb;
-
-    font-size: 21px;
-
-    font-weight: 400;
-
-}
-
-
-/* =========================================================
-   37. OPEN FAQ ICON
-   ========================================================= */
-
-.faq-item[open]
-summary::after {
-
-    content: "−";
-
-}
-
-
-/* =========================================================
-   38. FAQ HOVER
-   ========================================================= */
-
-.faq-item summary:hover {
-
-    color: #1f4f9a;
-
-    background: #edf3ff;
-
-}
-
-
-/* =========================================================
-   39. FAQ ANSWER
-   ========================================================= */
-
-.faq-item p {
-
-    margin: 0;
-
-    padding:
-        0 17px 18px;
-
-    color: #667085;
-
-    font-size: 13px;
-
-    line-height: 1.7;
-
-    border-top:
-        1px solid #e5eaf1;
-
-}
-
-
-/* =========================================================
-   40. FEEDBACK SECTION
-   ========================================================= */
-
-.feedback-section {
-
+.modal-box {
     width: 100%;
 
-    padding: 28px;
+    max-width: 400px;
 
-    background: #ffffff;
+    background: white;
 
-    border:
-        1px solid #e1e7ef;
+    border-radius: 12px;
 
-    border-radius: 14px;
-
-    box-shadow:
-        0 8px 28px
-        rgba(15, 23, 42, 0.06);
-
-}
-
-
-/* =========================================================
-   41. FEEDBACK FORM
-   ========================================================= */
-
-.feedback-form {
-
-    width: 100%;
-
-    max-width: 700px;
-
-}
-
-
-/* =========================================================
-   42. FORM GROUP
-   ========================================================= */
-
-.form-group {
-
-    display: flex;
-
-    flex-direction: column;
-
-    margin-bottom: 18px;
-
-}
-
-
-/* =========================================================
-   43. LABEL
-   ========================================================= */
-
-.form-group label {
-
-    margin-bottom: 7px;
-
-    color: #374151;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-}
-
-
-/* =========================================================
-   44. INPUT
-   ========================================================= */
-
-.form-group input,
-.form-group textarea {
-
-    width: 100%;
-
-    padding:
-        12px 14px;
-
-    color: #1f2937;
-
-    background: #ffffff;
-
-    border:
-        1px solid #cbd5e1;
-
-    border-radius: 8px;
-
-    font-family: inherit;
-
-    font-size: 13px;
-
-    outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
-
-}
-
-
-/* =========================================================
-   45. INPUT HEIGHT
-   ========================================================= */
-
-.form-group input {
-
-    min-height: 45px;
-
-}
-
-
-/* =========================================================
-   46. TEXTAREA
-   ========================================================= */
-
-.form-group textarea {
-
-    min-height: 145px;
-
-    resize: vertical;
-
-}
-
-
-/* =========================================================
-   47. PLACEHOLDER
-   ========================================================= */
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-
-    color: #9aa4b2;
-
-}
-
-
-/* =========================================================
-   48. INPUT FOCUS
-   ========================================================= */
-
-.form-group input:focus,
-.form-group textarea:focus {
-
-    border-color: #2563eb;
-
-    background: #ffffff;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(37, 99, 235, 0.12);
-
-}
-
-
-/* =========================================================
-   49. SUBMIT BUTTON
-   ========================================================= */
-
-.submit-feedback {
-
-    min-height: 44px;
-
-    padding:
-        10px 20px;
-
-    color: #ffffff;
-
-    background: #1f4f9a;
-
-    border:
-        1px solid #1f4f9a;
-
-    border-radius: 8px;
-
-    font-family: inherit;
-
-    font-size: 12px;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-
-}
-
-
-/* =========================================================
-   50. SUBMIT HOVER
-   ========================================================= */
-
-.submit-feedback:hover {
-
-    background: #173f7a;
-
-    border-color: #173f7a;
-
-    transform:
-        translateY(-1px);
-
-    box-shadow:
-        0 6px 15px
-        rgba(31, 79, 154, 0.20);
-
-}
-
-
-/* =========================================================
-   51. SUBMIT ACTIVE
-   ========================================================= */
-
-.submit-feedback:active {
-
-    transform:
-        translateY(0);
-
-}
-
-
-/* =========================================================
-   52. FOOTER
-   ========================================================= */
-
-.site-footer {
-
-    width: 100%;
-
-    padding:
-        22px 20px;
+    padding: 30px;
 
     text-align: center;
 
-    color: #64748b;
+    position: relative;
 
-    background: #ffffff;
-
-    border-top:
-        1px solid #e1e7ef;
-
-    font-size: 12px;
-
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.2);
 }
 
 
-.site-footer p {
+.modal-close {
+    position: absolute;
 
-    margin: 0;
+    right: 13px;
 
+    top: 10px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 22px;
+
+    cursor: pointer;
 }
 
 
-/* =========================================================
-   53. ACCESSIBILITY
-   ========================================================= */
+.success-icon {
+    width: 55px;
 
-a:focus-visible,
-button:focus-visible,
-summary:focus-visible {
+    height: 55px;
 
-    outline:
-        3px solid
-        rgba(37, 99, 235, 0.30);
+    margin: auto auto 12px;
 
-    outline-offset: 3px;
+    border-radius: 50%;
 
+    background: #dff8e7;
+
+    color: #159447;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 25px;
+
+    font-weight: bold;
 }
 
 
-/* =========================================================
-   54. TABLET
-   ========================================================= */
-
-@media (max-width: 768px) {
-
-
-    .site-header {
-
-        padding:
-            8px 16px;
-
-    }
-
-
-    .main-content {
-
-        padding:
-            35px 18px 50px;
-
-    }
-
-
-    .faq-section,
-    .feedback-section {
-
-        padding: 22px;
-
-    }
-
-
-    .faq-section h1 {
-
-        font-size: 28px;
-
-    }
-
-
-    .feedback-section h2 {
-
-        font-size: 23px;
-
-    }
-
+.modal-box h2 {
+    margin-bottom: 8px;
 }
 
 
-/* =========================================================
-   55. MOBILE
-   ========================================================= */
+.modal-box p {
+    color: #697488;
 
-@media (max-width: 600px) {
+    font-size: 13px;
+
+    margin-bottom: 18px;
+}
 
 
-    .site-header {
+.modal-ok {
+    border: none;
 
-        min-height: 64px;
+    background: #2468e8;
 
-        padding:
-            7px 12px;
+    color: white;
 
+    padding: 9px 28px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.footer {
+    border-top: 1px solid #dce2ea;
+
+    background: white;
+
+    text-align: center;
+
+    padding: 13px;
+
+    color: #697488;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   DARK MODE
+   ===================================================== */
+
+body.dark-theme {
+    background: #111827;
+
+    color: #e7edf7;
+}
+
+
+body.dark-theme .top-header,
+body.dark-theme .footer,
+body.dark-theme .faq-item,
+body.dark-theme .filter-box,
+body.dark-theme .feedback-section,
+body.dark-theme .search-box input,
+body.dark-theme .form-group input,
+body.dark-theme .form-group textarea,
+body.dark-theme .faq-pagination button,
+body.dark-theme .modal-box,
+body.dark-theme .dropdown-menu {
+    background: #1c2535;
+
+    color: #e7edf7;
+
+    border-color: #354158;
+}
+
+
+body.dark-theme .faq-heading h1,
+body.dark-theme .feedback-section h2,
+body.dark-theme .faq-question,
+body.dark-theme .form-group label {
+    color: #f2f5fa;
+}
+
+
+body.dark-theme .faq-heading p,
+body.dark-theme .feedback-description,
+body.dark-theme .faq-result-count,
+body.dark-theme .faq-answer,
+body.dark-theme .footer {
+    color: #aeb8ca;
+}
+
+
+body.dark-theme .faq-question:hover {
+    background: #222e42;
+}
+
+
+body.dark-theme .faq-answer {
+    background: #172031;
+
+    border-color: #354158;
+}
+
+
+body.dark-theme .notification-banner {
+    background: #172c48;
+
+    border-color: #315e91;
+
+    color: #c8ddfa;
+}
+
+
+body.dark-theme .dropdown-menu a {
+    color: #dbe4f2;
+}
+
+
+body.dark-theme .dropdown-menu a:hover {
+    background: #26344a;
+}
+
+
+body.dark-theme .filter-box select {
+    color: #e7edf7;
+}
+
+
+body.dark-theme .search-box input::placeholder,
+body.dark-theme .form-group input::placeholder,
+body.dark-theme .form-group textarea::placeholder {
+    color: #8995aa;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 700px) {
+
+    .faq-page {
+        width: 94%;
+
+        padding-top: 15px;
     }
 
 
-    .menu-container {
-
-        width: 40px;
-
-        height: 40px;
-
-    }
-
-
-    .menu-details {
-
-        width: 40px;
-
-    }
-
-
-    .menu-button {
-
-        width: 40px;
-
-        height: 40px;
-
-    }
-
-
-    .menu-button span {
-
-        width: 21px;
-
-        height: 2px;
-
-    }
-
-
-    .dropdown-menu {
-
-        width: 250px;
-
-        max-width:
-            calc(100vw - 20px);
-
-    }
-
-
-    .dropdown-menu a {
-
-        min-height: 42px;
-
-        font-size: 13px;
-
-    }
-
-
-    .logo {
-
-        gap: 4px;
-
-    }
-
-
-    .logo-icon {
-
-        font-size: 19px;
-
-    }
-
-
-    .logo-text {
-
-        font-size: 12px;
-
-    }
-
-
-    .auth-buttons {
-
-        gap: 4px;
-
-    }
-
-
-    .auth-buttons a {
-
-        min-height: 30px;
-
-        padding:
-            5px 8px;
-
-        font-size: 10px;
-
-    }
-
-
-    .main-content {
-
-        padding:
-            25px 12px 40px;
-
-    }
-
-
-    .faq-section,
-    .feedback-section {
-
-        padding: 18px;
-
-        border-radius: 11px;
-
-    }
-
-
-    .faq-section h1 {
-
+    .faq-heading h1 {
         font-size: 24px;
-
     }
 
 
-    .feedback-section h2 {
-
-        font-size: 21px;
-
+    .faq-filter-row {
+        grid-template-columns: 1fr;
     }
 
 
-    .page-description {
-
-        font-size: 12px;
-
-    }
-
-
-    .faq-item summary {
-
-        min-height: 52px;
-
-        padding:
-            13px 42px 13px 14px;
-
-        font-size: 13px;
-
-    }
-
-
-    .faq-item p {
-
-        padding:
-            0 14px 15px;
-
-        font-size: 12px;
-
-    }
-
-
-    .form-group input,
-    .form-group textarea {
-
-        font-size: 13px;
-
-    }
-
-}
-
-
-/* =========================================================
-   56. SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 400px) {
-
-
-    .site-header {
-
-        grid-template-columns:
-            40px
-            1fr
-            auto;
-
-        padding:
-            7px 8px;
-
-    }
-
-
-    .logo-icon {
-
-        font-size: 17px;
-
-    }
-
-
-    .logo-text {
-
-        font-size: 10px;
-
-    }
-
-
-    .auth-buttons a {
-
-        padding:
-            4px 6px;
-
-        font-size: 9px;
-
-    }
-
-
-    .dropdown-menu {
-
-        width: 235px;
-
-        max-width:
-            calc(100vw - 16px);
-
-    }
-
-
-    .main-content {
-
-        padding:
-            20px 8px 35px;
-
-    }
-
-
-    .faq-section,
     .feedback-section {
-
-        padding: 15px;
-
+        padding: 22px 16px;
     }
 
 
-    .faq-section h1 {
+    .faq-pagination {
+        justify-content: center;
 
-        font-size: 22px;
-
+        flex-wrap: wrap;
     }
 
 
-    .feedback-section h2 {
+    .notification-banner {
+        margin-bottom: 25px;
 
-        font-size: 19px;
-
+        font-size: 11px;
     }
 
 
-    .submit-feedback {
+    .header-content {
+        padding-left: 12px;
 
-        width: 100%;
-
+        padding-right: 12px;
     }
 
 }
 
 
-/* =========================================================
-   57. REDUCED MOTION
-   ========================================================= */
+@media (max-width: 450px) {
 
-@media (prefers-reduced-motion: reduce) {
+    .faq-heading h1 {
+        font-size: 21px;
+    }
 
-    *,
-    *::before,
-    *::after {
 
-        animation: none !important;
+    .faq-heading p {
+        font-size: 12px;
+    }
 
-        transition: none !important;
 
-        scroll-behavior: auto !important;
+    .faq-question {
+        min-height: 50px;
 
+        font-size: 12px;
+    }
+
+
+    .faq-answer {
+        font-size: 12px;
+    }
+
+
+    .feedback-section h2 {
+        font-size: 19px;
     }
 
 }

@@ -8,445 +8,516 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>StudentHub - FAQ & Feedback</title>
+    <title>StudentHub - Frequently Asked Questions</title>
 
     <link rel="stylesheet"
           href="css/faq.css">
+    <link rel="stylesheet" href="css/shared.css">
 
 </head>
 
-
 <body>
 
+    <!-- =================================================
+         HEADER
+    ================================================== -->
 
-<!-- =====================================================
-     HEADER
-     ===================================================== -->
+    <header class="top-header">
 
-<header class="site-header">
+        <div class="header-content">
+
+            <a href="index.html"
+               class="logo">
+
+                StudentHub
+
+            </a>
+
+
+            <div class="header-actions">
+
+                <details class="menu-details">
+
+                    <summary class="menu-button">
+                        ☰
+                    </summary>
+
+                    <div class="dropdown-menu">
+
+                        <a href="index.html">
+                            Home
+                        </a>
+
+                        <a href="about.html">
+                            About
+                        </a>
+
+                        <a href="dashboard.php">
+                            Dashboard
+                        </a>
+
+                        <a href="events.html">
+                            Events
+                        </a>
+
+                        <a href="profile.php">
+                            Profile
+                        </a>
+
+                        <a href="faq.html">
+                            FAQ
+                        </a>
+
+                        <a href="contact.html">
+                            Contact
+                        </a>
+
+                    </div>
+
+                </details>
+
+
+                <button
+                    id="themeToggle"
+                    class="theme-button"
+                    type="button"
+                    aria-label="Switch to dark mode">
+
+                    🌙
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
 
 
     <!-- =================================================
-         HTML-ONLY 3 LINE DROPDOWN MENU
-         ================================================= -->
+         MAIN CONTENT
+    ================================================== -->
 
-    <div class="menu-container">
+    <main class="faq-page">
 
-        <details class="menu-details">
 
+        <!-- =================================================
+             NOTIFICATION
+        ================================================== -->
 
-            <!-- THREE LINE BUTTON -->
+        <div
+            id="notificationBanner"
+            class="notification-banner">
 
-            <summary class="menu-button"
-                     aria-label="Open navigation menu">
+            <span>
 
-                <span></span>
-                <span></span>
-                <span></span>
+                📢 Welcome to the StudentHub Help Center!
 
-            </summary>
+            </span>
 
+            <button
+                id="closeNotification"
+                type="button">
 
-            <!-- =================================================
-                 DROPDOWN NAVIGATION
-                 ================================================= -->
+                ×
 
-            <nav class="dropdown-menu"
-                 aria-label="Main navigation">
+            </button>
 
+        </div>
 
-                <a href="index.html">
 
-                    <span class="menu-icon">
-                        🏠
-                    </span>
+        <!-- =================================================
+             PAGE HEADING
+        ================================================== -->
 
-                    <span>
-                        Home
-                    </span>
+        <section class="faq-heading">
 
-                </a>
+            <span class="section-label">
+                HELP CENTER
+            </span>
 
-
-                <a href="about.html">
-
-                    <span class="menu-icon">
-                        ⓘ
-                    </span>
-
-                    <span>
-                        About
-                    </span>
-
-                </a>
-
-
-                <a href="dashboard.html">
-
-                    <span class="menu-icon">
-                        ▣
-                    </span>
-
-                    <span>
-                        Dashboard
-                    </span>
-
-                </a>
-
-
-                <a href="events.html">
-
-                    <span class="menu-icon">
-                        ▦
-                    </span>
-
-                    <span>
-                        Events
-                    </span>
-
-                </a>
-
-
-                <a href="profile.html">
-
-                    <span class="menu-icon">
-                        👤
-                    </span>
-
-                    <span>
-                        Profile
-                    </span>
-
-                </a>
-
-
-                <a href="contact.html">
-
-                    <span class="menu-icon">
-                        ✉
-                    </span>
-
-                    <span>
-                        Contact
-                    </span>
-
-                </a>
-
-
-                <a href="admin.html">
-
-                    <span class="menu-icon">
-                        ◉
-                    </span>
-
-                    <span>
-                        Admin
-                    </span>
-
-                </a>
-
-
-                <a href="faq.html"
-                   aria-current="page">
-
-                    <span class="menu-icon">
-                        ?
-                    </span>
-
-                    <span>
-                        FAQ
-                    </span>
-
-                </a>
-
-
-            </nav>
-
-        </details>
-
-    </div>
-
-
-
-    <!-- =================================================
-         STUDENTHUB LOGO
-         ================================================= -->
-
-    <a href="index.html"
-       class="logo"
-       aria-label="StudentHub Home">
-
-
-        <span class="logo-icon">
-            🎓
-        </span>
-
-
-        <span class="logo-text">
-            StudentHub
-        </span>
-
-
-    </a>
-
-
-
-    <!-- =================================================
-         LOGIN / REGISTER
-         ================================================= -->
-
-    <div class="auth-buttons">
-
-
-        <a href="login.html">
-            Login
-        </a>
-
-
-        <a href="register.html">
-            Register
-        </a>
-
-
-    </div>
-
-
-</header>
-
-
-
-<!-- =====================================================
-     MAIN CONTENT
-     ===================================================== -->
-
-<main class="main-content">
-
-
-    <!-- =================================================
-         FAQ SECTION
-         ================================================= -->
-
-    <section class="faq-section"
-             aria-labelledby="faq-title">
-
-
-        <div class="page-heading">
-
-            <p class="section-label">
-                Help Center
-            </p>
-
-            <h1 id="faq-title">
+            <h1>
                 Frequently Asked Questions
             </h1>
 
-            <p class="page-description">
+            <p>
                 Find answers to common questions about
                 StudentHub and its features.
             </p>
 
+        </section>
+
+
+        <!-- =================================================
+             SEARCH
+        ================================================== -->
+
+        <section class="faq-search-section">
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    🔍
+                </span>
+
+                <input
+                    type="search"
+                    id="faqSearch"
+                    placeholder="Search FAQs..."
+                    autocomplete="off">
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             LOADING MESSAGE
+        ================================================== -->
+
+        <div
+            id="faqLoading"
+            class="faq-loading">
+
+            Loading FAQs...
+
         </div>
 
 
+        <!-- =================================================
+             ERROR MESSAGE
+        ================================================== -->
 
-        <!-- QUESTION 1 -->
+        <div
+            id="faqError"
+            class="faq-error"
+            style="display: none;">
 
-        <details class="faq-item">
+        </div>
 
-            <summary>
-                What is StudentHub?
-            </summary>
+
+        <!-- =================================================
+             FAQ CONTROLS
+             JS FILLS CATEGORY / SORT / PAGINATION SIZE
+        ================================================== -->
+
+        <section
+            id="faqControls"
+            class="faq-controls">
+
+            <div class="faq-filter-row">
+
+                <div class="filter-box">
+
+                    <span>
+                        🏷️
+                    </span>
+
+                    <select
+                        id="faqCategoryFilter">
+
+                        <option value="all">
+                            All Categories
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="filter-box">
+
+                    <span>
+                        ↕️
+                    </span>
+
+                    <select
+                        id="faqSort">
+
+                        <option value="id-asc">
+                            Default Order
+                        </option>
+
+                        <option value="question-asc">
+                            Question A-Z
+                        </option>
+
+                        <option value="question-desc">
+                            Question Z-A
+                        </option>
+
+                        <option value="category-asc">
+                            Category A-Z
+                        </option>
+
+                        <option value="category-desc">
+                            Category Z-A
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="filter-box">
+
+                    <span>
+                        ☷
+                    </span>
+
+                    <select
+                        id="faqPerPage">
+
+                        <option value="5">
+                            5 per page
+                        </option>
+
+                        <option value="10">
+                            10 per page
+                        </option>
+
+                        <option value="15">
+                            15 per page
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="faqResultCount"
+                class="faq-result-count">
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FAQ CONTAINER
+             IMPORTANT:
+             THERE ARE NO STATIC FAQ ITEMS HERE.
+             JAVASCRIPT CREATES THEM.
+        ================================================== -->
+
+        <section
+            id="faqContainer"
+            class="faq-container">
+
+        </section>
+
+
+        <!-- =================================================
+             NO RESULTS
+        ================================================== -->
+
+        <div
+            id="noResults"
+            class="no-results"
+            style="display: none;">
+
+            <div class="no-results-icon">
+                🔍
+            </div>
+
+            <h3>
+                No FAQs Found
+            </h3>
 
             <p>
-                StudentHub is a centralized student
-                portal that provides students with
-                access to important academic and
-                campus-related information.
+                Try another search term or category.
             </p>
 
-        </details>
+        </div>
 
 
+        <!-- =================================================
+             FEEDBACK SECTION
+        ================================================== -->
 
-        <!-- QUESTION 2 -->
+        <section class="feedback-section" id="feedback">
 
-        <details class="faq-item">
+            <div class="feedback-icon">
+                💬
+            </div>
 
-            <summary>
-                How do I register?
-            </summary>
+            <span class="section-label">
+                STUDENT FEEDBACK
+            </span>
 
-            <p>
-                Click the Register button and complete
-                the registration form with your
-                required student information.
-            </p>
-
-        </details>
-
-
-
-        <!-- QUESTION 3 -->
-
-        <details class="faq-item">
-
-            <summary>
-                How can I join an event?
-            </summary>
-
-            <p>
-                Open the Events page, select an event,
-                and follow the registration instructions.
-            </p>
-
-        </details>
-
-
-
-        <!-- QUESTION 4 -->
-
-        <details class="faq-item">
-
-            <summary>
-                How do I update my profile?
-            </summary>
-
-            <p>
-                Open your Profile page and select
-                Edit Profile to update your information.
-            </p>
-
-        </details>
-
-
-    </section>
-
-
-
-    <!-- =================================================
-         FEEDBACK SECTION
-         ================================================= -->
-
-    <section class="feedback-section"
-             aria-labelledby="feedback-title">
-
-
-        <div class="page-heading">
-
-            <p class="section-label">
-                Student Feedback
-            </p>
-
-            <h2 id="feedback-title">
+            <h2>
                 Share Your Feedback
             </h2>
 
-            <p class="page-description">
+            <p class="feedback-description">
                 Help us improve StudentHub by sharing
                 your suggestions and experience.
             </p>
 
+
+            <form
+                id="feedbackForm"
+                class="feedback-form">
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label for="feedback-name">
+                        Your Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="feedback-name"
+                        placeholder="Enter your name">
+
+                    <small
+                        id="nameError"
+                        class="error-text">
+
+                    </small>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="feedback-email">
+                        Your Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="feedback-email"
+                        placeholder="Enter your email">
+
+                    <small
+                        id="emailError"
+                        class="error-text">
+
+                    </small>
+
+                </div>
+
+
+                <!-- FEEDBACK -->
+
+                <div class="form-group">
+
+                    <label for="feedback-message">
+                        Your Feedback
+                    </label>
+
+                    <textarea
+                        id="feedback-message"
+                        rows="5"
+                        placeholder="Write your feedback here..."></textarea>
+
+                    <small
+                        id="feedbackError"
+                        class="error-text">
+
+                    </small>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="submit-feedback">
+
+                    ✈ Submit Feedback
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- =================================================
+             PAGINATION
+        ================================================== -->
+
+        <div
+            id="faqPagination"
+            class="faq-pagination">
+
         </div>
 
 
-
-        <form class="feedback-form"
-              action="#"
-              method="post">
+    </main>
 
 
-            <!-- NAME -->
+    <!-- =================================================
+         SUCCESS MODAL
+    ================================================== -->
 
-            <div class="form-group">
+    <div
+        id="feedbackModal"
+        class="modal-overlay"
+        style="display: none;">
 
-                <label for="feedback-name">
-                    Your Name
-                </label>
+        <div class="modal-box">
 
-                <input
-                    type="text"
-                    id="feedback-name"
-                    name="name"
-                    placeholder="Enter your name"
-                    autocomplete="name"
-                    required>
+            <button
+                id="modalClose"
+                class="modal-close"
+                type="button">
 
-            </div>
-
-
-
-            <!-- EMAIL -->
-
-            <div class="form-group">
-
-                <label for="feedback-email">
-                    Your Email
-                </label>
-
-                <input
-                    type="email"
-                    id="feedback-email"
-                    name="email"
-                    placeholder="Enter your email"
-                    autocomplete="email"
-                    required>
-
-            </div>
-
-
-
-            <!-- FEEDBACK -->
-
-            <div class="form-group">
-
-                <label for="feedback-message">
-                    Your Feedback
-                </label>
-
-                <textarea
-                    id="feedback-message"
-                    name="feedback"
-                    rows="6"
-                    placeholder="Write your feedback here..."
-                    required></textarea>
-
-            </div>
-
-
-
-            <!-- SUBMIT -->
-
-            <button type="submit"
-                    class="submit-feedback">
-
-                Submit Feedback
+                ×
 
             </button>
 
+            <div class="success-icon">
+                ✓
+            </div>
 
-        </form>
+            <h2>
+                Feedback Submitted
+            </h2>
+
+            <p>
+                Thank you for helping us improve StudentHub!
+            </p>
+
+            <button
+                id="modalOk"
+                class="modal-ok"
+                type="button">
+
+                OK
+
+            </button>
+
+        </div>
+
+    </div>
 
 
-    </section>
+    <!-- =================================================
+         FOOTER
+    ================================================== -->
+
+    <footer class="footer">
+
+        © 2026 StudentHub. All rights reserved.
+
+    </footer>
 
 
-</main>
+    <!-- =================================================
+         JAVASCRIPT
+    ================================================== -->
 
-
-
-<!-- =====================================================
-     FOOTER
-     ===================================================== -->
-
-<footer class="site-footer">
-
-    <p>
-        &copy; 2026 StudentHub.
-        All rights reserved.
-    </p>
-
-</footer>
-
+    <script src="../javascript/faq.js" defer></script>
 
 </body>
 

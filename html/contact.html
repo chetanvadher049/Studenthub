@@ -13,6 +13,195 @@
     <link rel="stylesheet"
           href="css/contact.css">
 
+    <!-- Theme and menu styling -->
+    <style>
+        /* ================================
+           HAMBURGER MENU
+           ================================ */
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-button {
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            border-radius: 6px;
+        }
+
+        .menu-button span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: currentColor;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .menu-button:hover {
+            background: rgba(127, 127, 127, 0.15);
+        }
+
+        .dropdown-menu {
+            display: none;
+        }
+
+        .dropdown-menu.active {
+            display: flex;
+        }
+
+
+        /* ================================
+           DARK THEME
+           ================================ */
+
+        body {
+            transition: background-color 0.3s ease,
+                        color 0.3s ease;
+        }
+
+        body.dark-theme {
+            background: #111827;
+            color: #f3f4f6;
+        }
+
+        body.dark-theme .site-header,
+        body.dark-theme .contact-section,
+        body.dark-theme .contact-information,
+        body.dark-theme .contact-card,
+        body.dark-theme .site-footer {
+            background: #1f2937;
+            color: #f3f4f6;
+        }
+
+        body.dark-theme input,
+        body.dark-theme textarea {
+            background: #374151;
+            color: #ffffff;
+            border-color: #4b5563;
+        }
+
+        body.dark-theme input::placeholder,
+        body.dark-theme textarea::placeholder {
+            color: #d1d5db;
+        }
+
+        body.dark-theme .dropdown-menu {
+            background: #1f2937;
+        }
+
+        body.dark-theme .dropdown-menu a {
+            color: #ffffff;
+        }
+
+        body.dark-theme .dropdown-menu a:hover {
+            background: #374151;
+        }
+
+        .theme-button {
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .theme-button:hover {
+            background: rgba(127, 127, 127, 0.15);
+        }
+
+
+        /* Header right side */
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .auth-buttons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .theme-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            cursor: pointer;
+            padding: 0;
+            border-radius: 6px;
+        }
+
+        .theme-button:hover {
+            background: rgba(127, 127, 127, 0.15);
+        }
+
+
+        /* Mobile menu */
+        @media (max-width: 768px) {
+
+            .header-right {
+                gap: 6px;
+            }
+
+            .auth-buttons {
+                gap: 5px;
+            }
+
+            .auth-buttons a {
+                padding: 7px 10px;
+                font-size: 14px;
+            }
+
+            .dropdown-menu {
+                position: absolute;
+                top: 50px;
+                left: 0;
+                width: 220px;
+                padding: 10px;
+                flex-direction: column;
+                gap: 5px;
+                border-radius: 8px;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+            }
+
+            .dropdown-menu a {
+                padding: 10px;
+                text-decoration: none;
+            }
+
+        }
+    </style>
+    <link rel="stylesheet" href="css/shared.css">
+
 </head>
 
 
@@ -26,189 +215,124 @@
 <header class="site-header">
 
 
-    <!-- =================================================
-         3-LINE DROPDOWN MENU
-         ================================================= -->
+    <!-- HAMBURGER MENU -->
 
     <div class="menu-container">
 
-        <details class="menu-details">
+        <button id="menuToggle"
+                class="menu-button"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
 
 
-            <!-- 3 LINE MENU BUTTON -->
+        <!-- NAVIGATION -->
 
-            <summary class="menu-button"
-                     aria-label="Open navigation menu">
+        <nav id="sidebar"
+             class="dropdown-menu"
+             aria-label="Main navigation">
 
-                <span></span>
-                <span></span>
-                <span></span>
+            <a href="index.html">
+                <span class="menu-icon">🏠</span>
+                <span>Home</span>
+            </a>
 
-            </summary>
+            <a href="about.html">
+                <span class="menu-icon">ⓘ</span>
+                <span>About</span>
+            </a>
 
+            <a href="dashboard.php">
+                <span class="menu-icon">▣</span>
+                <span>Dashboard</span>
+            </a>
 
-            <!-- =================================================
-                 DROPDOWN NAVIGATION
-                 ================================================= -->
+            <a href="events.html">
+                <span class="menu-icon">▦</span>
+                <span>Events</span>
+            </a>
 
-            <nav class="dropdown-menu"
-                 aria-label="Main navigation">
+            <a href="profile.php">
+                <span class="menu-icon">👤</span>
+                <span>Profile</span>
+            </a>
 
+            <a href="contact.html"
+               aria-current="page">
+                <span class="menu-icon">✉</span>
+                <span>Contact</span>
+            </a>
 
-                <a href="index.html">
+            <a href="admin.html">
+                <span class="menu-icon">◉</span>
+                <span>Admin</span>
+            </a>
 
-                    <span class="menu-icon">
-                        🏠
-                    </span>
+            <a href="faq.html">
+                <span class="menu-icon">?</span>
+                <span>FAQ</span>
+            </a>
 
-                    <span>
-                        Home
-                    </span>
-
-                </a>
-
-
-                <a href="about.html">
-
-                    <span class="menu-icon">
-                        ⓘ
-                    </span>
-
-                    <span>
-                        About
-                    </span>
-
-                </a>
-
-
-                <a href="dashboard.html">
-
-                    <span class="menu-icon">
-                        ▣
-                    </span>
-
-                    <span>
-                        Dashboard
-                    </span>
-
-                </a>
-
-
-                <a href="events.html">
-
-                    <span class="menu-icon">
-                        ▦
-                    </span>
-
-                    <span>
-                        Events
-                    </span>
-
-                </a>
-
-
-                <a href="profile.html">
-
-                    <span class="menu-icon">
-                        👤
-                    </span>
-
-                    <span>
-                        Profile
-                    </span>
-
-                </a>
-
-
-                <a href="contact.html"
-                   aria-current="page">
-
-                    <span class="menu-icon">
-                        ✉
-                    </span>
-
-                    <span>
-                        Contact
-                    </span>
-
-                </a>
-
-
-                <a href="admin.html">
-
-                    <span class="menu-icon">
-                        ◉
-                    </span>
-
-                    <span>
-                        Admin
-                    </span>
-
-                </a>
-
-
-                <a href="faq.html">
-
-                    <span class="menu-icon">
-                        ?
-                    </span>
-
-                    <span>
-                        FAQ
-                    </span>
-
-                </a>
-
-            </nav>
-
-        </details>
+        </nav>
 
     </div>
 
 
-
-    <!-- =================================================
-         STUDENTHUB LOGO
-         ================================================= -->
+    <!-- LOGO -->
 
     <a href="index.html"
        class="logo"
        aria-label="StudentHub Home">
 
-
         <span class="logo-icon">
             🎓
         </span>
-
 
         <span class="logo-text">
             StudentHub
         </span>
 
-
     </a>
 
 
+    <!-- HEADER RIGHT -->
 
-    <!-- =================================================
-         LOGIN / REGISTER
-         ================================================= -->
-
-    <div class="auth-buttons">
+    <div class="header-right">
 
 
-        <a href="login.html">
-            Login
-        </a>
+        <!-- LIGHT / DARK THEME -->
+
+        <button id="themeToggle"
+                class="theme-button"
+                type="button"
+                aria-label="Switch to dark mode">
+
+            🌙
+
+        </button>
 
 
-        <a href="register.html">
-            Register
-        </a>
+        <!-- LOGIN / REGISTER -->
 
+        <div class="auth-buttons">
+
+            <a href="login.html">
+                Login
+            </a>
+
+            <a href="register.html">
+                Register
+            </a>
+
+        </div>
 
     </div>
-
 
 </header>
 
@@ -221,52 +345,43 @@
 <main class="main-content">
 
 
-    <!-- =================================================
-         CONTACT SECTION
-         ================================================= -->
+    <!-- CONTACT SECTION -->
 
     <section class="contact-section"
              aria-labelledby="contact-title">
 
 
-        <!-- PAGE HEADER -->
-
         <div class="contact-heading">
-
 
             <p class="section-label">
                 Get In Touch
             </p>
 
-
             <h1 id="contact-title">
                 Contact Us
             </h1>
 
-
             <p class="contact-intro">
-
                 Have a question or need assistance?
                 Send us a message and our team will
                 get back to you.
-
             </p>
-
 
         </div>
 
 
 
-        <!-- =================================================
-             CONTACT FORM
-             ================================================= -->
+        <!-- CONTACT FORM -->
 
         <form class="contact-form"
-              action="#"
+              action="../php/contact.php"
               method="post">
 
-
-            <!-- NAME -->
+            <div class="contact-honeypot" aria-hidden="true">
+                <label for="contact-company">Leave this field empty</label>
+                <input type="text" id="contact-company" name="company"
+                       tabindex="-1" autocomplete="off">
+            </div>
 
             <div class="form-group">
 
@@ -274,12 +389,12 @@
                     Your Name
                 </label>
 
-
                 <input
                     type="text"
                     id="contact-name"
                     name="name"
                     placeholder="Enter your name"
+                    maxlength="100"
                     autocomplete="name"
                     required>
 
@@ -287,20 +402,18 @@
 
 
 
-            <!-- EMAIL -->
-
             <div class="form-group">
 
                 <label for="contact-email">
                     Email Address
                 </label>
 
-
                 <input
                     type="email"
                     id="contact-email"
                     name="email"
                     placeholder="Enter your email"
+                    maxlength="100"
                     autocomplete="email"
                     required>
 
@@ -308,27 +421,23 @@
 
 
 
-            <!-- SUBJECT -->
-
             <div class="form-group">
 
                 <label for="contact-subject">
                     Subject
                 </label>
 
-
                 <input
                     type="text"
                     id="contact-subject"
                     name="subject"
                     placeholder="Enter subject"
+                    maxlength="150"
                     required>
 
             </div>
 
 
-
-            <!-- MESSAGE -->
 
             <div class="form-group">
 
@@ -336,19 +445,17 @@
                     Message
                 </label>
 
-
                 <textarea
                     id="contact-message"
                     name="message"
                     rows="6"
                     placeholder="Write your message..."
+                    maxlength="5000"
                     required></textarea>
 
             </div>
 
 
-
-            <!-- SUBMIT -->
 
             <button type="submit"
                     class="send-message">
@@ -357,17 +464,13 @@
 
             </button>
 
-
         </form>
-
 
     </section>
 
 
 
-    <!-- =================================================
-         CONTACT INFORMATION
-         ================================================= -->
+    <!-- CONTACT INFORMATION -->
 
     <section class="contact-information"
              aria-labelledby="contact-info-title">
@@ -382,10 +485,9 @@
 
 
 
-        <!-- EMAIL CARD -->
+        <!-- EMAIL -->
 
         <article class="contact-card">
-
 
             <div class="contact-icon"
                  aria-hidden="true">
@@ -394,13 +496,11 @@
 
             </div>
 
-
             <div class="contact-card-content">
 
                 <h3>
                     Email
                 </h3>
-
 
                 <p>
                     info@studenthub.com
@@ -408,15 +508,13 @@
 
             </div>
 
-
         </article>
 
 
 
-        <!-- PHONE CARD -->
+        <!-- PHONE -->
 
         <article class="contact-card">
-
 
             <div class="contact-icon"
                  aria-hidden="true">
@@ -425,13 +523,11 @@
 
             </div>
 
-
             <div class="contact-card-content">
 
                 <h3>
                     Phone
                 </h3>
-
 
                 <p>
                     123-456-7890
@@ -439,15 +535,13 @@
 
             </div>
 
-
         </article>
 
 
 
-        <!-- LOCATION CARD -->
+        <!-- LOCATION -->
 
         <article class="contact-card">
-
 
             <div class="contact-icon"
                  aria-hidden="true">
@@ -456,13 +550,11 @@
 
             </div>
 
-
             <div class="contact-card-content">
 
                 <h3>
                     Location
                 </h3>
-
 
                 <p>
                     City, Country
@@ -470,12 +562,9 @@
 
             </div>
 
-
         </article>
 
-
     </section>
-
 
 </main>
 
@@ -487,17 +576,20 @@
 
 <footer class="site-footer">
 
-
     <p>
-
         &copy; 2026 StudentHub.
         All rights reserved.
-
     </p>
-
 
 </footer>
 
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script src="../javascript/contact.js?v=2" defer></script>
 
 </body>
 

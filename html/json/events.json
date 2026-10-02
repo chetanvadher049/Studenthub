@@ -1,0 +1,169 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "Web Development Workshop",
+      "date": "2026-09-20",
+      "time": "10:00 AM",
+      "venue": "Computer Lab 1",
+      "category": "Workshop",
+      "organizer": "Computer Science Department",
+      "description": "Learn HTML, CSS and JavaScript fundamentals by building a responsive website.",
+      "image": "images/web-workshop.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Coding Competition",
+      "date": "2026-09-22",
+      "time": "11:00 AM",
+      "venue": "Programming Lab",
+      "category": "Competition",
+      "organizer": "Coding Club",
+      "description": "Test your programming skills by solving challenging coding problems.",
+      "image": "images/coding-competition.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Cyber Security Awareness Seminar",
+      "date": "2026-09-24",
+      "time": "02:00 PM",
+      "venue": "Seminar Hall",
+      "category": "Seminar",
+      "organizer": "Cyber Security Club",
+      "description": "Understand common cyber threats and learn how to protect personal information online.",
+      "image": "images/cyber-security.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Annual Sports Meet",
+      "date": "2026-09-27",
+      "time": "09:00 AM",
+      "venue": "College Ground",
+      "category": "Sports",
+      "organizer": "Sports Committee",
+      "description": "Participate in exciting indoor and outdoor sports competitions.",
+      "image": "images/sports-meet.jpg"
+    },
+    {
+      "id": 5,
+      "title": "AI and Machine Learning Workshop",
+      "date": "2026-09-29",
+      "time": "10:30 AM",
+      "venue": "AI Lab",
+      "category": "Workshop",
+      "organizer": "AI Club",
+      "description": "Explore the fundamentals of artificial intelligence and machine learning.",
+      "image": "images/ai-workshop.jpg"
+    },
+    {
+      "id": 6,
+      "title": "Photography Contest",
+      "date": "2026-10-01",
+      "time": "01:00 PM",
+      "venue": "Activity Center",
+      "category": "Competition",
+      "organizer": "Photography Club",
+      "description": "Showcase your creativity and photography skills in this campus-wide contest.",
+      "image": "images/photography.jpg"
+    },
+    {
+      "id": 7,
+      "title": "Career Guidance Session",
+      "date": "2026-10-03",
+      "time": "11:30 AM",
+      "venue": "Auditorium",
+      "category": "Career",
+      "organizer": "Training and Placement Cell",
+      "description": "Get useful career guidance and learn how to prepare for campus placements.",
+      "image": "images/career-guidance.jpg"
+    },
+    {
+      "id": 8,
+      "title": "Hackathon 2026",
+      "date": "2026-10-05",
+      "time": "09:00 AM",
+      "venue": "Innovation Center",
+      "category": "Competition",
+      "organizer": "Innovation Club",
+      "description": "Build innovative technology solutions within a limited time during this exciting hackathon.",
+      "image": "images/hackathon.jpg"
+    },
+    {
+      "id": 9,
+      "title": "Cloud Computing Seminar",
+      "date": "2026-10-08",
+      "time": "02:30 PM",
+      "venue": "Seminar Hall 2",
+      "category": "Seminar",
+      "organizer": "Cloud Computing Club",
+      "description": "Learn about cloud computing, virtualization and modern cloud platforms.",
+      "image": "images/cloud-seminar.jpg"
+    },
+    {
+      "id": 10,
+      "title": "Cultural Festival",
+      "date": "2026-10-10",
+      "time": "05:00 PM",
+      "venue": "Main Auditorium",
+      "category": "Cultural",
+      "organizer": "Cultural Committee",
+      "description": "Enjoy music, dance, drama and other cultural performances by students.",
+      "image": "images/cultural-festival.jpg"
+    },
+    {
+      "id": 11,
+      "title": "Resume Building Workshop",
+      "date": "2026-10-13",
+      "time": "10:00 AM",
+      "venue": "Placement Room",
+      "category": "Career",
+      "organizer": "Placement Cell",
+      "description": "Learn how to create an effective resume that attracts recruiters.",
+      "image": "images/resume-workshop.jpg"
+    },
+    {
+      "id": 12,
+      "title": "Robotics Exhibition",
+      "date": "2026-10-15",
+      "time": "11:00 AM",
+      "venue": "Engineering Block",
+      "category": "Exhibition",
+      "organizer": "Robotics Club",
+      "description": "Explore innovative robotics projects developed by students.",
+      "image": "images/robotics.jpg"
+    },
+    {
+      "id": 13,
+      "title": "Entrepreneurship Talk",
+      "date": "2026-10-18",
+      "time": "03:00 PM",
+      "venue": "Conference Hall",
+      "category": "Seminar",
+      "organizer": "Entrepreneurship Cell",
+      "description": "Successful entrepreneurs share their startup experiences and business knowledge.",
+      "image": "images/entrepreneurship.jpg"
+    },
+    {
+      "id": 14,
+      "title": "Quiz Competition",
+      "date": "2026-10-20",
+      "time": "12:00 PM",
+      "venue": "Lecture Hall 5",
+      "category": "Competition",
+      "organizer": "Student Council",
+      "description": "Participate in an exciting general knowledge and technology quiz competition.",
+      "image": "images/quiz.jpg"
+    },
+    {
+      "id": 15,
+      "title": "Freshers Welcome Event",
+      "date": "2026-10-22",
+      "time": "04:00 PM",
+      "venue": "College Auditorium",
+      "category": "Cultural",
+      "organizer": "Student Council",
+      "description": "Welcome new students with fun activities, performances and interactive sessions.",
+      "image": "images/freshers.jpg"
+    }
+  ]
+}

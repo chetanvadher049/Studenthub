@@ -12,6 +12,8 @@
 
     <link rel="stylesheet"
           href="css/index.css">
+    <link rel="stylesheet" href="css/shared.css">
+    <script src="../javascript/index.js" defer></script>
 
 </head>
 
@@ -39,7 +41,8 @@
             <!-- 3 LINE MENU BUTTON -->
 
             <summary class="menu-button"
-                     aria-label="Open navigation menu">
+                     aria-label="Open navigation menu"
+                     title="Open navigation menu">
 
                 <span></span>
                 <span></span>
@@ -74,7 +77,7 @@
                 </a>
 
 
-                <a href="dashboard.html">
+                <a href="dashboard.php">
 
                     ▣
                     <span>Dashboard</span>
@@ -90,7 +93,7 @@
                 </a>
 
 
-                <a href="profile.html">
+                <a href="profile.php">
 
                     👤
                     <span>Profile</span>
@@ -157,7 +160,13 @@
          LOGIN / REGISTER
          ================================================= -->
 
-    <div class="auth-buttons">
+    <div class="header-actions">
+        <button id="themeToggle" class="theme-toggle" type="button"
+                aria-label="Switch to dark theme" title="Toggle light/dark theme">
+            🌙
+        </button>
+
+        <div class="auth-buttons">
 
 
         <a href="login.html"
@@ -176,6 +185,7 @@
         </a>
 
 
+        </div>
     </div>
 
 
@@ -186,6 +196,14 @@
 <!-- =====================================================
      MAIN CONTENT
      ===================================================== -->
+
+<div id="notificationBanner" class="notification-banner" role="status">
+    <div>
+        <strong>📢 StudentHub Notice:</strong>
+        Registration for the upcoming technical workshop is now open.
+    </div>
+    <button id="closeNotification" type="button" aria-label="Close notification">×</button>
+</div>
 
 <main class="main-content">
 
@@ -208,19 +226,39 @@
 
 
 
-        <div class="hero-placeholder">
+        <div class="hero-slider" id="heroSlider" aria-live="polite">
+            <article class="hero-slide active">
+                <div class="slide-text">
+                    <span class="slide-badge">Student Portal</span>
+                    <h1>Welcome to StudentHub</h1>
+                    <p>Your centralized student portal for academics, events and announcements.</p>
+                    <button class="primary-action open-modal" type="button">Explore StudentHub</button>
+                </div>
+            </article>
 
+            <article class="hero-slide">
+                <div class="slide-text">
+                    <span class="slide-badge">Technical Workshop</span>
+                    <h1>Learn New Technologies</h1>
+                    <p>Join practical workshops and improve your technical skills.</p>
+                </div>
+                <img src="workshop.jpg" alt="Technical Workshop" class="slider-image">
+            </article>
 
-            <h1>
-                Welcome to StudentHub
-            </h1>
+            <article class="hero-slide">
+                <div class="slide-text">
+                    <span class="slide-badge">College Hackathon</span>
+                    <h1>Build. Code. Win.</h1>
+                    <p>Take part in an exciting coding competition with other students.</p>
+                </div>
+                <img src="hackathon.jpg" alt="College Hackathon" class="slider-image">
+            </article>
 
-
-            <p>
-                Your centralized student portal
-            </p>
-
-
+            <div class="slider-dots" aria-label="Choose a slide">
+                <button type="button" class="slider-dot active" data-slide="0" aria-label="Slide 1"></button>
+                <button type="button" class="slider-dot" data-slide="1" aria-label="Slide 2"></button>
+                <button type="button" class="slider-dot" data-slide="2" aria-label="Slide 3"></button>
+            </div>
         </div>
 
 
@@ -505,8 +543,25 @@
 
 
 </footer>
+<!-- MODAL POPUP -->
+<div id="studentModal" class="modal">
 
+    <div class="modal-box">
 
+        <button class="modal-close">&times;</button>
+
+        <h2>Welcome to StudentHub 🎓</h2>
+
+        <p>
+            StudentHub helps students manage their profile,
+            academics, events and important notifications.
+        </p>
+
+        <button class="modal-ok">OK</button>
+
+    </div>
+
+</div>
 </body>
 
 </html>

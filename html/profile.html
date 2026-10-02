@@ -12,6 +12,8 @@
 
     <link rel="stylesheet"
           href="css/profile.css">
+    <link rel="stylesheet" href="css/shared.css">
+
 
 </head>
 
@@ -26,158 +28,132 @@
 <header class="site-header">
 
 
-    <!-- =================================================
-         3-LINE HTML DROPDOWN MENU
-         ================================================= -->
+    <!-- HAMBURGER MENU -->
 
     <div class="menu-container">
 
-        <details class="menu-details">
+        <button id="menuToggle"
+                class="menu-button"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
 
 
-            <!-- 3 LINE BUTTON -->
+        <!-- NAVIGATION -->
 
-            <summary class="menu-button"
-                     aria-label="Open navigation menu">
+        <nav id="sidebar"
+             class="dropdown-menu"
+             aria-label="Main navigation">
 
-                <span></span>
-                <span></span>
-                <span></span>
+            <a href="index.html">
+                🏠
+                <span>Home</span>
+            </a>
 
-            </summary>
+            <a href="about.html">
+                ⓘ
+                <span>About</span>
+            </a>
 
+            <a href="dashboard.php">
+                ▣
+                <span>Dashboard</span>
+            </a>
 
-            <!-- =================================================
-                 DROPDOWN MENU
-                 ================================================= -->
+            <a href="events.html">
+                ▦
+                <span>Events</span>
+            </a>
 
-            <nav class="dropdown-menu"
-                 aria-label="Main navigation">
+            <a href="profile.php"
+               aria-current="page">
+                👤
+                <span>Profile</span>
+            </a>
 
+            <a href="contact.html">
+                ✉
+                <span>Contact</span>
+            </a>
 
-                <a href="index.html">
+            <a href="admin.html">
+                ◉
+                <span>Admin</span>
+            </a>
 
-                    🏠
-                    <span>Home</span>
+            <a href="faq.html">
+                ?
+                <span>FAQ</span>
+            </a>
 
-                </a>
-
-
-                <a href="about.html">
-
-                    ⓘ
-                    <span>About</span>
-
-                </a>
-
-
-                <a href="dashboard.html">
-
-                    ▣
-                    <span>Dashboard</span>
-
-                </a>
-
-
-                <a href="events.html">
-
-                    ▦
-                    <span>Events</span>
-
-                </a>
-
-
-                <a href="profile.html"
-                   aria-current="page">
-
-                    👤
-                    <span>Profile</span>
-
-                </a>
-
-
-                <a href="contact.html">
-
-                    ✉
-                    <span>Contact</span>
-
-                </a>
-
-
-                <a href="admin.html">
-
-                    ◉
-                    <span>Admin</span>
-
-                </a>
-
-
-                <a href="faq.html">
-
-                    ?
-                    <span>FAQ</span>
-
-                </a>
-
-            </nav>
-
-
-        </details>
+        </nav>
 
     </div>
 
 
-
-    <!-- =================================================
-         STUDENTHUB LOGO
-         ================================================= -->
+    <!-- LOGO -->
 
     <a href="index.html"
        class="logo"
        aria-label="StudentHub Home">
 
-
         <span class="logo-icon">
             🎓
         </span>
-
 
         <span class="logo-text">
             StudentHub
         </span>
 
-
     </a>
 
 
+    <!-- HEADER RIGHT -->
 
-    <!-- =================================================
-         LOGIN / REGISTER
-         ================================================= -->
-
-    <div class="auth-buttons">
+    <div class="header-right">
 
 
-        <a href="login.html">
-            Login
-        </a>
+        <!-- THEME BUTTON -->
+
+        <button id="themeToggle"
+                class="theme-button"
+                type="button"
+                aria-label="Switch theme">
+
+            🌙
+
+        </button>
 
 
-        <a href="register.html">
-            Register
-        </a>
+        <!-- LOGIN / REGISTER -->
 
+        <div class="auth-buttons">
+
+            <a href="login.html">
+                Login
+            </a>
+
+            <a href="register.html">
+                Register
+            </a>
+
+        </div>
 
     </div>
-
 
 </header>
 
 
 
 <!-- =====================================================
-     MAIN CONTENT
-     ================================================= -->
+     MAIN PROFILE CONTENT
+     ===================================================== -->
 
 <main class="profile-main">
 
@@ -187,45 +163,38 @@
          ================================================= -->
 
     <section class="profile-header"
-             aria-labelledby="profile-name">
+             aria-labelledby="profileName">
 
 
-        <!-- Cover / Banner -->
+        <!-- COVER -->
 
-        <div class="profile-cover"
-             aria-hidden="true">
+        <div class="profile-cover">
         </div>
 
 
-
-        <!-- Profile Picture -->
+        <!-- PROFILE IMAGE -->
 
         <div class="profile-picture">
 
             <img src="img.png"
-                 alt="Profile picture of chetan vadher">
+                 alt="Profile picture">
 
         </div>
 
 
-
-        <!-- Student Information -->
+        <!-- BASIC INFORMATION -->
 
         <div class="profile-basic-info">
 
-
-            <h1 id="profile-name">
-                chetan vadher
+            <h1 id="profileName">
+                Chetan Vadher
             </h1>
 
-
-            <p>
+            <p id="profileEmail">
                 chetanvadher101@gmail.com
             </p>
 
-
         </div>
-
 
     </section>
 
@@ -244,11 +213,10 @@
         </h2>
 
 
-
         <dl class="profile-details">
 
 
-            <!-- Full Name -->
+            <!-- FULL NAME -->
 
             <div class="profile-row">
 
@@ -257,14 +225,13 @@
                 </dt>
 
                 <dd>
-                    chetan vadher
+                    Chetan Vadher
                 </dd>
 
             </div>
 
 
-
-            <!-- Username -->
+            <!-- USERNAME -->
 
             <div class="profile-row">
 
@@ -279,8 +246,7 @@
             </div>
 
 
-
-            <!-- Email -->
+            <!-- EMAIL -->
 
             <div class="profile-row">
 
@@ -295,8 +261,7 @@
             </div>
 
 
-
-            <!-- Phone -->
+            <!-- PHONE -->
 
             <div class="profile-row">
 
@@ -311,13 +276,12 @@
             </div>
 
 
-
-            <!-- Department -->
+            <!-- COURSE -->
 
             <div class="profile-row">
 
                 <dt>
-                    Department
+                    Course
                 </dt>
 
                 <dd>
@@ -327,28 +291,218 @@
             </div>
 
 
+            <!-- YEAR -->
+
+            <div class="profile-row">
+
+                <dt>
+                    Year
+                </dt>
+
+                <dd>
+                    3rd Year
+                </dd>
+
+            </div>
+
+
+            <!-- GENDER -->
+
+            <div class="profile-row">
+
+                <dt>
+                    Gender
+                </dt>
+
+                <dd>
+                    Male
+                </dd>
+
+            </div>
+
+
         </dl>
 
 
 
-        <!-- Edit Profile -->
+        <!-- =================================================
+             EDIT PROFILE BUTTON
+             ================================================= -->
 
         <div class="edit-profile">
 
-            <a href="#"
-               class="edit-button">
+            <button id="editProfileBtn"
+                    class="edit-button"
+                    type="button">
 
-                Edit Profile
+                ✏️ Edit Profile
 
-            </a>
+            </button>
 
         </div>
 
-
     </section>
 
-
 </main>
+
+
+
+<!-- =====================================================
+     EDIT PROFILE MODAL POPUP
+     ===================================================== -->
+
+<div id="profileModal"
+     class="modal"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="modalTitle">
+
+
+    <div class="modal-content">
+
+
+        <!-- CLOSE BUTTON -->
+
+        <button id="closeProfileModal"
+                class="modal-close"
+                type="button"
+                aria-label="Close popup">
+
+            ×
+
+        </button>
+
+
+        <!-- TITLE -->
+
+        <h2 id="modalTitle">
+            Edit Profile
+        </h2>
+
+
+
+        <!-- =================================================
+             EDIT PROFILE FORM
+             ================================================= -->
+
+        <form id="profileForm">
+
+
+            <!-- FULL NAME -->
+
+            <label for="editName">
+                Full Name
+            </label>
+
+            <input type="text"
+                   id="editName"
+                   required>
+
+
+
+            <!-- EMAIL -->
+
+            <label for="editEmail">
+                Email
+            </label>
+
+            <input type="email"
+                   id="editEmail"
+                   required>
+
+
+
+            <!-- PHONE -->
+
+            <label for="editPhone">
+                Phone
+            </label>
+
+            <input type="tel"
+                   id="editPhone"
+                   maxlength="10"
+                   required>
+
+
+
+            <!-- COURSE -->
+
+            <label for="editCourse">
+                Course
+            </label>
+
+            <input type="text"
+                   id="editCourse"
+                   required>
+
+
+
+            <!-- YEAR -->
+
+            <label for="editYear">
+                Year
+            </label>
+
+            <input type="text"
+                   id="editYear"
+                   required>
+
+
+
+            <!-- GENDER -->
+
+            <label for="editGender">
+                Gender
+            </label>
+
+            <select id="editGender"
+                    required>
+
+                <option value="Male">
+                    Male
+                </option>
+
+                <option value="Female">
+                    Female
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="modal-actions">
+
+
+                <button type="button"
+                        id="cancelProfileBtn"
+                        class="cancel-button">
+
+                    Cancel
+
+                </button>
+
+
+                <button type="submit"
+                        class="save-button">
+
+                    Save Changes
+
+                </button>
+
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 
 
@@ -358,16 +512,21 @@
 
 <footer class="site-footer">
 
-
     <p>
-
         &copy; 2026 StudentHub.
         All rights reserved.
-
     </p>
 
-
 </footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script src="../javascript/profile.js"
+        defer></script>
 
 
 </body>

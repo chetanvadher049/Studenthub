@@ -1,162 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>StudentHub - Login</title>
 
-    <link rel="stylesheet"
-          href="css/login.css">
-
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/shared.css">
 </head>
-
 
 <body>
 
-
-<!-- =====================================================
-     HEADER
-     ===================================================== -->
-
 <header class="site-header">
-
-
-    <!-- =================================================
-         3-LINE HTML DROPDOWN MENU
-         ================================================= -->
 
     <div class="menu-container">
 
         <details class="menu-details">
 
-
-            <!-- THREE LINE MENU BUTTON -->
-
-            <summary class="menu-button"
-                     aria-label="Open navigation menu">
-
+            <summary class="menu-button">
                 <span></span>
                 <span></span>
                 <span></span>
-
             </summary>
 
+            <nav class="dropdown-menu">
 
-            <!-- =================================================
-                 DROPDOWN NAVIGATION
-                 ================================================= -->
-
-            <nav class="dropdown-menu"
-                 aria-label="Main navigation">
-
-
-                <a href="index.html">
-
-                    <span class="menu-icon">
-                        🏠
-                    </span>
-
-                    <span>
-                        Home
-                    </span>
-
-                </a>
-
-
-                <a href="about.html">
-
-                    <span class="menu-icon">
-                        ⓘ
-                    </span>
-
-                    <span>
-                        About
-                    </span>
-
-                </a>
-
-
-                <a href="dashboard.html">
-
-                    <span class="menu-icon">
-                        ▣
-                    </span>
-
-                    <span>
-                        Dashboard
-                    </span>
-
-                </a>
-
-
-                <a href="events.html">
-
-                    <span class="menu-icon">
-                        ▦
-                    </span>
-
-                    <span>
-                        Events
-                    </span>
-
-                </a>
-
-
-                <a href="profile.html">
-
-                    <span class="menu-icon">
-                        👤
-                    </span>
-
-                    <span>
-                        Profile
-                    </span>
-
-                </a>
-
-
-                <a href="contact.html">
-
-                    <span class="menu-icon">
-                        ✉
-                    </span>
-
-                    <span>
-                        Contact
-                    </span>
-
-                </a>
-
-
-                <a href="admin.html">
-
-                    <span class="menu-icon">
-                        ◉
-                    </span>
-
-                    <span>
-                        Admin
-                    </span>
-
-                </a>
-
-
-                <a href="faq.html">
-
-                    <span class="menu-icon">
-                        ?
-                    </span>
-
-                    <span>
-                        FAQ
-                    </span>
-
-                </a>
+                <a href="index.html">🏠 Home</a>
+                <a href="about.html">ⓘ About</a>
+                <a href="dashboard.php">▣ Dashboard</a>
+                <a href="events.html">▦ Events</a>
+                <a href="profile.php">👤 Profile</a>
+                <a href="contact.html">✉ Contact</a>
+                <a href="admin.html">◉ Admin</a>
+                <a href="faq.html">? FAQ</a>
 
             </nav>
 
@@ -165,73 +42,38 @@
     </div>
 
 
+    <a href="index.html" class="logo">
 
-    <!-- =================================================
-         STUDENTHUB LOGO
-         ================================================= -->
-
-    <a href="index.html"
-       class="logo"
-       aria-label="StudentHub Home">
-
-
-        <span class="logo-icon">
-            🎓
-        </span>
-
+        <span class="logo-icon">🎓</span>
 
         <span class="logo-text">
             StudentHub
         </span>
 
-
     </a>
 
 
-
-    <!-- =================================================
-         LOGIN / REGISTER
-         ================================================= -->
-
     <div class="auth-buttons">
 
+        <button id="themeToggle" class="theme-button" type="button"
+                aria-label="Switch to dark mode">🌙</button>
 
-        <a href="login.html"
-           aria-current="page">
-
+        <a href="login.html" class="active">
             Login
-
         </a>
-
 
         <a href="register.html">
-
             Register
-
         </a>
 
-
     </div>
-
 
 </header>
 
 
-
-<!-- =====================================================
-     MAIN CONTENT
-     ===================================================== -->
-
 <main class="login-main">
 
-
-    <section class="login-section"
-             aria-labelledby="login-title">
-
-
-        <!-- =================================================
-             LOGIN HEADER
-             ================================================= -->
+    <section class="login-section">
 
         <div class="login-header">
 
@@ -239,7 +81,7 @@
                 Student Account
             </p>
 
-            <h1 id="login-title">
+            <h1>
                 Welcome Back!
             </h1>
 
@@ -250,41 +92,38 @@
         </div>
 
 
+        <form
+            class="login-form"
+            id="loginForm"
+            action="../php/login.php"
+            method="POST"
+            novalidate
+        >
 
-        <!-- =================================================
-             LOGIN FORM
-             ================================================= -->
+            <input type="hidden" name="return_to" id="return_to" value="">
 
-        <form class="login-form"
-              action="#"
-              method="post">
-
-
-            <!-- =================================================
-                 USERNAME / EMAIL
-                 ================================================= -->
+            <!-- EMAIL -->
 
             <div class="form-group">
 
                 <label for="login-email">
-                    Username or Email
+                    Email Address
                 </label>
 
                 <input
-                    type="text"
+                    type="email"
                     id="login-email"
-                    name="username"
-                    placeholder="Enter username or email"
-                    autocomplete="username"
-                    required>
+                    name="email"
+                    placeholder="Enter your registered email"
+                    autocomplete="email"
+                    maxlength="100"
+                    required
+                >
 
             </div>
 
 
-
-            <!-- =================================================
-                 PASSWORD
-                 ================================================= -->
+            <!-- PASSWORD -->
 
             <div class="form-group">
 
@@ -292,52 +131,49 @@
                     Password
                 </label>
 
-                <input
-                    type="password"
-                    id="login-password"
-                    name="password"
-                    placeholder="Enter your password"
-                    autocomplete="current-password"
-                    required>
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="login-password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        maxlength="100"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="toggle-password"
+                    >
+                        Show
+                    </button>
+
+                </div>
 
             </div>
 
 
-
-            <!-- =================================================
-                 FORGOT PASSWORD
-                 ================================================= -->
-
             <p class="forgot-password">
 
-                <a href="#">
+                <a href="contact.html">
                     Forgot Password?
                 </a>
 
             </p>
 
 
-
-            <!-- =================================================
-                 LOGIN BUTTON
-                 ================================================= -->
-
             <button
                 type="submit"
-                class="login-submit">
-
+                class="login-submit"
+            >
                 Login
-
             </button>
-
 
         </form>
 
-
-
-        <!-- =================================================
-             REGISTER LINK
-             ================================================= -->
 
         <p class="register-link">
 
@@ -349,17 +185,10 @@
 
         </p>
 
-
     </section>
-
 
 </main>
 
-
-
-<!-- =====================================================
-     FOOTER
-     ===================================================== -->
 
 <footer class="site-footer">
 
@@ -371,6 +200,7 @@
 </footer>
 
 
-</body>
+<script src="../javascript/login.js?v=2" defer></script>
 
+</body>
 </html>

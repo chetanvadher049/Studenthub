@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -10,300 +9,361 @@
 
     <title>StudentHub - About</title>
 
-    <link rel="stylesheet"
-          href="css/about.css">
+    <link rel="stylesheet" href="css/about.css">
 
+    <style>
+        /* ==========================================
+           HEADER - HAMBURGER MENU + THEME
+           ========================================== */
+
+        .site-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .menu-container {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .menu-button {
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            border-radius: 6px;
+            padding: 0;
+        }
+
+        .menu-button span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: currentColor;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .menu-button:hover {
+            background: rgba(127, 127, 127, 0.15);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 48px;
+            left: 0;
+            width: 220px;
+            padding: 10px;
+            flex-direction: column;
+            gap: 5px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.20);
+            z-index: 1000;
+        }
+
+        .dropdown-menu.active {
+            display: flex;
+        }
+
+        .dropdown-menu a {
+            padding: 10px;
+            text-decoration: none;
+            color: #222222;
+            border-radius: 6px;
+        }
+
+        .dropdown-menu a:hover {
+            background: #eeeeee;
+        }
+
+        /* ==========================================
+           LOGO AND RIGHT-SIDE CONTROLS
+           ========================================== */
+
+        .logo {
+            margin-left: 20px;
+        }
+
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .theme-button {
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            cursor: pointer;
+            border-radius: 6px;
+            padding: 0;
+        }
+
+        .theme-button:hover {
+            background: rgba(127, 127, 127, 0.15);
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .auth-buttons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        /* ==========================================
+           DARK THEME
+           ========================================== */
+
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-theme {
+            background: #111827;
+            color: #f3f4f6;
+        }
+
+        body.dark-theme .site-header,
+        body.dark-theme .about-section,
+        body.dark-theme .mission-section,
+        body.dark-theme .value-card,
+        body.dark-theme .site-footer {
+            background: #1f2937;
+            color: #f3f4f6;
+        }
+
+        body.dark-theme .dropdown-menu {
+            background: #1f2937;
+        }
+
+        body.dark-theme .dropdown-menu a {
+            color: #ffffff;
+        }
+
+        body.dark-theme .dropdown-menu a:hover {
+            background: #374151;
+        }
+
+        body.dark-theme p,
+        body.dark-theme h1,
+        body.dark-theme h2,
+        body.dark-theme h3 {
+            color: #f3f4f6;
+        }
+
+        /* ==========================================
+           MOBILE
+           ========================================== */
+
+        @media (max-width: 768px) {
+
+            .header-right {
+                gap: 6px;
+            }
+
+            .auth-buttons {
+                gap: 5px;
+            }
+
+            .auth-buttons a {
+                padding: 7px 10px;
+                font-size: 14px;
+            }
+
+            .logo {
+                margin-left: 10px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/shared.css">
 </head>
-
 
 <body>
 
-
-<!-- =====================================================
-     HEADER
-     ===================================================== -->
-
 <header class="site-header">
 
-
-    <!-- =================================================
-         3-LINE DROPDOWN MENU
-         ================================================= -->
-
+    <!-- HAMBURGER MENU -->
     <div class="menu-container">
 
-        <details class="menu-details">
+        <button id="menuToggle"
+                class="menu-button"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false">
 
+            <span></span>
+            <span></span>
+            <span></span>
 
-            <!-- 3 LINE BUTTON -->
+        </button>
 
-            <summary class="menu-button"
-                     aria-label="Open navigation menu">
+        <!-- NAVIGATION -->
+        <nav id="sidebar"
+             class="dropdown-menu"
+             aria-label="Main navigation">
 
-                <span></span>
-                <span></span>
-                <span></span>
+            <a href="index.html">🏠 <span>Home</span></a>
 
-            </summary>
+            <a href="about.html" aria-current="page">
+                ⓘ <span>About</span>
+            </a>
 
+            <a href="dashboard.php">▣ <span>Dashboard</span></a>
 
-            <!-- =================================================
-                 DROPDOWN MENU
-                 ================================================= -->
+            <a href="events.html">▦ <span>Events</span></a>
 
-            <nav class="dropdown-menu"
-                 aria-label="Main navigation">
+            <a href="profile.php">👤 <span>Profile</span></a>
 
+            <a href="contact.html">✉ <span>Contact</span></a>
 
-                <a href="index.html">
+            <a href="admin.html">◉ <span>Admin</span></a>
 
-                    🏠
-                    <span>Home</span>
+            <a href="faq.html">? <span>FAQ</span></a>
 
-                </a>
+            <a href="faq.html#feedback">♡ <span>Feedback</span></a>
 
-
-                <a href="about.html"
-                   aria-current="page">
-
-                    ⓘ
-                    <span>About</span>
-
-                </a>
-
-
-                <a href="dashboard.html">
-
-                    ▣
-                    <span>Dashboard</span>
-
-                </a>
-
-
-                <a href="events.html">
-
-                    ▦
-                    <span>Events</span>
-
-                </a>
-
-
-                <a href="profile.html">
-
-                    👤
-                    <span>Profile</span>
-
-                </a>
-
-
-                <a href="contact.html">
-
-                    ✉
-                    <span>Contact</span>
-
-                </a>
-
-
-                <a href="admin.html">
-
-                    ◉
-                    <span>Admin</span>
-
-                </a>
-
-
-                <a href="faq.html">
-
-                    ?
-                    <span>FAQ</span>
-
-                </a>
-
-
-                <a href="feedback.html">
-
-                    ♡
-                    <span>Feedback</span>
-
-                </a>
-
-
-            </nav>
-
-
-        </details>
+        </nav>
 
     </div>
 
 
-
-    <!-- =================================================
-         CENTER LOGO
-         ================================================= -->
-
+    <!-- LOGO -->
     <a href="index.html"
        class="logo"
        aria-label="StudentHub Home">
 
+        <span class="logo-icon">🎓</span>
 
-        <span class="logo-icon">
-            🎓
-        </span>
-
-
-        <span class="logo-text">
-            StudentHub
-        </span>
-
+        <span class="logo-text">StudentHub</span>
 
     </a>
 
 
+    <!-- RIGHT SIDE: THEME + LOGIN + REGISTER -->
+    <div class="header-right">
 
-    <!-- =================================================
-         LOGIN / REGISTER
-         ================================================= -->
+        <button id="themeToggle"
+                class="theme-button"
+                type="button"
+                aria-label="Switch to dark mode">
+            🌙
+        </button>
 
-    <div class="auth-buttons">
+        <div class="auth-buttons">
 
+            <a href="login.html">
+                Login
+            </a>
 
-        <a href="login.html">
-            Login
-        </a>
+            <a href="register.html">
+                Register
+            </a>
 
-
-        <a href="register.html">
-            Register
-        </a>
-
+        </div>
 
     </div>
-
 
 </header>
 
 
-
-<!-- =====================================================
-     MAIN PAGE LAYOUT
-     ===================================================== -->
-
+<!-- MAIN PAGE LAYOUT -->
 <div class="page-layout">
-
-
-    <!-- =================================================
-         MAIN CONTENT
-         ================================================= -->
 
     <main class="main-content">
 
-
-        <!-- =================================================
-             ABOUT SECTION
-             ================================================= -->
-
+        <!-- ABOUT SECTION -->
         <section class="about-section"
                  aria-labelledby="about-title">
-
 
             <h1 id="about-title">
                 About StudentHub
             </h1>
 
-
-
             <div class="about-introduction">
-
-
-                <!-- ABOUT IMAGE -->
 
                 <div class="about-image">
 
-                    <img src="images/about-image.jpg"
+                    <img src="img.png"
                          alt="StudentHub portal illustration">
 
                 </div>
 
-
-
-                <!-- ABOUT DESCRIPTION -->
-
                 <div class="about-description">
 
-
                     <p>
-
                         StudentHub is a centralized student
                         portal designed to provide students
                         with easy access to academic and
                         campus-related information.
-
                     </p>
 
-
                     <p>
-
                         The platform brings important
                         student services and resources
                         together in one convenient place.
-
                     </p>
-
 
                 </div>
 
-
             </div>
-
 
         </section>
 
 
-
-        <!-- =================================================
-             MISSION SECTION
-             ================================================= -->
-
+        <!-- MISSION SECTION -->
         <section class="mission-section"
                  aria-labelledby="mission-title">
-
 
             <h2 id="mission-title">
                 Our Mission
             </h2>
 
-
             <p>
-
                 Our mission is to simplify student
                 communication and provide a
                 user-friendly digital platform where
                 students can access important
                 academic and campus services.
-
             </p>
 
-
             <p>
-
                 StudentHub aims to improve communication,
                 accessibility and student engagement
                 through a centralized portal.
-
             </p>
-
 
         </section>
 
 
-
-        <!-- =================================================
-             VALUES SECTION
-             ================================================= -->
-
+        <!-- VALUES SECTION -->
         <section class="values-section"
                  aria-labelledby="values-title">
-
 
             <h2 id="values-title"
                 class="visually-hidden">
@@ -312,125 +372,73 @@
 
             </h2>
 
-
-
-            <!-- VALUE 1 -->
-
             <article class="value-card">
 
-
-                <div class="value-icon"
-                     aria-hidden="true">
-
+                <div class="value-icon" aria-hidden="true">
                     👤
-
                 </div>
 
-
-                <h3>
-                    Student Focus
-                </h3>
-
+                <h3>Student Focus</h3>
 
                 <p>
-
                     We put students and their
                     requirements first.
-
                 </p>
-
 
             </article>
 
 
-
-            <!-- VALUE 2 -->
-
             <article class="value-card">
 
-
-                <div class="value-icon"
-                     aria-hidden="true">
-
+                <div class="value-icon" aria-hidden="true">
                     👥
-
                 </div>
 
-
-                <h3>
-                    Collaboration
-                </h3>
-
+                <h3>Collaboration</h3>
 
                 <p>
-
                     We encourage communication
                     and collaboration.
-
                 </p>
-
 
             </article>
 
-
-
-            <!-- VALUE 3 -->
 
             <article class="value-card">
 
-
-                <div class="value-icon"
-                     aria-hidden="true">
-
+                <div class="value-icon" aria-hidden="true">
                     🛡️
-
                 </div>
 
-
-                <h3>
-                    Accessibility
-                </h3>
-
+                <h3>Accessibility</h3>
 
                 <p>
-
                     We provide simple and
                     accessible student services.
-
                 </p>
 
-
             </article>
-
 
         </section>
 
-
     </main>
-
 
 </div>
 
 
-
-<!-- =====================================================
-     FOOTER
-     ===================================================== -->
-
+<!-- FOOTER -->
 <footer class="site-footer">
 
-
     <p>
-
         &copy; 2026 StudentHub.
         All rights reserved.
-
     </p>
-
 
 </footer>
 
 
-</body>
+<!-- JAVASCRIPT -->
+<script src="../javascript/about.js" defer></script>
 
+</body>
 </html>

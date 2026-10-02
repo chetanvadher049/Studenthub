@@ -61,7 +61,7 @@ Path: /login.html or html/login.html
 
 ## 3. Student Dashboard
 
-Path: /dashboard.html or html/dashboard.html
+Path: /dashboard.php or html/dashboard.php (dashboard.html redirects to this protected route)
 
 ```text
 +----------------------------------------------------------------+
@@ -204,7 +204,7 @@ Path: /discussions.html or html/discussions.html
 
 ## 10. Profile and Settings
 
-Path: /profile.html or html/profile.html
+Path: /profile.php or html/profile.php (profile.html redirects to this protected route)
 
 ```text
 +----------------------------------------------------------------+
