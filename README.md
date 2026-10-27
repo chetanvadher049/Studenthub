@@ -6,11 +6,15 @@
 
 ## 📌 Project Overview
 
-StudentHub is a multi-page student portal prototype designed to provide students with a simple and organized interface for accessing academic and campus-related information from one place.
+StudentHub is a PHP/MySQLi student portal for student accounts, campus events,
+event registrations, and administrator management. It combines responsive
+HTML/CSS/JavaScript pages with prepared MySQLi statements, secure sessions,
+CSRF protection, role-based authorization, and an administrator dashboard.
 
-The project demonstrates a multi-page student portal using **HTML5, CSS3, and JavaScript**, with PHP endpoints for login and registration. It focuses on page structure, navigation, forms, cards, responsive layouts, and a consistent visual design across the application.
-
-The project includes interactive JavaScript page behaviors and PHP login/registration endpoints. PHP features require a local PHP server and the database settings configured for the environment; the site is not production authentication software.
+The application is intended for local WAMP/XAMPP development and WDF practical
+submission. PHP features require Apache/PHP and the configured `studenthub`
+database; do not expose the local default database configuration directly to
+the public internet.
 
 ---
 
@@ -37,17 +41,23 @@ The main objectives of StudentHub are:
 | **CSS Flexbox / Grid** | Responsive page and component layouts |
 | **Static File Navigation** | Linking pages using relative HTML paths |
 | **JavaScript** | Page interactions, validation, menus, themes, and dashboard behaviors |
-| **PHP** | Login and registration endpoints |
+| **PHP 8.x** | Authentication, registration, CRUD pages, JSON APIs, and server-side validation |
+| **MySQL / MySQLi** | Student, admin, event, registration, and login-throttling data |
+| **Fetch API** | Asynchronous administrator event CRUD without full page reloads |
+| **PHP sessions** | Student/admin authentication, timeout, CSRF tokens, and role checks |
 | **Image Assets** | Visual content used throughout the portal |
 
 ### 🔹 Current Implementation
 
 - **Frontend:** HTML5 + CSS3
 - **JavaScript:** Page-specific interactions and form validation
-- **Backend:** PHP login, registration, contact, event catalog, and event registration endpoints are included
+- **Backend:** PHP login, logout, registration, contact, event catalog, event registration, student CRUD, event CRUD, admin dashboard, and JSON API endpoints
 - **Database:** MySQLi connection is centralized in `php/dbconnect.php`; the running WAMP project uses the `studenthub` schema for student registration, login, events, and legacy event registrations
 - **Session navigation:** Shared page script shows account links based on the active student or administrator session
-- **Authentication:** Student and administrator login modes use prepared statements, hashed passwords, session regeneration, and CSRF-protected forms
+- **Authentication:** Student and administrator login modes use prepared statements, `password_verify()`, hashed passwords, session regeneration, CSRF-protected forms, timeout handling, and administrator login throttling
+- **Authorization:** Admin pages require an active `admin` or `super_admin` account; student pages require an active student session
+- **Validation:** Server-side validation is applied to registration, student management, event management, contact forms, and poster uploads
+- **Uploads:** Event posters accept JPEG, PNG, and WebP files up to 5 MB
 - **Data Storage:** MySQL for student and event data; JSON for FAQ content
 - **Shared footer:** All site pages use the same responsive footer with navigation and contact links
 
@@ -55,7 +65,8 @@ The main objectives of StudentHub are:
 
 ## 📄 Main Pages
 
-The StudentHub project contains ten pages (static HTML pages plus PHP-backed student pages):
+The StudentHub project contains public student pages plus protected administrator
+pages and JSON/PHP endpoints:
 
 | **No.** | **Page** | **File** | **Purpose** |
 |---:|---|---|---|
@@ -63,12 +74,16 @@ The StudentHub project contains ten pages (static HTML pages plus PHP-backed stu
 | 2 | 🔐 Login | `html/login.html` | Login interface |
 | 3 | 📊 Dashboard | `html/dashboard.php` | Authenticated student overview |
 | 4 | ℹ️ About | `html/about.html` | Project and portal information |
-| 5 | 🛠️ Admin | `html/admin/dashboard.php` | Administrator-only management dashboard |
+| 5 | 🛠️ Admin dashboard | `html/admin/dashboard.php` | Admin-only statistics, graph, latest registrations, and event summaries |
 | 6 | 📞 Contact | `html/contact.html` | Contact interface |
 | 7 | 📅 Events | `html/events.html` | MySQL-backed events and campus activities |
 | 8 | ❓ FAQ | `html/faq.html` | Frequently asked questions |
 | 9 | 👤 Profile | `html/profile.php` | Authenticated, database-backed student profile |
 | 10 | 📝 Register | `html/register.html` | Student registration interface |
+| 11 | 👨‍🎓 Student management | `html/admin/students.php` | Admin search, filtering, add, view, edit, and delete operations |
+| 12 | 📅 Event management | `html/admin/events.php` | Admin event CRUD, search, filtering, and poster uploads |
+| 13 | ⚡ Async event manager | `html/admin/events-api.php` | Fetch API CRUD without full page reloads |
+| 14 | 📋 Registration management | `html/admin/registrations.php` | Admin participant and registration management |
 
 ---
 
@@ -226,7 +241,16 @@ StudentHub/
 │   ├── admin/
 │   │   ├── dashboard.php
 │   │   ├── students.php
+│   │   ├── student-create.php
+│   │   ├── student-view.php
+│   │   ├── student-edit.php
+│   │   ├── student-delete.php
 │   │   ├── events.php
+│   │   ├── event-create.php
+│   │   ├── event-view.php
+│   │   ├── event-edit.php
+│   │   ├── event-delete.php
+│   │   ├── events-api.php
 │   │   └── registrations.php
 │   └── json/
 │       ├── events.json
@@ -235,6 +259,7 @@ StudentHub/
 ├── javascript/
 │   ├── about.js
 │   ├── admin.js
+│   ├── admin-events-api.js
 │   ├── contact.js
 │   ├── dashboard.js
 │   ├── events.js
@@ -242,7 +267,8 @@ StudentHub/
 │   ├── index.js
 │   ├── login.js
 │   ├── profile.js
-│   └── register.js
+│   ├── register.js
+│   └── session-nav.js
 │
 ├── database/
 │   ├── studenthub_db.sql
@@ -253,19 +279,27 @@ StudentHub/
 │       ├── 003_events_catalog.sql
 │       ├── 004_event_registration_details.sql
 │       ├── 005_student_username.sql
-│       └── 006_student_auth_fields.sql
+│       ├── 006_student_auth_fields.sql
+│       ├── 007_event_organizer.sql
+│       ├── 008_student_registration_schema.sql
+│       └── 009_admin_management_support.sql
 │
 ├── php/
 │   ├── auth.php
 │   ├── contact.php
 │   ├── dbconnect.php
 │   ├── event-registration.php
+│   ├── events-api.php
 │   ├── events.php
 │   ├── footer.php
 │   ├── login.php
 │   ├── logout.php
 │   ├── session-status.php
 │   └── register.php
+│
+├── scripts/
+│   ├── create-admin.php
+│   └── import-json-data.php
 │
 └── wireframe/
 ```
@@ -316,7 +350,7 @@ Run the site through Apache/PHP (for example WAMP) at `http://localhost/<project
 There is no public administrator-registration form or default admin password. Run this from the project root in a trusted terminal:
 
 ```text
-D:\wamp\bin\php\php8.4.15\php.exe scripts\create-admin.php
+php scripts/create-admin.php
 ```
 
 The script collects a name, username, email, and terminal-hidden password, validates the values, and stores only a `password_hash()` in `admins`. The first admin becomes `super_admin`; subsequent CLI-created accounts are regular admins. Run the same script to add admins safely. Never expose it through Apache or allow students to insert into `admins` or change roles.
@@ -377,40 +411,55 @@ Fetch API admin interface is `html/admin/events-api.php`. It supports GET
 list/detail requests and CSRF-protected POST, PUT (multipart POST with
 `_method=PUT`), and DELETE operations without full page reloads.
 
+### API routes
+
+| Method | Route | Purpose |
+|---|---|---|
+| `GET` | `php/events.php` | Public event listing |
+| `GET` | `php/events-api.php` | Authenticated admin event list |
+| `GET` | `php/events-api.php?id=EVENT_ID` | Authenticated admin event detail |
+| `POST` | `php/events-api.php` | Add an event |
+| `POST` | `php/events-api.php?id=EVENT_ID` with `_method=PUT` | Update an event |
+| `DELETE` | `php/events-api.php?id=EVENT_ID` | Delete an event |
+| `GET` | `php/session-status.php` | Return session and CSRF status |
+
+All administrator API mutations require a valid authenticated admin session
+and CSRF token. Poster uploads use `multipart/form-data`.
+
 ---
 
-## ⚠️ Prototype Limitations
+## ⚠️ Local-development limitations
 
 Start Apache and MySQL before verifying the live workflows. Student registration and login were verified through the running WAMP server after aligning the handlers with the live schema.
 
-Registration, login, student profile updates, contact form submissions, event listings, dashboard event summaries, and event registrations require Apache/PHP and the `studenthub` schema. Administrator login additionally requires an administrator table and active administrator record. The FAQ content remains a JSON file. Production deployment still requires environment-specific database credentials, HTTPS, and operational/security hardening.
+Registration, login, student profile updates, contact form submissions, event
+listings, dashboard summaries, event registrations, student management, and
+administrator management require Apache/PHP and the `studenthub` schema.
+The FAQ content remains a JSON file. Production deployment still requires
+environment-specific database credentials, HTTPS, secure cookie configuration,
+database backups, upload hardening, and operational monitoring.
 
 ---
 
 ## 🔮 Future Scope
 
-StudentHub can be extended into a complete student-management platform by adding:
+StudentHub can be extended further with:
 
 ### 💻 Frontend Enhancements
 
-- Dynamic content
-- Interactive dashboards
-- Search and filtering
+- More dashboard period filters and visualizations
+- Dynamic notifications and messaging
+- Advanced search and filtering
 - Animations and transitions
 - Advanced responsive behavior
 - Accessibility improvements
 
 ### ⚙️ Backend Enhancements
 
-- User authentication
-- Student registration
-- Database integration
 - Course management
 - Assignment management
 - Grade management
-- Event management
-- Profile management
-- Admin controls
+- Audit-log viewing and administrative reporting
 
 ### 🚀 Advanced Features
 
@@ -421,8 +470,8 @@ StudentHub can be extended into a complete student-management platform by adding
 - ⏰ Assignment deadlines
 - 📤 Online submissions
 - 👨‍🏫 Faculty portal
-- 🛠️ Admin dashboard
-- 🔑 Role-based access control
+- 🛠️ Advanced admin reporting
+- 🔑 Granular role permissions
 
 ---
 
@@ -434,27 +483,30 @@ StudentHub can be extended into a complete student-management platform by adding
 | `SITEMAP.md` | Website hierarchy and navigation flow |
 | `LOW_FIDELITY_WIREFRAME.md` | Initial layout and wireframe planning |
 | `FRONTEND_FOLDER_STRUCTURE.txt` | Frontend folder and file reference |
+| `StudentHub_Admin_Dashboard_Main_Code.txt` | Main admin dashboard code extraction |
+| `StudentHub_Student_Management_Main_Code.txt` | Main student CRUD code extraction |
+| `StudentHub_Event_Management_Main_Code.txt` | Main event CRUD and upload code extraction |
+| `StudentHub_Async_JSON_API_Fetch_Main_Code.txt` | Main JSON API and Fetch code extraction |
+| `StudentHub_Secure_Login_Logout_Main_Code.txt` | Main authentication code extraction |
 
 ---
 
 ## 📊 Project Status
 
-**Current Status:** `Frontend Prototype / WDF Practical Project`
+**Current Status:** `Functional PHP/MySQLi WDF Practical Project`
 
 The project demonstrates:
 
-- 🌐 Multi-page website development
-- 🧱 HTML5 structure
-- 🎨 CSS3 styling
-- 📱 Responsive layout concepts
-- 🧭 Navigation between pages
-- 🎓 Academic portal UI design
-- 📝 Forms
-- 🃏 Cards
-- 🖼️ Static image assets
-- 📊 Dashboard-style layouts
-
-The project can be further enhanced with production-ready backend services, security controls, and database functionality.
+- 🌐 Multi-page student portal
+- 🧱 HTML5/CSS3 responsive interface
+- 🔐 Secure student and administrator authentication
+- 🗄️ MySQLi-backed registration and management modules
+- 👨‍🎓 Student CRUD with search and filtering
+- 📅 Event CRUD with validated poster uploads
+- ⚡ Fetch API asynchronous event operations
+- 📊 Live administrator dashboard and graph
+- 🛡️ Sessions, CSRF protection, role checks, and login throttling
+- 📝 Submission-ready code extraction documents
 
 ---
 
@@ -463,18 +515,20 @@ The project can be further enhanced with production-ready backend services, secu
 | **Item** | **Details** |
 |---|---|
 | **Project Name** | StudentHub Portal |
-| **Project Type** | Web Design and Frontend Project |
-| **Development Type** | Static Frontend Prototype |
-| **Primary Technologies** | HTML5 and CSS3 |
-| **Documentation** | README + Sitemap + Wireframe Documentation |
+| **Project Type** | PHP/MySQLi Student Portal |
+| **Development Type** | Local WAMP/XAMPP web application |
+| **Primary Technologies** | HTML5, CSS3, JavaScript, PHP 8.x, MySQLi |
+| **Documentation** | README, sitemap, wireframe, migrations, and code extracts |
 
 ---
 
 ## ✅ Conclusion
 
-StudentHub provides a structured frontend for an academic student portal. The project demonstrates practical knowledge of **HTML5, CSS3, responsive layouts, navigation, forms, cards, and UI organization**.
-
-The current prototype establishes the major portal screens and provides a foundation for future development into a fully functional academic management system.
+StudentHub provides a functional academic portal with student authentication,
+registration, profile access, event participation, and administrator workflows.
+It demonstrates HTML5, CSS3, JavaScript, PHP, MySQLi, secure session handling,
+prepared statements, CRUD operations, file validation, and asynchronous API
+integration.
 
 ---
 
