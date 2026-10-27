@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function loadEvents() {
         try {
-            const response = await fetch("json/events.json", {
+            const response = await fetch("../php/events.php", {
                 headers: { Accept: "application/json" }
             });
             if (!response.ok) {
@@ -36,22 +36,24 @@ document.addEventListener("DOMContentLoaded", async function () {
                 throw new Error("Event data has an invalid format.");
             }
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const events = data.events.filter((event) => {
+            const events = data.events;
+            events.forEach((event) => {
                 if (
                     !Number.isInteger(event.id) ||
                     typeof event.title !== "string" ||
                     typeof event.description !== "string" ||
                     typeof event.category !== "string" ||
                     typeof event.date !== "string" ||
-                    !/^\d{4}-\d{2}-\d{2}$/.test(event.date)
+                    !/^\d{4}-\d{2}-\d{2}$/.test(event.date) ||
+                    (event.time !== undefined && typeof event.time !== "string") ||
+                    (event.venue !== undefined && typeof event.venue !== "string") ||
+                    (event.organizer !== undefined && typeof event.organizer !== "string") ||
+                    (event.image !== undefined &&
+                        event.image !== null &&
+                        typeof event.image !== "string")
                 ) {
                     throw new Error("An event record is missing required fields.");
                 }
-
-                const [year, month, day] = event.date.split("-").map(Number);
-                return new Date(year, month - 1, day) >= today;
             });
 
             eventList.replaceChildren();
@@ -72,11 +74,15 @@ document.addEventListener("DOMContentLoaded", async function () {
                 card.dataset.title = event.title;
                 card.dataset.description = event.description;
                 card.dataset.date = event.date;
+                card.dataset.meta = [event.time, event.venue, event.organizer]
+                    .filter(Boolean)
+                    .join(" · ");
 
                 const icon = document.createElement("div");
                 icon.className = "event-image";
                 icon.setAttribute("aria-hidden", "true");
-                icon.textContent = ({
+                const fallbackIcon = document.createElement("span");
+                fallbackIcon.textContent = ({
                     Workshop: "📚",
                     Competition: "💻",
                     Sports: "🏆",
@@ -85,6 +91,20 @@ document.addEventListener("DOMContentLoaded", async function () {
                     Seminar: "🗣️",
                     Exhibition: "🧪"
                 })[event.category] || "📅";
+                icon.append(fallbackIcon);
+
+                if (event.image) {
+                    const image = document.createElement("img");
+                    image.src = event.image;
+                    image.alt = event.title;
+                    image.addEventListener("load", () => {
+                        image.hidden = false;
+                        fallbackIcon.hidden = true;
+                    }, { once: true });
+                    image.addEventListener("error", () => image.remove(), { once: true });
+                    image.hidden = true;
+                    icon.append(image);
+                }
 
                 const details = document.createElement("div");
                 details.className = "event-details";
@@ -116,6 +136,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
 
                 details.append(category, title, description, meta);
+                if (event.organizer) {
+                    const organizer = document.createElement("p");
+                    organizer.className = "event-organizer";
+                    organizer.textContent = `Organized by ${event.organizer}`;
+                    details.append(organizer);
+                }
                 const viewButton = document.createElement("button");
                 viewButton.className = "view-details";
                 viewButton.type = "button";
@@ -125,7 +151,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             if (events.length === 0) {
-                eventList.textContent = "There are no upcoming events.";
+                eventList.textContent = "There are no events to display.";
             }
         } catch (error) {
             console.error("Unable to load StudentHub events.", error);
@@ -386,6 +412,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                             ""
                         ).toLowerCase();
 
+                    const meta =
+                        (
+                            event.dataset.meta ||
+                            ""
+                        ).toLowerCase();
+
 
                     const category =
                         event.dataset.category ||
@@ -394,7 +426,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                     const matchesSearch =
                         title.includes(searchText) ||
-                        description.includes(searchText);
+                        description.includes(searchText) ||
+                        meta.includes(searchText);
 
 
                     const matchesCategory =
@@ -785,6 +818,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             "modalDate"
         );
 
+    const modalEventMeta =
+        document.getElementById(
+            "modalEventMeta"
+        );
+
 
     const registerEvent =
         document.getElementById(
@@ -857,12 +895,20 @@ document.addEventListener("DOMContentLoaded", async function () {
                             "";
 
 
-                        modalDate.textContent =
-                            "📅 " +
-                            (
-                                event.dataset.date ||
-                                ""
-                            );
+                        const [year, month, day] = (event.dataset.date || "")
+                            .split("-")
+                            .map(Number);
+                        modalDate.textContent = year && month && day
+                            ? `📅 ${new Date(year, month - 1, day).toLocaleDateString(undefined, {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric"
+                            })}`
+                            : "📅 Date to be announced";
+                        modalEventMeta.textContent =
+                            event.dataset.meta || "";
+                        modalEventMeta.hidden =
+                            modalEventMeta.textContent === "";
 
                         eventModal.dataset.eventId =
                             event.dataset.eventId || "";
@@ -975,7 +1021,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         registerEvent.addEventListener(
             "click",
-            async function () {
+            function () {
                 const eventId = Number(eventModal?.dataset.eventId);
                 if (!Number.isInteger(eventId) || eventId < 1) {
                     registrationMessage.textContent =
@@ -984,62 +1030,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                     return;
                 }
 
-                registerEvent.disabled = true;
-                registerEvent.textContent = "Registering...";
-                registrationMessage.hidden = true;
-
-                try {
-                    const tokenResponse = await fetch(
-                        "../php/event-registration.php?action=token",
-                        { headers: { Accept: "application/json" } }
-                    );
-                    const tokenData = await tokenResponse.json();
-                    if (!tokenResponse.ok || !tokenData.csrfToken) {
-                        throw new Error(
-                            tokenData.error || "Could not prepare the registration."
-                        );
-                    }
-
-                    const response = await fetch(
-                        "../php/event-registration.php",
-                        {
-                            method: "POST",
-                            headers: {
-                                Accept: "application/json",
-                                "Content-Type": "application/json",
-                                "X-CSRF-Token": tokenData.csrfToken
-                            },
-                            body: JSON.stringify({ eventId })
-                        }
-                    );
-                    const result = await response.json();
-
-                    if (response.status === 401) {
-                        window.location.href =
-                            "login.html?return_to=events.html";
-                        return;
-                    }
-
-                    if (response.ok || (response.status === 409 && result.registered)) {
-                        registerEvent.textContent = "Registered";
-                        registrationMessage.textContent = result.alreadyRegistered
-                            ? "You are already registered for this event."
-                            : "Your event registration has been saved.";
-                        registrationMessage.hidden = false;
-                        return;
-                    }
-
-                    throw new Error(
-                        result.error || "Could not register for this event."
-                    );
-                } catch (error) {
-                    console.error("Event registration failed.", error);
-                    registerEvent.disabled = false;
-                    registerEvent.textContent = "Register for Event";
-                    registrationMessage.textContent =
-                        error.message || "Could not register for this event.";
-                    registrationMessage.hidden = false;
-                }
+                window.location.href =
+                    `event-register.php?event_id=${encodeURIComponent(eventId)}`;
             }
         );
 

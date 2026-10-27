@@ -44,10 +44,12 @@ The main objectives of StudentHub are:
 
 - **Frontend:** HTML5 + CSS3
 - **JavaScript:** Page-specific interactions and form validation
-- **Backend:** PHP login and registration endpoints are included
-- **Database:** MySQL connection is centralized in `php/dbconnect.php`; student profile and contact messages use the `studenthub` database
-- **Authentication:** Prototype only; review and harden before deployment
-- **Data Storage:** Static JSON content and PHP registration data files
+- **Backend:** PHP login, registration, contact, event catalog, and event registration endpoints are included
+- **Database:** MySQLi connection is centralized in `php/dbconnect.php`; the running WAMP project uses the `studenthub` schema for student registration, login, events, and legacy event registrations
+- **Session navigation:** Shared page script shows account links based on the active student or administrator session
+- **Authentication:** Student and administrator login modes use prepared statements, hashed passwords, session regeneration, and CSRF-protected forms
+- **Data Storage:** MySQL for student and event data; JSON for FAQ content
+- **Shared footer:** All site pages use the same responsive footer with navigation and contact links
 
 ---
 
@@ -61,9 +63,9 @@ The StudentHub project contains ten pages (static HTML pages plus PHP-backed stu
 | 2 | 🔐 Login | `html/login.html` | Login interface |
 | 3 | 📊 Dashboard | `html/dashboard.php` | Authenticated student overview |
 | 4 | ℹ️ About | `html/about.html` | Project and portal information |
-| 5 | 🛠️ Admin | `html/admin.html` | Admin interface prototype |
+| 5 | 🛠️ Admin | `html/admin/dashboard.php` | Administrator-only management dashboard |
 | 6 | 📞 Contact | `html/contact.html` | Contact interface |
-| 7 | 📅 Events | `html/events.html` | Events and campus activities |
+| 7 | 📅 Events | `html/events.html` | MySQL-backed events and campus activities |
 | 8 | ❓ FAQ | `html/faq.html` | Frequently asked questions |
 | 9 | 👤 Profile | `html/profile.php` | Authenticated, database-backed student profile |
 | 10 | 📝 Register | `html/register.html` | Student registration interface |
@@ -130,7 +132,7 @@ These assets can be used for event sections, portal content, banners, cards, and
 - ❓ FAQ page
 - 📞 Contact page
 - ℹ️ About page
-- 🛠️ Admin interface prototype
+- 🛠️ Administrator dashboard with student, event, and registration management
 
 ### 🎨 UI / Design Features
 
@@ -207,6 +209,7 @@ StudentHub/
 │   │
 │   ├── about.html
 │   ├── admin.html
+│   ├── admin.php
 │   ├── contact.html
 │   ├── dashboard.php
 │   ├── events.html
@@ -216,9 +219,15 @@ StudentHub/
 │   ├── index.html
 │   ├── login.html
 │   ├── profile.php
+│   ├── event-register.php
 │   ├── register.html
 │   ├── sport.webp
 │   ├── workshop.jpg
+│   ├── admin/
+│   │   ├── dashboard.php
+│   │   ├── students.php
+│   │   ├── events.php
+│   │   └── registrations.php
 │   └── json/
 │       ├── events.json
 │       └── faq.json
@@ -236,16 +245,26 @@ StudentHub/
 │   └── register.js
 │
 ├── database/
+│   ├── studenthub_db.sql
 │   └── migrations/
+│       ├── 000_create_student.sql
 │       ├── 001_profile_and_contact.sql
-│       └── 002_event_registrations.sql
+│       ├── 002_event_registrations.sql
+│       ├── 003_events_catalog.sql
+│       ├── 004_event_registration_details.sql
+│       ├── 005_student_username.sql
+│       └── 006_student_auth_fields.sql
 │
 ├── php/
 │   ├── auth.php
 │   ├── contact.php
 │   ├── dbconnect.php
-│   ├── logout.php
+│   ├── event-registration.php
+│   ├── events.php
+│   ├── footer.php
 │   ├── login.php
+│   ├── logout.php
+│   ├── session-status.php
 │   └── register.php
 │
 └── wireframe/
@@ -271,25 +290,100 @@ StudentHub/
 3. Open `http://localhost/<project-folder>/html/index.html`.
 4. Configure and start the PHP/database services before testing login and registration.
 
-### Registration database
+### Current MySQL database setup
 
-Registration and login use the `studenthub` database and its `student` table:
+The current WAMP setup uses the shared MySQLi connection in `php/dbconnect.php` with MySQL on port 3306 and the `studenthub` database.
 
-`student_id`, `student_name`, `email`, `mobile_no`, `gender`, `password`, `time_stamp`
+1. Back up any existing database before changing it. For example: `mysqldump -u root -p --single-transaction studenthub > studenthub_backup.sql`.
+2. Import `database/studenthub_db.sql` for the canonical schema, or follow the legacy setup below when using the practical `studenthub.student` table.
+3. For a database created from an earlier version of this canonical schema, apply `database/migrations/006_student_auth_fields.sql` only if its `students.gender` and `students.academic_year` columns are missing. Do not run it against a fresh import because those columns are already in the schema.
+4. The legacy `studenthub` tables are not automatically renamed or copied. Back up legacy data and plan/test any data conversion separately before using the canonical tables.
 
-The current table uses a string `student_id`; registration generates a 32-character hexadecimal ID. `mobile_no` is `VARCHAR(10)` so all 10 digits, including a leading zero, are retained. The local database column was updated from `INT` to `VARCHAR(10)`. The password column must be long enough for a `password_hash()` result; `VARCHAR(255)` is recommended.
+The canonical schema includes `students`, `admins`, `events`, `registrations`, `remember_tokens`, `audit_logs`, `login_attempts`, and `contact_messages`. The running practical schema uses `student`, `events`, `event_registrations`, `admins`, and `login_attempts`.
 
-The additive migration in `database/migrations/001_profile_and_contact.sql` adds the course/year fields used by profile editing and a `contact_messages` table for submitted contact forms. It has been applied to the local `studenthub` database. Run `database/migrations/002_event_registrations.sql` to add the table used by authenticated event registrations (it is also applied to the local database).
+The connection supports WAMP/XAMPP defaults (`127.0.0.1`, `root`, empty local password, port `3306`, database `studenthub`). Override them with `STUDENTHUB_DB_HOST`, `STUDENTHUB_DB_USER`, `STUDENTHUB_DB_PASSWORD`, `STUDENTHUB_DB_NAME`, and `STUDENTHUB_DB_PORT`. Keep credentials in the local environment, never in source control.
 
-The connection defaults in `php/dbconnect.php` are for a local WAMP setup (`localhost`, user `root`, an empty password, and database `studenthub`). Override them with the `STUDENTHUB_DB_HOST`, `STUDENTHUB_DB_USER`, `STUDENTHUB_DB_PASSWORD`, `STUDENTHUB_DB_NAME`, and `STUDENTHUB_DB_PORT` environment variables when needed. Do not expose production database credentials in source control.
+There is no default administrator. Use the secure CLI process described below to create an admin; never insert or store a plaintext password. Student self-registration is available from `html/register.html`.
 
-Dashboard and profile routes require an authenticated student session. Use the **Log out** link to end the session. The admin page remains an accessible prototype; the database does not define administrator roles or permissions.
+Students sign in through Student Login and are sent to `html/dashboard.php`; administrators use Admin Login and are sent to `html/admin/dashboard.php`. The admin folder implements student search/filter/pagination, create/view/edit/deactivate/delete, event management and poster uploads, and participant listings. Every management page checks the administrator session on the server. Student dashboards/profile and event registration independently require an active student account; public event listings read from MySQL.
+
+Sign-out is a CSRF-protected POST operation. State-changing forms use session-bound CSRF tokens, sessions expire after 20 minutes of inactivity, and login attempts are throttled. Client-side session navigation only changes displayed links; it is not an authorization boundary. Event posters are stored under `html/uploads/events/`.
+
+Run the site through Apache/PHP (for example WAMP) at `http://localhost/<project-folder>/html/index.html`. phpMyAdmin or MySQL must be running for database-backed routes. The FAQ content remains in JSON.
+
+### First admin account
+
+There is no public administrator-registration form or default admin password. Run this from the project root in a trusted terminal:
+
+```text
+D:\wamp\bin\php\php8.4.15\php.exe scripts\create-admin.php
+```
+
+The script collects a name, username, email, and terminal-hidden password, validates the values, and stores only a `password_hash()` in `admins`. The first admin becomes `super_admin`; subsequent CLI-created accounts are regular admins. Run the same script to add admins safely. Never expose it through Apache or allow students to insert into `admins` or change roles.
+
+### Optional one-time JSON import
+
+The supplied `html/json/students.json` and `html/json/events.json` contain 15 demo records each. They are not runtime data sources; FAQ content remains in `faq.json`. Preview before importing:
+
+```text
+php scripts\import-json-data.php --students --events --dry-run
+php scripts\import-json-data.php --students --events --yes
+```
+
+Select only `--students` or `--events` to import one table. Each selected MySQL table must be empty or the importer stops without writing anything. The JSON source files are never modified. Imported demo students are inactive, get generated usernames, and receive unrecoverable random password hashes, so they cannot log in until an admin reviews and activates/resets them. Event organizer values and original image filenames are retained. Back up the database first.
+
+For an older canonical database, run `database/migrations/007_event_organizer.sql` once if `events.organizer` is missing. Fresh schema imports already include it.
+
+### Admin dashboard and styling
+
+The dashboard generates all statistics, charts, event lists, and registration tables from MySQL, with explicit empty states. It reuses `html/css/admin.css` and `javascript/admin.js`, with Bootstrap 5.3.3 and Bootstrap Icons loaded once from CDN. No Metis ZIP/template was present in the workspace; the existing StudentHub branding and CSS were adapted into a responsive admin layout rather than using static Metis records.
+
+`.env.example` documents the supported connection variables. PHP does not parse `.env` files, so configure these values in Apache/PHP or the WAMP/XAMPP environment. `.env` is ignored by Git.
+
+### Legacy database setup (registration practical)
+
+The registration practical stores new account records in the `studenthub` database and its `student` table. For a fresh legacy database, run these migrations in numeric order:
+
+1. `database/migrations/000_create_student.sql` creates the required student account fields: `student_id`, `student_name`, `email`, `mobile_no`, `gender`, `password`, and `time_stamp`.
+2. `database/migrations/001_profile_and_contact.sql` adds `course` and `academic_year`, and creates `contact_messages`.
+3. `database/migrations/002_event_registrations.sql` creates `event_registrations`.
+4. `database/migrations/003_events_catalog.sql` creates/seeds the `studenthub.events` catalog used by the current event pages.
+5. `database/migrations/004_event_registration_details.sql` adds the registrant name, email, mobile number, registration status, and update timestamp to `event_registrations`.
+6. `database/migrations/005_student_username.sql` adds a unique username for student accounts and assigns one to existing students.
+7. `database/migrations/008_student_registration_schema.sql` creates the complete registration table for a fresh `studenthub` database.
+8. `database/migrations/009_admin_management_support.sql` creates the `admins` and `login_attempts` tables required for administrator login and student management.
+
+Back up before applying any migration because older migrations may already have been applied. `php/register.php` connects to `studenthub` and inserts each valid submission into `student`; the generated `student_id`, email and username constraints allow multiple accounts while preventing duplicate account identifiers.
+
+The current registration, student login, profile, dashboard, event listing, event registration, and admin student-management handlers target this legacy practical schema. The student-management module supports add, view, edit, delete, search, and course filtering through prepared MySQLi statements with success/error messages. The WAMP/XAMPP environment variables are documented in `.env.example`.
+
+### Admin event management
+
+The admin event module uses the legacy `studenthub.events` table and supports:
+
+- Add, view, edit, and delete events
+- Event title, date, time, venue, category, organizer, and description
+- Search and category filtering
+- Poster uploads saved under `html/uploads/events/`
+- JPEG, PNG, and WebP MIME validation
+- Maximum poster size of 5 MB
+- Prepared MySQLi statements and CSRF-protected admin forms
+- Clear success and failure messages
+
+Open `html/admin/events.php` after administrator login to manage events.
+
+The asynchronous event API is available at `php/events-api.php`, and the
+Fetch API admin interface is `html/admin/events-api.php`. It supports GET
+list/detail requests and CSRF-protected POST, PUT (multipart POST with
+`_method=PUT`), and DELETE operations without full page reloads.
 
 ---
 
 ## ⚠️ Prototype Limitations
 
-Registration, login, student profile updates, contact form submissions, and event registrations are connected to the local MySQL database. They require Apache/PHP, the `studenthub` database, and the migrations above. The events catalog remains a JSON file, and the admin page is still a public prototype because the student schema has no roles or permissions. Production deployment still requires environment-specific database credentials, HTTPS, and appropriate operational/security hardening.
+Start Apache and MySQL before verifying the live workflows. Student registration and login were verified through the running WAMP server after aligning the handlers with the live schema.
+
+Registration, login, student profile updates, contact form submissions, event listings, dashboard event summaries, and event registrations require Apache/PHP and the `studenthub` schema. Administrator login additionally requires an administrator table and active administrator record. The FAQ content remains a JSON file. Production deployment still requires environment-specific database credentials, HTTPS, and operational/security hardening.
 
 ---
 

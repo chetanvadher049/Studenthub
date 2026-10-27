@@ -1,0 +1,350 @@
+STUDENTHUB - SECURE LOGIN AND LOGOUT MAIN CODE
+================================================
+
+Aim:
+Develop secure login and logout functionality using PHP sessions. Verify the
+password using password_verify(), regenerate the session ID after login,
+restrict dashboard access, implement role-based redirection, session timeout,
+and optional secure remember-me token support.
+
+The following are the main implementation excerpts from the existing project.
+
+Important project note:
+The existing project implements all requested login, logout, session,
+dashboard-protection, role and timeout features. The database schema includes
+the optional remember_tokens table, but no runtime remember-me cookie/token
+logic was found in the current PHP files.
+
+
+1. LOGIN - php/login.php
+------------------------
+
+<?php
+require_once __DIR__ . "/auth.php";
+studenthub_start_session();
+
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    header("Location: ../html/login.html");
+    exit;
+}
+
+$loginMode = $_POST["user_type"] ?? "student";
+if (!is_string($loginMode) || !in_array($loginMode, ["student", "admin"], true)) {
+    showError("Invalid username or password.", 401);
+}
+
+if (!verifyCsrfToken($_POST["csrf_token"] ?? null)) {
+    showError("Your login form expired. Reload the page and try again.", 403, $loginMode);
+}
+
+$identifier = $_POST["identifier"] ?? "";
+$password = $_POST["password"] ?? "";
+if (
+    !is_string($identifier) ||
+    !is_string($password) ||
+    trim($identifier) === "" ||
+    $password === "" ||
+    strlen($identifier) > 255 ||
+    strlen($password) > 255
+) {
+    showError("Invalid username or password.", 401, $loginMode);
+}
+$identifier = trim($identifier);
+
+$connection = studenthub_db();
+
+// Select an active student or admin account using a prepared statement.
+if ($loginMode === "admin") {
+    $statement = $connection->prepare(
+        "SELECT id, full_name, email, password_hash, role
+         FROM admins
+         WHERE (email = ? OR username = ?) AND status = 'active'
+         LIMIT 1"
+    );
+    $statement->bind_param("ss", $identifier, $identifier);
+    $statement->execute();
+    $account = $statement->get_result()->fetch_assoc();
+} else {
+    $statement = $connection->prepare(
+        "SELECT id, full_name, email, password_hash
+         FROM students
+         WHERE (email = ? OR username = ?) AND status = 'active'
+         LIMIT 1"
+    );
+    $statement->bind_param("ss", $identifier, $identifier);
+    $statement->execute();
+    $account = $statement->get_result()->fetch_assoc();
+}
+
+// Verify the submitted password against the stored password hash.
+if (!$account || !password_verify($password, $account["password_hash"])) {
+    $statement->close();
+    $connection->close();
+    showError("Invalid username or password.", 401, $loginMode);
+}
+
+$role = $loginMode === "admin" ? $account["role"] : "student";
+$statement->close();
+$connection->close();
+
+// Prevent session fixation after successful login.
+session_regenerate_id(true);
+
+$_SESSION = [
+    "authenticated" => true,
+    "user_id" => (int) $account["id"],
+    "user_type" => $loginMode,
+    "role" => $role,
+    "user_name" => $account["full_name"],
+    "last_activity" => time(),
+    "studenthub_csrf" => bin2hex(random_bytes(32)),
+];
+
+// Role-based redirection.
+if ($loginMode === "admin") {
+    header("Location: ../html/admin/dashboard.php");
+    exit;
+}
+
+header("Location: ../html/dashboard.php");
+exit;
+?>
+
+
+2. SESSION START, SECURITY AND TIMEOUT - php/auth.php
+------------------------------------------------------
+
+<?php
+require_once __DIR__ . "/dbconnect.php";
+
+function studenthub_start_session(): void
+{
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        $lastActivity = $_SESSION["last_activity"] ?? null;
+
+        // Expire the session after 20 minutes of inactivity.
+        if (is_int($lastActivity) && time() - $lastActivity > 1200) {
+            $_SESSION = [];
+            session_regenerate_id(true);
+        }
+
+        $_SESSION["last_activity"] = time();
+        return;
+    }
+
+    ini_set("session.use_strict_mode", "1");
+    ini_set("session.use_only_cookies", "1");
+    ini_set("session.cookie_httponly", "1");
+    ini_set("session.cookie_samesite", "Lax");
+
+    session_set_cookie_params([
+        "lifetime" => 0,
+        "path" => "/",
+        "secure" => isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off",
+        "httponly" => true,
+        "samesite" => "Lax",
+    ]);
+
+    session_start();
+    $_SESSION["last_activity"] = time();
+}
+
+function isAuthenticated(): bool
+{
+    studenthub_start_session();
+
+    return ($_SESSION["authenticated"] ?? false) === true
+        && in_array($_SESSION["user_type"] ?? null, ["student", "admin"], true)
+        && is_int($_SESSION["user_id"] ?? null)
+        && is_string($_SESSION["role"] ?? null)
+        && is_string($_SESSION["user_name"] ?? null);
+}
+
+function currentUser(): ?array
+{
+    return isAuthenticated()
+        ? [
+            "id" => $_SESSION["user_id"],
+            "type" => $_SESSION["user_type"],
+            "role" => $_SESSION["role"],
+            "name" => $_SESSION["user_name"],
+        ]
+        : null;
+}
+?>
+
+
+3. STUDENT DASHBOARD ACCESS - php/auth.php and html/dashboard.php
+------------------------------------------------------------------
+
+// html/dashboard.php
+require_once __DIR__ . "/../php/auth.php";
+$student = requireStudent();
+
+// auth.php
+function requireStudent(): array
+{
+    if (!isAuthenticated()) {
+        studenthub_require_authentication("student", 401);
+    }
+
+    if ($_SESSION["user_type"] !== "student") {
+        studenthub_require_authentication("student", 403);
+    }
+
+    $connection = studenthub_db();
+    $statement = $connection->prepare(
+        "SELECT id AS student_id, full_name AS student_name, username,
+                email, phone AS mobile_no, gender, course, academic_year,
+                status, created_at
+         FROM students
+         WHERE id = ? AND status = 'active'
+         LIMIT 1"
+    );
+    $statement->bind_param("i", $_SESSION["user_id"]);
+    $statement->execute();
+    $student = $statement->get_result()->fetch_assoc();
+    $statement->close();
+
+    if (!$student) {
+        expireCurrentSession();
+        studenthub_require_authentication("student", 401);
+    }
+
+    return $student;
+}
+
+
+4. ADMIN ROLE-BASED ACCESS - php/auth.php
+------------------------------------------
+
+function requireAdmin(): array
+{
+    if (!isAuthenticated()) {
+        studenthub_require_authentication("admin", 401);
+    }
+
+    if ($_SESSION["user_type"] !== "admin") {
+        studenthub_require_authentication("admin", 403);
+    }
+
+    $connection = studenthub_db();
+    $statement = $connection->prepare(
+        "SELECT id, full_name, username, email, role
+         FROM admins
+         WHERE id = ?
+           AND status = 'active'
+           AND role IN ('admin', 'super_admin')
+         LIMIT 1"
+    );
+    $statement->bind_param("i", $_SESSION["user_id"]);
+    $statement->execute();
+    $admin = $statement->get_result()->fetch_assoc();
+    $statement->close();
+
+    if (!$admin || $admin["role"] !== $_SESSION["role"]) {
+        expireCurrentSession();
+        studenthub_require_authentication("admin", 401);
+    }
+
+    return $admin;
+}
+
+function requireSuperAdmin(): array
+{
+    $admin = requireAdmin();
+
+    if ($admin["role"] !== "super_admin") {
+        http_response_code(403);
+        exit("This action requires a super administrator.");
+    }
+
+    return $admin;
+}
+
+
+5. AUTHENTICATION REDIRECTION - php/auth.php
+--------------------------------------------
+
+function studenthub_require_authentication(string $userType, int $status): void
+{
+    $scriptPath = str_replace("\\", "/", $_SERVER["SCRIPT_NAME"] ?? "");
+
+    if (str_contains($scriptPath, "/php/")) {
+        http_response_code($status);
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode([
+            "error" => $status === 401
+                ? "Sign in to continue."
+                : "You are not authorized to perform this action.",
+        ]);
+        exit;
+    }
+
+    $loginPath = str_contains($scriptPath, "/html/admin/")
+        ? "../login.html"
+        : "../html/login.html";
+
+    if ($userType === "admin") {
+        $loginPath .= "?mode=admin";
+    }
+
+    header("Location: " . $loginPath);
+    exit;
+}
+
+
+6. LOGOUT - php/logout.php
+--------------------------
+
+<?php
+require_once __DIR__ . "/auth.php";
+studenthub_start_session();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!studenthub_verify_csrf_token($_POST["csrf_token"] ?? null)) {
+        http_response_code(403);
+        exit("Your sign-out request expired. Reload this page and try again.");
+    }
+
+    $_SESSION = [];
+
+    if (ini_get("session.use_cookies")) {
+        $cookie = session_get_cookie_params();
+        setcookie(session_name(), "", [
+            "expires" => time() - 42000,
+            "path" => $cookie["path"],
+            "domain" => $cookie["domain"],
+            "secure" => $cookie["secure"],
+            "httponly" => $cookie["httponly"],
+            "samesite" => $cookie["samesite"] ?? "Lax",
+        ]);
+    }
+
+    session_destroy();
+    header("Location: ../html/login.html?logged_out=1");
+    exit;
+}
+?>
+
+
+7. OPTIONAL REMEMBER-ME TOKEN TABLE - database/studenthub_db.sql
+-----------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS remember_tokens (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_type ENUM('student', 'admin') NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    selector VARCHAR(32) NOT NULL,
+    token_hash VARCHAR(255) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_remember_tokens_selector (selector),
+    KEY idx_remember_tokens_user (user_type, user_id),
+    KEY idx_remember_tokens_expires_at (expires_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+This table is prepared for secure remember-me support. The current project does
+not include the runtime code that creates, rotates, validates or deletes the
+remember-me cookie/token.

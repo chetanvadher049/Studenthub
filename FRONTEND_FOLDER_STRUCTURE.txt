@@ -7,6 +7,7 @@ StudentHub/
 |-- database/
 |   |-- migrations/
 |       |-- 001_profile_and_contact.sql
+|       |-- 002_event_registrations.sql
 |
 |-- html/
 |   |-- css/
@@ -56,13 +57,16 @@ StudentHub/
 |   |-- login.js
 |   |-- profile.js
 |   |-- register.js
+|   |-- session-nav.js
 |
 |-- php/
 |   |-- auth.php
 |   |-- contact.php
 |   |-- dbconnect.php
+|   |-- footer.php
 |   |-- login.php
 |   |-- logout.php
+|   |-- session-status.php
 |   |-- register.php
 |
 |-- wireframe/
@@ -75,6 +79,9 @@ Notes:
 - Page-specific JavaScript is kept in javascript/.
 - Local registration exports and student sample data are ignored to avoid publishing personal data.
 - Database migrations are documented under database/migrations/.
+- All pages use a consistent responsive footer with navigation and contact links.
+- Shared session navigation displays Profile and Log out for authenticated students on every page.
+- Public information pages have the full footer; account pages use a compact footer and generated results use a minimal footer.
 - Run through a PHP-enabled server to use login, registration, profile, and contact endpoints.
 - Configure php/dbconnect.php for the local database before using database-backed behavior.
 - Keep all page links and asset references relative to their documented folders.

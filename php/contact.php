@@ -1,13 +1,25 @@
 <?php
 
-require_once __DIR__ . "/dbconnect.php";
+require_once __DIR__ . "/auth.php";
+studenthub_start_session();
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    http_response_code(405);
+    header("Allow: POST");
     contactResult(
         "Invalid request",
         "Send your message through the contact form.",
         false,
         405
+    );
+}
+
+if (!verifyCsrfToken($_POST["csrf_token"] ?? null)) {
+    contactResult(
+        "Form expired",
+        "Reload the contact page and send your message again.",
+        false,
+        403
     );
 }
 
@@ -98,13 +110,14 @@ function contactResult(
         <link rel="stylesheet" href="../html/css/shared.css">
         <style>
             body {
-                align-items: center;
-                justify-content: center;
-                padding: 24px;
+                align-items: stretch;
+                justify-content: flex-start;
+                padding: 0;
             }
 
             .contact-result {
                 width: min(100%, 520px);
+                margin: auto;
                 padding: clamp(24px, 6vw, 40px);
                 border: 1px solid var(--border);
                 border-radius: 16px;
@@ -139,6 +152,10 @@ function contactResult(
             <p><?= $safeMessage ?></p>
             <a href="../html/contact.html">Back to contact</a>
         </main>
+        <?php
+        $footerVariant = "minimal";
+        require __DIR__ . "/footer.php";
+        ?>
     </body>
     </html>
     <?php

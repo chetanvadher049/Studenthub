@@ -1,20 +1,13 @@
 <?php
 require_once __DIR__ . "/../php/auth.php";
-$student = studenthub_require_login();
+$student = requireStudent();
 $profileForm = $student;
 $profileError = "";
 
-if (empty($_SESSION["studenthub_csrf"])) {
-    $_SESSION["studenthub_csrf"] = bin2hex(random_bytes(32));
-}
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $token = $_POST["csrf_token"] ?? "";
-    if (
-        !is_string($token) ||
-        !hash_equals($_SESSION["studenthub_csrf"], $token)
-    ) {
-        http_response_code(400);
+    if (!verifyCsrfToken($token)) {
+        http_response_code(403);
         $profileError = "Your form expired. Reload the page and try again.";
     } else {
         $profileInput = static function (string $key): string {
@@ -57,14 +50,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $profileError = "Course or academic year is too long.";
         } else {
             try {
-                $connection = studenthub_db();
+                $connection = studenthub_db("studenthub");
                 $check = $connection->prepare(
                     "SELECT student_id
                      FROM student
                      WHERE email = ? AND student_id <> ?
                      LIMIT 1"
                 );
-                $check->bind_param("ss", $email, $student["student_id"]);
+                $studentId = (string) $student["student_id"];
+                $check->bind_param("ss", $email, $studentId);
                 $check->execute();
                 $check->store_result();
 
@@ -85,15 +79,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         $gender,
                         $course,
                         $academicYear,
-                        $student["student_id"]
+                        $studentId
                     );
                     $update->execute();
                     $update->close();
 
-                    $_SESSION["student_name"] = $name;
-                    $_SESSION["student_email"] = $email;
-                    $_SESSION["student_mobile"] = $mobile;
-                    $_SESSION["student_gender"] = $gender;
                     $check->close();
                     $connection->close();
 
@@ -126,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <link rel="stylesheet"
           href="css/profile.css">
-    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/shared.css?v=5">
 
 
 </head>
@@ -505,7 +495,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <form id="profileForm" method="post" action="profile.php">
             <input type="hidden" name="csrf_token"
-                   value="<?= studenthub_escape($_SESSION["studenthub_csrf"]) ?>">
+                   value="<?= studenthub_escape(csrfToken()) ?>">
 
 
             <!-- FULL NAME -->
@@ -647,14 +637,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
      FOOTER
      ===================================================== -->
 
-<footer class="site-footer">
-
-    <p>
-        &copy; 2026 StudentHub.
-        All rights reserved.
-    </p>
-
-</footer>
+<?php
+$footerPagePrefix = "";
+$footerVariant = "compact";
+require __DIR__ . "/../php/footer.php";
+?>
 
 
 
@@ -662,10 +649,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
      JAVASCRIPT
      ===================================================== -->
 
-<script src="../javascript/profile.js?v=2"
+<script src="../javascript/profile.js?v=3"
         defer></script>
 
 
+<script src="../javascript/session-nav.js" defer></script>
 </body>
 
 </html>

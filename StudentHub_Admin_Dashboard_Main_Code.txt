@@ -1,0 +1,283 @@
+STUDENTHUB ADMIN DASHBOARD - MAIN CODE
+======================================
+
+This extract contains only the main code used in the project for:
+1. Admin-only dashboard access
+2. Role validation
+3. Dynamic navigation state
+4. User, student, event, and registration statistics
+5. Latest registrations
+6. Registration activity data for the dashboard graph
+
+
+1. ADMIN-ONLY ACCESS AND DATABASE CONNECTION
+---------------------------------------------
+
+// html/admin/includes/bootstrap.php
+
+require_once __DIR__ . "/../../../php/auth.php";
+
+$admin = requireAdmin();
+$connection = studenthub_db("studenthub");
+
+function adminEscape($value): string
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES, "UTF-8");
+}
+
+
+2. ADMIN AUTHORIZATION AND ROLE VALIDATION
+------------------------------------------
+
+// php/auth.php
+
+function requireAdmin(): array
+{
+    if (!isAuthenticated()) {
+        studenthub_require_authentication("admin", 401);
+    }
+
+    if ($_SESSION["user_type"] !== "admin") {
+        studenthub_require_authentication("admin", 403);
+    }
+
+    $connection = studenthub_db("studenthub");
+    $statement = $connection->prepare(
+        "SELECT id, full_name, username, email, role
+         FROM admins
+         WHERE id = ?
+           AND status = 'active'
+           AND role IN ('admin', 'super_admin')
+         LIMIT 1"
+    );
+
+    $statement->bind_param("i", $_SESSION["user_id"]);
+    $statement->execute();
+    $admin = $statement->get_result()->fetch_assoc();
+    $statement->close();
+
+    if (!$admin || $admin["role"] !== $_SESSION["role"]) {
+        expireCurrentSession();
+        studenthub_require_authentication("admin", 401);
+    }
+
+    return $admin;
+}
+
+
+3. DASHBOARD STATISTICS
+-----------------------
+
+// html/admin/dashboard.php
+
+require_once __DIR__ . "/includes/bootstrap.php";
+
+$result = $connection->query(
+    "SELECT
+        (SELECT COUNT(*) FROM student) AS student_total,
+        (SELECT COUNT(*) FROM admins WHERE status = 'active') AS admin_total,
+        (SELECT COUNT(*) FROM events) AS event_total,
+        (SELECT COUNT(*) FROM event_registrations) AS registration_total"
+);
+
+$stats = $result->fetch_assoc();
+$result->free();
+
+$userTotal = (int) $stats["student_total"]
+           + (int) $stats["admin_total"];
+
+
+4. LATEST REGISTRATIONS
+-----------------------
+
+$recentRegistrations = $connection->query(
+    "SELECT r.student_id,
+            s.student_name,
+            s.email,
+            r.event_title,
+            r.event_date,
+            r.time_stamp AS registration_date
+     FROM event_registrations r
+     LEFT JOIN student s ON s.student_id = r.student_id
+     ORDER BY r.time_stamp DESC, r.registration_id DESC
+     LIMIT 6"
+)->fetch_all(MYSQLI_ASSOC);
+
+
+5. REGISTRATION ACTIVITY FOR DASHBOARD GRAPH
+---------------------------------------------
+
+$monthlyRows = $connection->query(
+    "SELECT DATE_FORMAT(time_stamp, '%Y-%m') AS month_key,
+            COUNT(*) AS registration_count
+     FROM event_registrations
+     WHERE time_stamp >= DATE_FORMAT(
+         DATE_SUB(CURRENT_DATE, INTERVAL 5 MONTH), '%Y-%m-01'
+     )
+     GROUP BY DATE_FORMAT(time_stamp, '%Y-%m')
+     ORDER BY month_key"
+)->fetch_all(MYSQLI_ASSOC);
+
+$monthlyCounts = [];
+foreach ($monthlyRows as $row) {
+    $monthlyCounts[$row["month_key"]] =
+        (int) $row["registration_count"];
+}
+
+$registrationActivity = [];
+$monthStart = new DateTimeImmutable("first day of this month");
+
+for ($monthOffset = 5; $monthOffset >= 0; $monthOffset--) {
+    $month = $monthStart->modify("-" . $monthOffset . " months");
+    $monthKey = $month->format("Y-m");
+
+    $registrationActivity[] = [
+        "label" => $month->format("M Y"),
+        "count" => $monthlyCounts[$monthKey] ?? 0,
+    ];
+}
+
+
+6. DASHBOARD STATISTIC CARDS
+----------------------------
+
+<?php foreach ([
+    [
+        "Users",
+        (int) $stats["student_total"] + (int) $stats["admin_total"],
+        "Students and active administrators"
+    ],
+    [
+        "Students",
+        (int) $stats["student_total"],
+        "Registered student accounts"
+    ],
+    [
+        "Events",
+        (int) $stats["event_total"],
+        "Events in the event catalogue"
+    ],
+    [
+        "Registrations",
+        (int) $stats["registration_total"],
+        "Event registrations"
+    ],
+] as [$label, $value, $description]): ?>
+    <article class="admin-stat-card">
+        <strong><?= number_format($value) ?></strong>
+        <span><?= adminEscape($label) ?></span>
+        <small><?= adminEscape($description) ?></small>
+    </article>
+<?php endforeach; ?>
+
+
+7. LATEST REGISTRATION TABLE
+----------------------------
+
+<?php foreach ($recentRegistrations as $registration): ?>
+    <tr>
+        <td>
+            <?= adminEscape(
+                $registration["student_name"]
+                ?: $registration["student_id"]
+            ) ?>
+            <small>
+                <?= adminEscape(
+                    $registration["email"] ?: "Student account"
+                ) ?>
+            </small>
+        </td>
+        <td><?= adminEscape($registration["event_title"]) ?></td>
+        <td>
+            <?= adminEscape(
+                date("M j, Y", strtotime(
+                    $registration["registration_date"]
+                ))
+            ) ?>
+        </td>
+        <td><span class="badge text-bg-success">Registered</span></td>
+    </tr>
+<?php endforeach; ?>
+
+
+8. DYNAMIC MENU AND ACTIVE PAGE
+-------------------------------
+
+// html/admin/includes/header.php
+
+The current project uses the validated administrator role to permit the
+dashboard and displays the role in the header. The menu is dynamically
+highlighted according to the current page; both active administrator roles
+share the same dashboard menu.
+
+$currentPage = basename($_SERVER["SCRIPT_NAME"] ?? "");
+
+$activeSection = match ($currentPage) {
+    "students.php",
+    "student-create.php",
+    "student-edit.php",
+    "student-view.php" => "students",
+
+    "events.php",
+    "events-api.php",
+    "event-create.php",
+    "event-edit.php",
+    "event-view.php" => "events",
+
+    "registrations.php" => "registrations",
+    default => "dashboard",
+};
+
+<nav aria-label="Administration">
+    <a class="<?= $activeSection === "dashboard" ? "active" : "" ?>"
+       href="dashboard.php">
+        Dashboard
+    </a>
+
+    <a class="<?= $activeSection === "students" ? "active" : "" ?>"
+       href="students.php">
+        Students
+    </a>
+
+    <a class="<?= $activeSection === "events" ? "active" : "" ?>"
+       href="events.php">
+        Events
+    </a>
+
+    <a class="<?= $activeSection === "registrations" ? "active" : "" ?>"
+       href="registrations.php">
+        Registrations
+    </a>
+</nav>
+
+<span class="admin-role">
+    <?= adminEscape($admin["role"]) ?>
+</span>
+
+
+9. ERROR HANDLING
+-----------------
+
+try {
+    // Dashboard queries and data preparation
+} catch (mysqli_sql_exception $exception) {
+    error_log(
+        "StudentHub admin dashboard query failed: "
+        . $exception->getMessage()
+    );
+
+    http_response_code(503);
+    exit(
+        "Dashboard data is temporarily unavailable. "
+        . "Check the database connection and try again."
+    );
+}
+
+
+PROJECT FILES USED
+------------------
+
+html/admin/dashboard.php
+html/admin/includes/bootstrap.php
+html/admin/includes/header.php
+php/auth.php

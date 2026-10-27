@@ -1,6 +1,50 @@
 <?php
 require_once __DIR__ . "/../php/auth.php";
-$student = studenthub_require_login();
+
+$student = requireStudent();
+
+try {
+    $dashboardConnection = studenthub_db("studenthub");
+
+    $upcomingEventResult = $dashboardConnection->query(
+        "SELECT COUNT(*) AS event_count
+         FROM events
+         WHERE event_date >= CURRENT_DATE"
+    );
+    $upcomingEventCount = (int) $upcomingEventResult->fetch_assoc()["event_count"];
+    $upcomingEventResult->free();
+
+    $registrationCountQuery = $dashboardConnection->prepare(
+        "SELECT COUNT(*) AS registration_count
+         FROM event_registrations AS registration
+         WHERE registration.student_id = ?
+           AND registration.registration_status = 'registered'
+           AND registration.event_date >= CURRENT_DATE"
+    );
+    $studentId = (string) $student["student_id"];
+    $registrationCountQuery->bind_param("s", $studentId);
+    $registrationCountQuery->execute();
+    $registrationCount = (int) $registrationCountQuery
+        ->get_result()
+        ->fetch_assoc()["registration_count"];
+    $registrationCountQuery->close();
+
+    $upcomingEventsResult = $dashboardConnection->query(
+        "SELECT event_id, title, event_date, event_time,
+                venue, category, description
+         FROM events
+         WHERE event_date >= CURRENT_DATE
+         ORDER BY event_date, event_id
+         LIMIT 3"
+    );
+    $upcomingEvents = $upcomingEventsResult->fetch_all(MYSQLI_ASSOC);
+    $upcomingEventsResult->free();
+    $dashboardConnection->close();
+} catch (mysqli_sql_exception $exception) {
+    error_log("StudentHub dashboard data lookup failed: " . $exception->getMessage());
+    http_response_code(503);
+    exit("Dashboard data is temporarily unavailable. Please try again shortly.");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,8 +60,8 @@ $student = studenthub_require_login();
 
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/dashboard-dynamic.css">
-    <link rel="stylesheet" href="css/shared.css">
-    <script src="../javascript/dashboard.js?v=2" defer></script>
+    <link rel="stylesheet" href="css/shared.css?v=5">
+    <script src="../javascript/dashboard.js?v=3" defer></script>
 
 </head>
 
@@ -181,14 +225,6 @@ $student = studenthub_require_login();
 
 </header>
 
-<!-- NOTIFICATION BANNER -->
-<div id="notificationBanner" class="notification-banner">
-    <span>📢 You have 5 new notifications and upcoming events.</span>
-    <button id="closeNotification" type="button" aria-label="Close notification">×</button>
-</div>
-
-
-
 <!-- =====================================================
      MAIN CONTENT
      ================================================= -->
@@ -262,18 +298,16 @@ $student = studenthub_require_login();
             </div>
 
 
-            <strong>
-                12
-            </strong>
+            <strong><?= $upcomingEventCount ?></strong>
 
 
             <span>
-                Events
+                Upcoming Events
             </span>
 
 
             <p>
-                Upcoming events
+                Available in the catalog
             </p>
 
 
@@ -292,7 +326,7 @@ $student = studenthub_require_login();
                 <div class="summary-icon notification-icon"
                      aria-hidden="true">
 
-                    🔔
+                    ✅
 
                 </div>
 
@@ -300,18 +334,16 @@ $student = studenthub_require_login();
             </div>
 
 
-            <strong>
-                5
-            </strong>
+            <strong><?= $registrationCount ?></strong>
 
 
             <span>
-                Notifications
+                Your Registrations
             </span>
 
 
             <p>
-                New notifications
+                Active event registrations
             </p>
 
 
@@ -330,7 +362,7 @@ $student = studenthub_require_login();
                 <div class="summary-icon message-icon"
                      aria-hidden="true">
 
-                    👤
+                    🎓
 
                 </div>
 
@@ -338,18 +370,16 @@ $student = studenthub_require_login();
             </div>
 
 
-            <strong>
-                3
-            </strong>
+            <strong>Ready</strong>
 
 
             <span>
-                Messages
+                Student Profile
             </span>
 
 
             <p>
-                Unread messages
+                Connected to your account
             </p>
 
 
@@ -403,53 +433,34 @@ $student = studenthub_require_login();
 
 
             <ul class="dashboard-list">
-
-
-                <!-- EVENT 1 -->
-                <li class="event-item" data-event="Technical Workshop">
-                    <div class="list-thumbnail" aria-hidden="true">
-                        📚
-                    </div>
-
-                    <div class="list-content">
-                        <strong>Technical Workshop</strong>
-                        <span>Technology & Development</span>
-                    </div>
-
-                    <span class="list-arrow">›</span>
-                </li>
-
-
-                <!-- EVENT 2 -->
-                <li class="event-item" data-event="College Hackathon">
-                    <div class="list-thumbnail" aria-hidden="true">
-                        💻
-                    </div>
-
-                    <div class="list-content">
-                        <strong>College Hackathon</strong>
-                        <span>Coding Competition</span>
-                    </div>
-
-                    <span class="list-arrow">›</span>
-                </li>
-
-
-                <!-- EVENT 3 -->
-                <li class="event-item" data-event="Sports Day">
-                    <div class="list-thumbnail" aria-hidden="true">
-                        🏆
-                    </div>
-
-                    <div class="list-content">
-                        <strong>Sports Day</strong>
-                        <span>Annual Sports Activities</span>
-                    </div>
-
-                    <span class="list-arrow">›</span>
-                </li>
-
-
+                <?php if ($upcomingEvents === []): ?>
+                    <li class="dashboard-empty">There are no upcoming events.</li>
+                <?php else: ?>
+                    <?php foreach ($upcomingEvents as $event): ?>
+                        <?php
+                        $eventDetails = sprintf(
+                            "%s at %s, %s. %s",
+                            (new DateTimeImmutable($event["event_date"]))->format("F j, Y"),
+                            $event["event_time"],
+                            $event["venue"],
+                            $event["description"]
+                        );
+                        ?>
+                        <li class="event-item"
+                            data-event="<?= studenthub_escape($event["title"]) ?>"
+                            data-text="<?= studenthub_escape($eventDetails) ?>">
+                            <div class="list-thumbnail" aria-hidden="true">📅</div>
+                            <div class="list-content">
+                                <strong><?= studenthub_escape($event["title"]) ?></strong>
+                                <span>
+                                    <?= studenthub_escape($event["category"]) ?> ·
+                                    <?= studenthub_escape((new DateTimeImmutable($event["event_date"]))->format("M j, Y")) ?>
+                                </span>
+                            </div>
+                            <span class="list-arrow">›</span>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </ul>
 
 
@@ -602,20 +613,14 @@ $student = studenthub_require_login();
      FOOTER
      ===================================================== -->
 
-<footer class="site-footer">
+<?php
+$footerPagePrefix = "";
+$footerVariant = "compact";
+require __DIR__ . "/../php/footer.php";
+?>
 
 
-    <p>
-
-        &copy; 2026 StudentHub.
-        All rights reserved.
-
-    </p>
-
-
-</footer>
-
-
+<script src="../javascript/session-nav.js" defer></script>
 </body>
 
 </html>

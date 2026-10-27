@@ -1,0 +1,455 @@
+STUDENTHUB - ASYNCHRONOUS JSON API AND FETCH API
+Main excerpts showing event list, add, update, and delete operations
+without a full page reload.
+
+======================================================================
+1. PHP JSON API RESPONSE AND ADMIN AUTHENTICATION
+======================================================================
+
+// php/events-api.php
+require_once __DIR__ . "/../html/admin/includes/bootstrap.php";
+
+header("Content-Type: application/json; charset=utf-8");
+header("Cache-Control: no-store");
+
+function apiResponse(array $payload, int $status = 200): never
+{
+    http_response_code($status);
+    echo json_encode($payload, JSON_UNESCAPED_SLASHES);
+    exit;
+}
+
+try {
+    // Only logged-in active administrators can use CRUD operations.
+    $admin = requireAdmin();
+    $method = $_SERVER["REQUEST_METHOD"];
+    $input = [];
+
+    // Multipart POST is used for add/update because it can contain a poster.
+    $override = $_POST["_method"] ?? "";
+    if ($method === "POST" && is_string($override) && $override !== "") {
+        $method = strtoupper($override);
+    }
+
+    // The API returns JSON instead of redirecting to another page.
+} catch (mysqli_sql_exception | JsonException $exception) {
+    error_log("StudentHub event API failed: " . $exception->getMessage());
+    apiResponse(
+        ["error" => "The event operation could not be completed."],
+        500
+    );
+}
+
+======================================================================
+2. API INPUT AND EVENT JSON FORMAT
+======================================================================
+
+function apiInput(): array
+{
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        return adminEventInput();
+    }
+
+    $raw = file_get_contents("php://input");
+    $data = json_decode($raw ?: "{}", true);
+
+    return is_array($data)
+        ? array_map(
+            static fn ($value): string =>
+                is_string($value) ? trim($value) : "",
+            $data
+        )
+        : [];
+}
+
+function apiEvent(array $row): array
+{
+    return [
+        "id" => (int) $row["event_id"],
+        "title" => $row["title"],
+        "event_date" => $row["event_date"],
+        "event_time" => $row["event_time"],
+        "venue" => $row["venue"],
+        "category" => $row["category"],
+        "organizer" => $row["organizer"],
+        "description" => $row["description"],
+        "image" => $row["image"],
+    ];
+}
+
+======================================================================
+3. LIST EVENTS AS JSON
+======================================================================
+
+if ($method === "GET") {
+    $conditions = [];
+    $values = [];
+    $types = "";
+
+    $eventId = filter_var(
+        $_GET["id"] ?? null,
+        FILTER_VALIDATE_INT
+    );
+
+    if ($eventId) {
+        $conditions[] = "event_id = ?";
+        $values[] = $eventId;
+        $types .= "i";
+    }
+
+    $where = $conditions
+        ? " WHERE " . implode(" AND ", $conditions)
+        : "";
+
+    $statement = $connection->prepare(
+        "SELECT event_id, title, event_date, event_time, venue,
+                category, organizer, description, image
+         FROM events"
+        . $where
+        . " ORDER BY event_date DESC, event_id DESC"
+    );
+
+    if ($types !== "") {
+        $statement->bind_param($types, ...$values);
+    }
+
+    $statement->execute();
+    $rows = $statement->get_result()->fetch_all(MYSQLI_ASSOC);
+    $statement->close();
+
+    apiResponse([
+        "events" => array_map("apiEvent", $rows)
+    ]);
+}
+
+======================================================================
+4. CSRF CHECK FOR ADD, UPDATE AND DELETE
+======================================================================
+
+$csrf = $_SERVER["HTTP_X_CSRF_TOKEN"]
+    ?? ($_POST["csrf_token"] ?? null);
+
+if (!verifyCsrfToken($csrf)) {
+    apiResponse(
+        ["error" => "Your request token expired. Reload the page."],
+        403
+    );
+}
+
+======================================================================
+5. ADD EVENT USING PREPARED MYSQLI
+======================================================================
+
+if ($method === "POST") {
+    $input = apiInput();
+    $errors = adminEventErrors($input);
+    $image = null;
+
+    if (!$errors) {
+        try {
+            $image = adminStoreEventPoster($_FILES["poster"] ?? []);
+        } catch (RuntimeException $exception) {
+            $errors[] = $exception->getMessage();
+        }
+    }
+
+    if ($errors) {
+        apiResponse(["errors" => $errors], 422);
+    }
+
+    $nextIdResult = $connection->query(
+        "SELECT COALESCE(MAX(event_id), 0) + 1 AS next_id
+         FROM events"
+    );
+    $eventId = (int) $nextIdResult->fetch_assoc()["next_id"];
+    $nextIdResult->free();
+
+    $statement = $connection->prepare(
+        "INSERT INTO events
+         (event_id, title, event_date, event_time, venue, category,
+          organizer, description, image)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    );
+
+    $statement->bind_param(
+        "issssssss",
+        $eventId,
+        $input["title"],
+        $input["event_date"],
+        $input["event_time"],
+        $input["venue"],
+        $input["category"],
+        $input["organizer"],
+        $input["description"],
+        $image
+    );
+
+    $statement->execute();
+    $statement->close();
+
+    apiResponse([
+        "message" => "Event created successfully.",
+        "id" => $eventId
+    ], 201);
+}
+
+======================================================================
+6. UPDATE EVENT ASYNCHRONOUSLY
+======================================================================
+
+if ($method === "PUT") {
+    $input = apiInput();
+    $eventId = filter_var(
+        $_GET["id"] ?? $_POST["event_id"] ?? null,
+        FILTER_VALIDATE_INT
+    );
+
+    $statement = $connection->prepare(
+        "SELECT event_id, title, event_date, event_time, venue, category,
+                organizer, description, image
+         FROM events
+         WHERE event_id = ?
+         LIMIT 1"
+    );
+    $statement->bind_param("i", $eventId);
+    $statement->execute();
+    $current = $statement->get_result()->fetch_assoc();
+    $statement->close();
+
+    if (!$current) {
+        apiResponse(["error" => "Event not found."], 404);
+    }
+
+    $input = array_merge($current, $input);
+    $errors = adminEventErrors($input);
+    $image = $current["image"];
+
+    if (!$errors) {
+        try {
+            $image = adminStoreEventPoster($_FILES["poster"] ?? [])
+                ?? $image;
+        } catch (RuntimeException $exception) {
+            $errors[] = $exception->getMessage();
+        }
+    }
+
+    if ($errors) {
+        apiResponse(["errors" => $errors], 422);
+    }
+
+    $statement = $connection->prepare(
+        "UPDATE events
+         SET title = ?, event_date = ?, event_time = ?, venue = ?,
+             category = ?, organizer = ?, description = ?, image = ?
+         WHERE event_id = ?"
+    );
+
+    $statement->bind_param(
+        "ssssssssi",
+        $input["title"],
+        $input["event_date"],
+        $input["event_time"],
+        $input["venue"],
+        $input["category"],
+        $input["organizer"],
+        $input["description"],
+        $image,
+        $eventId
+    );
+
+    $statement->execute();
+    $statement->close();
+
+    apiResponse(["message" => "Event updated successfully."]);
+}
+
+======================================================================
+7. DELETE EVENT ASYNCHRONOUSLY
+======================================================================
+
+if ($method === "DELETE") {
+    $eventId = filter_var(
+        $_GET["id"] ?? null,
+        FILTER_VALIDATE_INT
+    );
+
+    $statement = $connection->prepare(
+        "DELETE FROM events WHERE event_id = ?"
+    );
+    $statement->bind_param("i", $eventId);
+    $statement->execute();
+    $deleted = $statement->affected_rows > 0;
+    $statement->close();
+
+    apiResponse(
+        [
+            "message" => $deleted
+                ? "Event deleted successfully."
+                : "Event not found."
+        ],
+        $deleted ? 200 : 404
+    );
+}
+
+======================================================================
+8. ADMIN FETCH API PAGE
+======================================================================
+
+// html/admin/events-api.php
+<section class="admin-card async-event-manager"
+         data-api-url="../../php/events-api.php"
+         data-csrf-token="<?= adminEscape(csrfToken()) ?>">
+    <button id="async-event-new" type="button">New event</button>
+    <button id="async-event-refresh" type="button">Refresh</button>
+
+    <p id="async-event-message" role="status" hidden></p>
+
+    <form id="async-event-form"
+          enctype="multipart/form-data"
+          hidden>
+        <input type="hidden" name="event_id">
+        <input name="title" required>
+        <input type="date" name="event_date" required>
+        <input name="event_time" required>
+        <input name="venue" required>
+        <input name="category" required>
+        <input name="organizer">
+        <textarea name="description" required></textarea>
+        <input type="file"
+               name="poster"
+               accept="image/jpeg,image/png,image/webp">
+        <button type="submit">Save event</button>
+    </form>
+
+    <table>
+        <tbody id="async-event-list">
+            <tr><td>Loading events...</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<script src="../../javascript/admin-events-api.js" defer></script>
+
+======================================================================
+9. FETCH HELPER AND ASYNCHRONOUS LIST
+======================================================================
+
+// javascript/admin-events-api.js
+const request = async (url, options = {}) => {
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            Accept: "application/json",
+            ...(options.headers || {})
+        }
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(
+            data.errors?.join(" ")
+            || data.error
+            || "Request failed."
+        );
+    }
+    return data;
+};
+
+const load = async () => {
+    const data = await request(apiUrl);
+    render(data.events);
+};
+
+load();
+
+======================================================================
+10. FETCH ADD AND UPDATE WITHOUT PAGE RELOAD
+======================================================================
+
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const id = form.elements.event_id.value;
+    const body = new FormData(form);
+    body.append("csrf_token", csrfToken);
+
+    // Existing records use PUT through a multipart POST override.
+    if (id) {
+        body.append("_method", "PUT");
+    }
+
+    const result = await request(
+        id ? `${apiUrl}?id=${encodeURIComponent(id)}` : apiUrl,
+        {
+            method: "POST",
+            body
+        }
+    );
+
+    showMessage(result.message);
+    resetForm();
+    await load();
+});
+
+======================================================================
+11. FETCH DELETE WITHOUT PAGE RELOAD
+======================================================================
+
+if (deleteId && confirm("Delete this event?")) {
+    const result = await request(`${apiUrl}?id=${deleteId}`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRF-Token": csrfToken
+        }
+    });
+
+    showMessage(result.message);
+    await load();
+}
+
+======================================================================
+12. DYNAMIC TABLE UPDATE
+======================================================================
+
+const render = (events) => {
+    list.replaceChildren();
+
+    if (!events.length) {
+        list.innerHTML =
+            "<tr><td colspan=\"6\">No events found.</td></tr>";
+        return;
+    }
+
+    events.forEach((event) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${escapeHtml(event.title)}</td>
+            <td>${escapeHtml(event.event_date)}
+                ${escapeHtml(event.event_time)}</td>
+            <td>${escapeHtml(event.venue)}</td>
+            <td>${escapeHtml(event.category)}</td>
+            <td>${event.image ? "Uploaded" : "None"}</td>
+            <td>
+                <button data-edit="${event.id}">Edit</button>
+                <button data-delete="${event.id}">Delete</button>
+            </td>`;
+        list.append(row);
+    });
+};
+
+// The page updates the table using DOM operations; no reload is used.
+
+======================================================================
+ENDPOINT SUMMARY
+======================================================================
+
+GET     php/events-api.php
+GET     php/events-api.php?id=EVENT_ID
+POST    php/events-api.php              Add event
+POST    php/events-api.php?id=ID
+        with _method=PUT                 Update event
+DELETE  php/events-api.php?id=EVENT_ID  Delete event
+
+All modifying operations require an active administrator session and CSRF
+token. The API returns JSON and the Fetch client updates the table
+asynchronously without a full page reload.

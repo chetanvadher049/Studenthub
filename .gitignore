@@ -2,3 +2,9 @@
 /php/registrations.json
 /php/registrations.txt
 /html/json/students.json
+.env
+.env.*
+!.env.example
+
+/html/uploads/events/*
+!/html/uploads/events/.htaccess

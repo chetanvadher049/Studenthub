@@ -12,7 +12,7 @@
 
     <link rel="stylesheet"
           href="css/profile.css">
-    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/shared.css?v=5">
 
 
 </head>
@@ -176,7 +176,7 @@
 
         <div class="profile-picture">
 
-            <img src="img.png"
+            <img /*src="img.png"*/
                  alt="Profile picture">
 
         </div>
@@ -510,13 +510,14 @@
      FOOTER
      ===================================================== -->
 
-<footer class="site-footer">
-
-    <p>
-        &copy; 2026 StudentHub.
-        All rights reserved.
-    </p>
-
+<footer class="studenthub-footer studenthub-footer--compact">
+    <nav aria-label="Student account links">
+        <a href="index.html">Home</a>
+        <a href="dashboard.php">Dashboard</a>
+        <a href="profile.php">Profile</a>
+        <a href="contact.html">Help</a>
+    </nav>
+    <p class="studenthub-footer__legal">&copy; 2026 StudentHub.</p>
 </footer>
 
 
@@ -529,6 +530,7 @@
         defer></script>
 
 
+<script src="../javascript/session-nav.js" defer></script>
 </body>
 
 </html>

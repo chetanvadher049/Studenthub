@@ -1,2 +1,3 @@
 RewriteEngine On
 RewriteRule ^(dashboard|profile)\.html$ $1.php [L]
+RewriteRule ^admin\.html$ admin/dashboard.php [L]

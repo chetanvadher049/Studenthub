@@ -12,7 +12,7 @@
 
     <link rel="stylesheet"
           href="css/events.css">
-    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/shared.css?v=5">
 
 </head>
 
@@ -268,203 +268,6 @@
                 id="eventList"
                 class="event-list"
             >
-
-
-                <!-- EVENT 1 -->
-
-                <article
-                    class="event-item"
-                    data-category="Workshop"
-                    data-title="Technical Workshop"
-                    data-description="Learn about new technologies and development."
-                    data-date="15 September 2026"
-                >
-
-                    <div class="event-image">
-                        📚
-                    </div>
-
-                    <div class="event-details">
-
-                        <div class="event-category">
-                            Workshop
-                        </div>
-
-                        <h2>
-                            Technical Workshop
-                        </h2>
-
-                        <p>
-                            Learn about new technologies
-                            and development.
-                        </p>
-
-                        <div class="event-meta">
-
-                            <time>
-                                📅 15 September 2026
-                            </time>
-
-                        </div>
-
-                    </div>
-
-                    <button
-                        class="view-details"
-                        type="button"
-                    >
-                        View Details
-                    </button>
-
-                </article>
-
-
-                <!-- EVENT 2 -->
-
-                <article
-                    class="event-item"
-                    data-category="Competition"
-                    data-title="College Hackathon"
-                    data-description="Participate in an exciting coding competition."
-                    data-date="25 September 2026"
-                >
-
-                    <div class="event-image">
-                        💻
-                    </div>
-
-                    <div class="event-details">
-
-                        <div class="event-category">
-                            Competition
-                        </div>
-
-                        <h2>
-                            College Hackathon
-                        </h2>
-
-                        <p>
-                            Participate in an exciting
-                            coding competition.
-                        </p>
-
-                        <div class="event-meta">
-
-                            <time>
-                                📅 25 September 2026
-                            </time>
-
-                        </div>
-
-                    </div>
-
-                    <button
-                        class="view-details"
-                        type="button"
-                    >
-                        View Details
-                    </button>
-
-                </article>
-
-
-                <!-- EVENT 3 -->
-
-                <article
-                    class="event-item"
-                    data-category="Sports"
-                    data-title="Sports Day"
-                    data-description="Annual sports activities for students."
-                    data-date="5 October 2026"
-                >
-
-                    <div class="event-image">
-                        🏆
-                    </div>
-
-                    <div class="event-details">
-
-                        <div class="event-category">
-                            Sports
-                        </div>
-
-                        <h2>
-                            Sports Day
-                        </h2>
-
-                        <p>
-                            Annual sports activities
-                            for students.
-                        </p>
-
-                        <div class="event-meta">
-
-                            <time>
-                                📅 5 October 2026
-                            </time>
-
-                        </div>
-
-                    </div>
-
-                    <button
-                        class="view-details"
-                        type="button"
-                    >
-                        View Details
-                    </button>
-
-                </article>
-
-
-                <!-- EVENT 4 -->
-
-                <article
-                    class="event-item"
-                    data-category="Cultural"
-                    data-title="Cultural Festival"
-                    data-description="Join students for cultural and creative activities."
-                    data-date="15 October 2026"
-                >
-
-                    <div class="event-image">
-                        🎭
-                    </div>
-
-                    <div class="event-details">
-
-                        <div class="event-category">
-                            Cultural
-                        </div>
-
-                        <h2>
-                            Cultural Festival
-                        </h2>
-
-                        <p>
-                            Join students for cultural
-                            and creative activities.
-                        </p>
-
-                        <div class="event-meta">
-
-                            <time>
-                                📅 15 October 2026
-                            </time>
-
-                        </div>
-
-                    </div>
-
-                    <button
-                        class="view-details"
-                        type="button"
-                    >
-                        View Details
-                    </button>
-
-                </article>
-
             </div>
 
 
@@ -559,6 +362,8 @@
                 📅 15 September 2026
             </p>
 
+            <p id="modalEventMeta" class="modal-event-meta" hidden></p>
+
             <p id="eventRegistrationMessage" class="event-registration-message"
                role="status" hidden></p>
 
@@ -579,23 +384,47 @@
          FOOTER
          ===================================================== -->
 
-    <footer class="site-footer">
-
-        <p>
-            &copy; 2026 StudentHub.
-            All rights reserved.
-        </p>
-
+    <footer class="studenthub-footer">
+        <div class="studenthub-footer__inner">
+            <div class="studenthub-footer__columns">
+                <section class="studenthub-footer__column">
+                    <h2>About StudentHub</h2>
+                    <ul><li><a href="about.html">About Us</a></li><li><a href="events.html">Campus Events</a></li><li><a href="admin.html">Administration</a></li></ul>
+                </section>
+                <section class="studenthub-footer__column">
+                    <h2>My StudentHub</h2>
+                    <ul><li><a href="profile.php">My Profile</a></li><li><a href="dashboard.php">Dashboard</a></li><li><a href="register.html">Create an Account</a></li></ul>
+                </section>
+                <section class="studenthub-footer__column">
+                    <h2>Help &amp; FAQs</h2>
+                    <ul><li><a href="faq.html">Frequently Asked Questions</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="mailto:info@studenthub.com">Email StudentHub</a></li></ul>
+                </section>
+                <section class="studenthub-footer__column">
+                    <h2>Explore</h2>
+                    <ul><li><a href="events.html">Upcoming Events</a></li><li><a href="about.html">Student Resources</a></li><li><a href="index.html">Home</a></li></ul>
+                </section>
+            </div>
+            <div class="studenthub-footer__bottom">
+<div class="studenthub-footer__connect">
+                    <h2>Connect</h2>
+                    <nav class="studenthub-footer__icons" aria-label="StudentHub quick links">
+                        <a href="index.html" aria-label="Home">⌂</a><a href="events.html" aria-label="Events">▦</a><a href="faq.html" aria-label="Help and FAQs">?</a><a href="mailto:info@studenthub.com" aria-label="Email StudentHub">✉</a>
+                    </nav>
+                </div>
+            </div>
+            <p class="studenthub-footer__legal">&copy; 2026 StudentHub. All rights reserved.</p>
+        </div>
     </footer>
 
 
     <!-- JAVASCRIPT -->
 
     <script
-        src="../javascript/events.js?v=2"
+        src="../javascript/events.js?v=5"
         defer
     ></script>
 
+<script src="../javascript/session-nav.js" defer></script>
 </body>
 
 </html>

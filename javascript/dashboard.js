@@ -337,6 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     eventName,
 
+                    event.dataset.text ||
                     "This is an upcoming StudentHub event. " +
                     "Click View All Events for complete details."
 

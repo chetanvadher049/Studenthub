@@ -24,31 +24,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 event.stopPropagation();
 
                 sidebar.classList.toggle("active");
-
-
-                if (sidebar.classList.contains("active")) {
-
-                    menuToggle.innerHTML = "✕";
-
-                    menuToggle.setAttribute(
-                        "aria-expanded",
-                        "true"
-                    );
-
-                    menuToggle.setAttribute(
-                        "aria-label",
-                        "Close navigation menu"
-                    );
-
-                } else {
-
-                    showHamburger();
-
+                const isOpen = sidebar.classList.contains("active");
+                menuToggle.setAttribute("aria-expanded", String(isOpen));
+                menuToggle.setAttribute(
+                    "aria-label",
+                    isOpen ? "Close navigation menu" : "Open navigation menu"
+                );
+                const backdrop = document.getElementById("sidebarBackdrop");
+                if (backdrop) {
+                    backdrop.classList.toggle("active", isOpen);
                 }
 
             }
         );
 
+        const backdrop = document.getElementById("sidebarBackdrop");
+        if (backdrop) {
+            backdrop.addEventListener("click", closeSidebar);
+        }
 
         // ==========================================
         // CLOSE MENU WHEN CLICKING OUTSIDE
@@ -60,12 +53,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (
                     sidebar.classList.contains("active") &&
-                    !event.target.closest(".menu-container")
+                    !event.target.closest(".menu-container") &&
+                    !event.target.closest("#sidebar")
                 ) {
 
-                    sidebar.classList.remove("active");
-
-                    showHamburger();
+                    closeSidebar();
 
                 }
 
@@ -87,9 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "click",
                 function () {
 
-                    sidebar.classList.remove("active");
-
-                    showHamburger();
+                    closeSidebar();
 
                 }
             );
@@ -109,11 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        menuToggle.innerHTML = `
-            <span></span>
-            <span></span>
-            <span></span>
-        `;
+        menuToggle.innerHTML = '<i class="bi bi-list fs-4" aria-hidden="true"></i>';
 
         menuToggle.setAttribute(
             "aria-expanded",
@@ -125,6 +111,20 @@ document.addEventListener("DOMContentLoaded", function () {
             "Open navigation menu"
         );
 
+    }
+
+    function closeSidebar() {
+        if (!sidebar || !menuToggle) {
+            return;
+        }
+        sidebar.classList.remove("active");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation menu");
+        const backdrop = document.getElementById("sidebarBackdrop");
+        if (backdrop) {
+            backdrop.classList.remove("active");
+        }
+        showHamburger();
     }
 
 

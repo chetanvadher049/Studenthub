@@ -1,27 +1,5 @@
 <?php
 
-// =====================================================
-// STUDENTHUB LOGIN
-// =====================================================
-//
-// Database : studenthub
-// Table    : student
-//
-// Columns:
-// student_id
-// student_name
-// email
-// mobile_no
-// gender
-// password
-//
-// =====================================================
-
-
-// =====================================================
-// START SESSION
-// =====================================================
-
 require_once __DIR__ . "/auth.php";
 studenthub_start_session();
 
@@ -30,201 +8,171 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
-try {
-    $conn = studenthub_db();
-
-    // =================================================
-    // GET LOGIN DATA
-    // =================================================
-
-    $emailInput = $_POST["email"] ?? "";
-    $passwordInput = $_POST["password"] ?? "";
-    if (!is_string($emailInput) || !is_string($passwordInput)) {
-        showError("Please enter a valid email address and password.");
-    }
-
-    $email = trim($emailInput);
-    $password = $passwordInput;
-
-
-    // =================================================
-    // VALIDATE EMPTY VALUES
-    // =================================================
-
-    if (
-        $email === "" ||
-        $password === ""
-    ) {
-
-        showError(
-            "Please enter email and password."
-        );
-    }
-
-
-    // =================================================
-    // VALIDATE EMAIL
-    // =================================================
-
-    if (
-        !filter_var(
-            $email,
-            FILTER_VALIDATE_EMAIL
-        )
-    ) {
-
-        showError(
-            "Please enter a valid email address."
-        );
-    }
-
-
-    // =================================================
-    // FIND STUDENT
-    // =================================================
-
-    $stmt = $conn->prepare(
-        "SELECT
-            student_id,
-            student_name,
-            email,
-            mobile_no,
-            gender,
-            course,
-            academic_year,
-            password
-         FROM student
-         WHERE email = ?
-         LIMIT 1"
-    );
-
-
-    $stmt->bind_param(
-        "s",
-        $email
-    );
-
-
-    $stmt->execute();
-
-
-    $result =
-        $stmt->get_result();
-
-
-    // =================================================
-    // CHECK USER EXISTS
-    // =================================================
-
-    if (
-        $result->num_rows !== 1
-    ) {
-
-        $stmt->close();
-
-        showError(
-            "Invalid email or password."
-        );
-    }
-
-
-    // =================================================
-    // GET STUDENT DATA
-    // =================================================
-
-    $student =
-        $result->fetch_assoc();
-
-
-    // =================================================
-    // CHECK PASSWORD
-    // =================================================
-
-    if (
-        !password_verify(
-            $password,
-            $student["password"]
-        )
-    ) {
-
-        $stmt->close();
-
-        showError(
-            "Invalid email or password."
-        );
-    }
-
-
-    // =================================================
-    // LOGIN SUCCESS
-    // =================================================
-
-    session_regenerate_id(true);
-
-
-    $_SESSION["logged_in"] =
-        true;
-
-
-    $_SESSION["student_id"] =
-        $student["student_id"];
-
-
-    $_SESSION["student_name"] =
-        $student["student_name"];
-
-
-    $_SESSION["student_email"] =
-        $student["email"];
-
-
-    $_SESSION["student_mobile"] =
-        $student["mobile_no"];
-
-
-    $_SESSION["student_gender"] =
-        $student["gender"];
-
-
-    // =================================================
-    // CLOSE CONNECTION
-    // =================================================
-
-    $stmt->close();
-
-    $conn->close();
-
-
-    // =================================================
-    // REDIRECT AFTER LOGIN
-    // =================================================
-
-    $returnTo = $_POST["return_to"] ?? "";
-    $destination = $returnTo === "events.html"
-        ? "../html/events.html"
-        : "../html/dashboard.php";
-    header("Location: " . $destination);
-
-    exit;
-
-
+$loginMode = $_POST["user_type"] ?? "student";
+if (!is_string($loginMode) || !in_array($loginMode, ["student", "admin"], true)) {
+    showError("Invalid username or password.", 401);
 }
 
+if (!verifyCsrfToken($_POST["csrf_token"] ?? null)) {
+    showError("Your login form expired. Reload the page and try again.", 403, $loginMode);
+}
 
-// =====================================================
-// DATABASE ERROR
-// =====================================================
-
-catch (
-    mysqli_sql_exception $e
+$identifier = $_POST["identifier"] ?? "";
+$password = $_POST["password"] ?? "";
+if (
+    !is_string($identifier) ||
+    !is_string($password) ||
+    trim($identifier) === "" ||
+    $password === "" ||
+    strlen($identifier) > 255 ||
+    strlen($password) > 255
 ) {
+    showError("Invalid username or password.", 401, $loginMode);
+}
+$identifier = trim($identifier);
 
-    error_log("StudentHub login database error: " . $e->getMessage());
-    http_response_code(500);
-    showError(
-        "Sign-in is temporarily unavailable. Please try again shortly.",
-        500
+$throttleKey = hash(
+    "sha256",
+    $loginMode . "|" . ($_SERVER["REMOTE_ADDR"] ?? "unknown") . "|" . strtolower($identifier)
+);
+
+try {
+    $database = $loginMode === "student"
+        ? "studenthub"
+        : (getenv("STUDENTHUB_ADMIN_DB_NAME") ?: "studenthub");
+    $connection = studenthub_db($database);
+
+    if ($loginMode === "admin" && loginIsThrottled($connection, $throttleKey)) {
+        $connection->close();
+        showError("Invalid username or password. Please try again later.", 429, $loginMode);
+    }
+
+    if ($loginMode === "admin") {
+        $statement = $connection->prepare(
+            "SELECT id, full_name, email, password_hash, role
+             FROM admins
+             WHERE (email = ? OR username = ?) AND status = 'active'
+             LIMIT 1"
+        );
+        $statement->bind_param("ss", $identifier, $identifier);
+        $statement->execute();
+        $account = $statement->get_result()->fetch_assoc();
+    } else {
+        $statement = $connection->prepare(
+            "SELECT student_id AS id, student_name AS full_name,
+                    email, password
+             FROM student
+             WHERE email = ? OR username = ?
+             LIMIT 1"
+        );
+        $statement->bind_param("ss", $identifier, $identifier);
+        $statement->execute();
+        $account = $statement->get_result()->fetch_assoc();
+    }
+
+    $storedPassword = $account["password_hash"] ?? $account["password"] ?? "";
+    if (!$account || !password_verify($password, $storedPassword)) {
+        $statement->close();
+        if ($loginMode === "admin") {
+            recordFailedLogin($connection, $throttleKey);
+        }
+        $connection->close();
+        showError("Invalid username or password.", 401, $loginMode);
+    }
+
+    if ($loginMode === "admin") {
+        $adminId = (int) $account["id"];
+        $lastLogin = $connection->prepare(
+            "UPDATE admins SET last_login_at = CURRENT_TIMESTAMP WHERE id = ?"
+        );
+        $lastLogin->bind_param("i", $adminId);
+        $lastLogin->execute();
+        $lastLogin->close();
+        $role = $account["role"];
+    } else {
+        $role = "student";
+    }
+
+    if ($loginMode === "admin") {
+        clearLoginFailures($connection, $throttleKey);
+    }
+    $statement->close();
+    $connection->close();
+
+    session_regenerate_id(true);
+    $_SESSION = [
+        "authenticated" => true,
+        "user_id" => $loginMode === "student"
+            ? (string) $account["id"]
+            : (int) $account["id"],
+        "user_type" => $loginMode,
+        "role" => $role,
+        "user_name" => $account["full_name"],
+        "last_activity" => time(),
+        "studenthub_csrf" => bin2hex(random_bytes(32)),
+    ];
+
+    if ($loginMode === "admin") {
+        header("Location: ../html/admin/dashboard.php");
+        exit;
+    }
+
+    $returnTo = $_POST["return_to"] ?? "";
+    header("Location: " . ($returnTo === "events.html"
+        ? "../html/events.html"
+        : "../html/dashboard.php"));
+    exit;
+} catch (mysqli_sql_exception $exception) {
+    error_log("StudentHub login database error: " . $exception->getMessage());
+    http_response_code(503);
+    showError("Sign-in is temporarily unavailable. Please try again shortly.", 503, $loginMode);
+}
+
+function loginIsThrottled(mysqli $connection, string $key): bool
+{
+    $statement = $connection->prepare(
+        "SELECT locked_until FROM login_attempts WHERE attempt_key = ? LIMIT 1"
     );
+    $statement->bind_param("s", $key);
+    $statement->execute();
+    $attempt = $statement->get_result()->fetch_assoc();
+    $statement->close();
+
+    return $attempt
+        && $attempt["locked_until"] !== null
+        && strtotime($attempt["locked_until"]) > time();
+}
+
+function recordFailedLogin(mysqli $connection, string $key): void
+{
+    $statement = $connection->prepare(
+        "INSERT INTO login_attempts (attempt_key, attempts, window_started_at)
+         VALUES (?, 1, CURRENT_TIMESTAMP)
+         ON DUPLICATE KEY UPDATE
+            attempts = IF(window_started_at < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 15 MINUTE), 1, attempts + 1),
+            locked_until = IF(window_started_at < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 15 MINUTE), NULL, locked_until),
+            window_started_at = IF(window_started_at < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 15 MINUTE), CURRENT_TIMESTAMP, window_started_at)"
+    );
+    $statement->bind_param("s", $key);
+    $statement->execute();
+    $statement->close();
+
+    $statement = $connection->prepare(
+        "UPDATE login_attempts
+         SET locked_until = IF(attempts >= 5, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 15 MINUTE), locked_until)
+         WHERE attempt_key = ?"
+    );
+    $statement->bind_param("s", $key);
+    $statement->execute();
+    $statement->close();
+}
+
+function clearLoginFailures(mysqli $connection, string $key): void
+{
+    $statement = $connection->prepare("DELETE FROM login_attempts WHERE attempt_key = ?");
+    $statement->bind_param("s", $key);
+    $statement->execute();
+    $statement->close();
 }
 
 
@@ -232,9 +180,15 @@ catch (
 // ERROR FUNCTION
 // =====================================================
 
-function showError(string $message, int $statusCode = 400): void
+function showError(
+    string $message,
+    int $statusCode = 400,
+    string $loginMode = "student"
+): void
 {
     http_response_code($statusCode);
+    $loginUrl = "../html/login.html"
+        . ($loginMode === "admin" ? "?mode=admin" : "");
 ?>
 
 <!DOCTYPE html>
@@ -255,7 +209,7 @@ function showError(string $message, int $statusCode = 400): void
         StudentHub - Login Error
     </title>
 
-
+    <link rel="stylesheet" href="../html/css/shared.css">
     <style>
 
         * {
@@ -268,11 +222,11 @@ function showError(string $message, int $statusCode = 400): void
 
             min-height: 100vh;
 
-            display: flex;
+            align-items: stretch;
 
-            align-items: center;
+            justify-content: flex-start;
 
-            justify-content: center;
+            padding: 0;
 
             background: #f4f7fb;
 
@@ -287,6 +241,8 @@ function showError(string $message, int $statusCode = 400): void
             width: 90%;
 
             max-width: 500px;
+
+            margin: auto;
 
             background: white;
 
@@ -341,6 +297,13 @@ function showError(string $message, int $statusCode = 400): void
             background: #3730a3;
         }
 
+        .studenthub-footer a {
+            margin: 0;
+            padding: 0;
+            background: none;
+            border-radius: 0;
+        }
+
     </style>
 
 </head>
@@ -364,7 +327,7 @@ function showError(string $message, int $statusCode = 400): void
             ?>
         </p>
 
-        <a href="../html/login.html">
+        <a href="<?= htmlspecialchars($loginUrl, ENT_QUOTES, "UTF-8") ?>">
             Try Again
         </a>
 
@@ -373,6 +336,11 @@ function showError(string $message, int $statusCode = 400): void
         </a>
 
     </div>
+    <?php
+    $footerPagePrefix = "../html/";
+    $footerVariant = "minimal";
+    require __DIR__ . "/footer.php";
+    ?>
 
 </body>
 

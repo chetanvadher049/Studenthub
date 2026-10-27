@@ -200,7 +200,7 @@
 
         }
     </style>
-    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/shared.css?v=5">
 
 </head>
 
@@ -376,6 +376,7 @@
         <form class="contact-form"
               action="../php/contact.php"
               method="post">
+            <input type="hidden" name="csrf_token" value="">
 
             <div class="contact-honeypot" aria-hidden="true">
                 <label for="contact-company">Leave this field empty</label>
@@ -574,13 +575,39 @@
      FOOTER
      ===================================================== -->
 
-<footer class="site-footer">
-
-    <p>
-        &copy; 2026 StudentHub.
-        All rights reserved.
-    </p>
-
+<footer class="studenthub-footer">
+    <div class="studenthub-footer__inner">
+        <div class="studenthub-footer__columns">
+            <section class="studenthub-footer__column">
+                <h2>About StudentHub</h2>
+                <ul><li><a href="about.html">About Us</a></li><li><a href="events.html">Campus Events</a></li><li><a href="admin.html">Administration</a></li></ul>
+            </section>
+            <section class="studenthub-footer__column">
+                <h2>My StudentHub</h2>
+                <ul><li><a href="profile.php">My Profile</a></li><li><a href="dashboard.php">Dashboard</a></li><li><a href="register.html">Create an Account</a></li></ul>
+            </section>
+            <section class="studenthub-footer__column">
+                <h2>Help &amp; FAQs</h2>
+                <ul><li><a href="faq.html">Frequently Asked Questions</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="mailto:info@studenthub.com">Email StudentHub</a></li></ul>
+            </section>
+            <section class="studenthub-footer__column">
+                <h2>Explore</h2>
+                <ul><li><a href="events.html">Upcoming Events</a></li><li><a href="about.html">Student Resources</a></li><li><a href="index.html">Home</a></li></ul>
+            </section>
+        </div>
+        <div class="studenthub-footer__bottom">
+<div class="studenthub-footer__connect">
+                <h2>Connect</h2>
+                <nav class="studenthub-footer__icons" aria-label="StudentHub quick links">
+                    <a href="index.html" aria-label="Home">⌂</a>
+                    <a href="events.html" aria-label="Events">▦</a>
+                    <a href="faq.html" aria-label="Help and FAQs">?</a>
+                    <a href="mailto:info@studenthub.com" aria-label="Email StudentHub">✉</a>
+                </nav>
+            </div>
+        </div>
+        <p class="studenthub-footer__legal">&copy; 2026 StudentHub. All rights reserved.</p>
+    </div>
 </footer>
 
 
@@ -591,6 +618,7 @@
 
 <script src="../javascript/contact.js?v=2" defer></script>
 
+<script src="../javascript/session-nav.js" defer></script>
 </body>
 
 </html>

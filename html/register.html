@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudentHub - Register</title>
     <link rel="stylesheet" href="css/register.css">
-    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/shared.css?v=5">
 </head>
 
 <body>
@@ -51,7 +51,8 @@
         </div>
 
         <form class="register-form" id="registerForm"
-              action="../php/register.php" method="POST">
+              action="../php/register.php" method="POST" novalidate>
+            <input type="hidden" name="csrf_token" id="csrf_token" value="">
             <p class="form-feedback" id="formFeedback"
                role="alert" aria-live="assertive" hidden></p>
 
@@ -65,10 +66,23 @@
             </div>
 
             <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username"
+                       placeholder="Choose a username"
+                       minlength="3" maxlength="30"
+                       pattern="[A-Za-z0-9_]{3,30}"
+                       autocomplete="username"
+                       aria-describedby="usernameHint" required>
+                <small id="usernameHint">Use 3–30 letters, numbers or underscores.</small>
+            </div>
+
+            <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email"
                        placeholder="Enter your email address"
-                       maxlength="100" autocomplete="email" required>
+                       maxlength="100" autocomplete="email"
+                       aria-describedby="emailHint" required>
+                <small id="emailHint">Enter a valid email address.</small>
             </div>
 
             <div class="form-group">
@@ -87,6 +101,20 @@
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label for="course">Course</label>
+                <input type="text" id="course" name="course"
+                       placeholder="Enter your course"
+                       maxlength="100" autocomplete="off" required>
+            </div>
+
+            <div class="form-group">
+                <label for="academic_year">Academic Year</label>
+                <input type="text" id="academic_year" name="academic_year"
+                       placeholder="e.g. 2nd Year"
+                       maxlength="30" required>
             </div>
 
             <div class="form-group">
@@ -122,10 +150,16 @@
     </section>
 </main>
 
-<footer class="site-footer">
-    <p>&copy; 2026 StudentHub. All rights reserved.</p>
+<footer class="studenthub-footer studenthub-footer--compact">
+    <nav aria-label="Account help links">
+        <a href="index.html">Home</a>
+        <a href="login.html">Sign in</a>
+        <a href="contact.html">Help</a>
+    </nav>
+    <p class="studenthub-footer__legal">&copy; 2026 StudentHub.</p>
 </footer>
 
-<script src="../javascript/register.js?v=2" defer></script>
+<script src="../javascript/register.js?v=3" defer></script>
+<script src="../javascript/session-nav.js" defer></script>
 </body>
 </html>

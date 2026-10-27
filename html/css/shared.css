@@ -282,6 +282,151 @@ button[type="submit"]:hover {
     color: #d2deef;
 }
 
+.studenthub-footer {
+    width: 100%;
+    margin-top: auto;
+    padding: 38px clamp(20px, 5vw, 64px) 22px;
+    background: #050505;
+    color: #f8fafc;
+    font-size: 0.78rem;
+}
+
+.studenthub-footer a {
+    color: #d1d5db;
+    text-decoration: none;
+}
+
+.studenthub-footer a:hover,
+.studenthub-footer a:focus-visible {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.studenthub-footer__inner {
+    width: min(100%, 1240px);
+    margin-inline: auto;
+}
+
+.studenthub-footer__columns {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+    padding-bottom: 28px;
+}
+
+.studenthub-footer__column h2,
+.studenthub-footer__connect h2 {
+    margin: 0 0 12px;
+    color: #ffffff !important;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.studenthub-footer__column ul {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.studenthub-footer__column a {
+    display: inline-block;
+    line-height: 1.45;
+}
+
+.studenthub-footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #303030;
+}
+
+.studenthub-footer__connect {
+    text-align: right;
+}
+
+.studenthub-footer__icons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.studenthub-footer__icons a {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #777777;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.studenthub-footer__legal {
+    margin: 18px 0 0;
+    color: #a3a3a3 !important;
+    font-size: 0.72rem;
+}
+
+.studenthub-footer--compact,
+.studenthub-footer--minimal {
+    padding: 14px 20px;
+    text-align: center;
+}
+
+.studenthub-footer--compact nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 20px;
+}
+
+.studenthub-footer--compact .studenthub-footer__legal,
+.studenthub-footer--minimal .studenthub-footer__legal {
+    margin: 8px 0 0;
+}
+
+body.dark-theme .studenthub-footer {
+    background: #050505;
+    color: #f8fafc;
+}
+
+body.dark-theme .studenthub-footer :is(h2, p, a) {
+    color: #f8fafc !important;
+}
+
+@media (max-width: 700px) {
+    .studenthub-footer__columns {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px 18px;
+    }
+
+    .studenthub-footer__bottom {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .studenthub-footer__connect {
+        text-align: left;
+    }
+
+    .studenthub-footer__icons {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 380px) {
+    .studenthub-footer__columns {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 12px;
+    }
+}
+
 body.dark-theme .site-header,
 body.dark-theme .top-header,
 body.dark-theme .dropdown-menu,
@@ -380,5 +525,150 @@ body.dark-theme .dropdown-menu a[aria-current="page"] {
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
+    }
+}
+
+.site-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 12px;
+}
+
+.site-header > .menu-container {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+}
+
+.site-header > .logo {
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    justify-self: center;
+    white-space: nowrap;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.site-header > .logo .logo-text {
+    font-size: inherit !important;
+    font-weight: 700 !important;
+}
+
+.site-header > .header-actions,
+.site-header > .header-right,
+.site-header > .auth-buttons {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    margin-left: 0;
+}
+
+.site-header > .logo .logo-icon {
+    font-size: 1.5rem !important;
+    line-height: 1;
+}
+
+.site-header > .logo {
+    font-size: 1.5rem !important;
+}
+
+.top-header .header-content {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: none;
+}
+
+.top-header .header-brand {
+    display: contents;
+}
+
+.top-header .header-brand > .menu-details {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+}
+
+.top-header .header-brand > .logo {
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    justify-self: center;
+    white-space: nowrap;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.top-header .header-brand > .logo .logo-text {
+    font-size: inherit !important;
+    font-weight: 700 !important;
+}
+
+.top-header .header-brand > .logo .logo-icon {
+    font-size: 1.5rem !important;
+    line-height: 1;
+}
+
+.top-header .header-brand > .logo {
+    font-size: 1.5rem !important;
+}
+
+.top-header .header-actions {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+}
+
+@media (max-width: 640px) {
+    .site-header {
+        grid-template-columns: minmax(40px, 1fr) auto minmax(40px, 1fr);
+        row-gap: 8px;
+    }
+
+    .site-header > .header-actions,
+    .site-header > .header-right,
+    .site-header > .auth-buttons {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-self: end;
+    }
+
+    .site-header > .logo,
+    .top-header .header-brand > .logo {
+        font-size: 1.25rem !important;
+    }
+
+    .site-header > .logo .logo-text,
+    .top-header .header-brand > .logo .logo-text {
+        font-size: inherit !important;
+    }
+
+    .site-header > .logo .logo-icon,
+    .top-header .header-brand > .logo .logo-icon {
+        font-size: 1.25rem !important;
+    }
+
+    .site-header > .logo .logo-text {
+        display: inline;
+    }
+
+    .top-header .header-content {
+        grid-template-columns: minmax(40px, 1fr) auto minmax(40px, 1fr);
+    }
+
+    .top-header .header-actions {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-self: end;
     }
 }

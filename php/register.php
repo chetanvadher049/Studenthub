@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . "/dbconnect.php";
+require_once __DIR__ . "/auth.php";
+studenthub_start_session();
 
 try {
     if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -12,18 +13,29 @@ try {
         );
     }
 
-    $student_name = trim(postedString("student_name"));
-    $email        = trim(postedString("email"));
-    $mobile_no    = trim(postedString("mobile_no"));
-    $gender       = trim(postedString("gender"));
-    $password     = postedString("password");
-    $confirm      = postedString("confirm_password");
-    $terms        = isset($_POST["terms"]);
+    if (!studenthub_verify_csrf_token($_POST["csrf_token"] ?? null)) {
+        registrationError(
+            "Registration form expired",
+            "Reload the registration page and submit the form again.",
+            403
+        );
+    }
+
+    $studentName = trim(postedString("student_name"));
+    $username = trim(postedString("username"));
+    $email = trim(postedString("email"));
+    $mobileNumber = trim(postedString("mobile_no"));
+    $gender = trim(postedString("gender"));
+    $course = trim(postedString("course"));
+    $academicYear = trim(postedString("academic_year"));
+    $password = postedString("password");
+    $confirmPassword = postedString("confirm_password");
+    $termsAccepted = isset($_POST["terms"]);
 
     if (
         !preg_match(
             "/^[\\p{L}\\p{M}][\\p{L}\\p{M}\\s.'’\\-]{1,99}$/u",
-            $student_name
+            $studentName
         )
     ) {
         registrationError(
@@ -32,17 +44,21 @@ try {
         );
     }
 
-    if (
-        !filter_var($email, FILTER_VALIDATE_EMAIL) ||
-        strlen($email) > 100
-    ) {
+    if (!preg_match("/^[A-Za-z0-9_]{3,30}$/", $username)) {
+        registrationError(
+            "Check your username",
+            "Use 3 to 30 letters, numbers or underscores for your username."
+        );
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 100) {
         registrationError(
             "Check your email",
             "Enter a valid email address of no more than 100 characters."
         );
     }
 
-    if (!preg_match("/^[0-9]{10}$/", $mobile_no)) {
+    if (!preg_match("/^[0-9]{10}$/", $mobileNumber)) {
         registrationError(
             "Check your mobile number",
             "Enter exactly 10 digits."
@@ -53,6 +69,20 @@ try {
 
     if (!in_array($gender, $allowed_gender, true)) {
         registrationError("Choose a gender", "Select one of the available options.");
+    }
+
+    if ($course === "" || strlen($course) > 100) {
+        registrationError(
+            "Check your course",
+            "Enter a course name of no more than 100 characters."
+        );
+    }
+
+    if ($academicYear === "" || strlen($academicYear) > 30) {
+        registrationError(
+            "Check your academic year",
+            "Enter an academic year of no more than 30 characters."
+        );
     }
 
 
@@ -71,82 +101,90 @@ try {
     }
 
 
-    if ($password !== $confirm) {
+    if ($password !== $confirmPassword) {
         registrationError(
             "Passwords do not match",
             "Enter the same password in both password fields."
         );
     }
 
-    if (!$terms) {
+    if (!$termsAccepted) {
         registrationError(
             "Terms required",
             "Accept the Terms & Conditions before creating your account."
         );
     }
 
-    $conn = studenthub_db();
+    /*
+     * The registration practical uses the legacy StudentHub database:
+     * studenthub.student. Keep the form-to-column mapping explicit because
+     * that table uses student_name, mobile_no and password column names.
+     */
+    $conn = studenthub_db("studenthub");
 
-    $check = $conn->prepare(
-        "SELECT student_id
+    $existing_account = $conn->prepare(
+        "SELECT email, username
          FROM student
-         WHERE email = ?
+         WHERE email = ? OR username = ?
          LIMIT 1"
     );
 
-    $check->bind_param("s", $email);
-    $check->execute();
-    $check->store_result();
+    $existing_account->bind_param("ss", $email, $username);
+    $existing_account->execute();
+    $existing_account->store_result();
 
-    if ($check->num_rows > 0) {
-
-        $check->close();
+    if ($existing_account->num_rows > 0) {
+        $existing_account->close();
         $conn->close();
 
         registrationError(
-            "Email already registered",
-            "An account already uses this email address. Try signing in instead.",
+            "Account details already in use",
+            "An account already uses this email address or username. Choose different details or sign in.",
             409
         );
     }
 
-    $check->close();
+    $existing_account->close();
 
-    $student_id = bin2hex(random_bytes(16));
-    $hashed_password = password_hash(
-        $password,
-        PASSWORD_DEFAULT
-    );
-
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+    $studentId = "STU_" . bin2hex(random_bytes(12));
 
     $stmt = $conn->prepare(
         "INSERT INTO student
         (
             student_id,
             student_name,
+            username,
             email,
             mobile_no,
             gender,
-            password,
-            time_stamp
+            course,
+            academic_year,
+            password
         )
-        VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)"
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
     );
 
     $stmt->bind_param(
-        "ssssss",
-        $student_id,
-        $student_name,
+        "sssssssss",
+        $studentId,
+        $studentName,
+        $username,
         $email,
-        $mobile_no,
+        $mobileNumber,
         $gender,
-        $hashed_password
+        $course,
+        $academicYear,
+        $passwordHash
     );
 
     $stmt->execute();
 
     $stmt->close();
     $conn->close();
+
+    header("Location: ../html/login.html?registered=1");
+    exit;
 
 ?>
 
@@ -162,6 +200,7 @@ try {
 
     <title>Registration Successful</title>
 
+    <link rel="stylesheet" href="../html/css/shared.css">
     <style>
 
         * {
@@ -169,24 +208,17 @@ try {
         }
 
         body {
-            margin: 0;
-            padding: 0;
-
+            align-items: stretch;
+            justify-content: flex-start;
             font-family: Arial, sans-serif;
-
             background: #f5f8ff;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            min-height: 100vh;
         }
 
         .success-box {
 
             width: 90%;
             max-width: 500px;
+            margin: auto;
 
             background: #ffffff;
 
@@ -278,53 +310,14 @@ try {
 
 <body>
 
-    <div class="success-box">
-
-        <div class="success-icon">
-            ✓
-        </div>
-
-        <h1>
-            Registration Successful!
-        </h1>
-
-        <p>
-            Your StudentHub account has been
-            created successfully.
-        </p>
-
-        <div class="student-id">
-
-            <strong>Student ID:</strong><br>
-
-            <?php
-            echo htmlspecialchars((string) $student_id, ENT_QUOTES, "UTF-8");
-            ?>
-
-        </div>
-
-        <a
-            href="../html/login.html"
-            class="btn"
-        >
-            Go to Login
-        </a>
-
-    </div>
-
-</body>
-
-</html>
-
 <?php
-
 } catch (mysqli_sql_exception $e) {
 
     if ((int) $e->getCode() === 1062) {
         http_response_code(409);
         registrationError(
-            "Email already registered",
-            "An account already uses this email address. Try signing in instead.",
+            "Account details already in use",
+            "An account already uses this email address or username. Choose different details or sign in.",
             409
         );
     }
@@ -333,7 +326,7 @@ try {
     http_response_code(500);
     registrationError(
         "Registration unavailable",
-        "We could not create your account right now. Check the database configuration and try again.",
+        "We could not create your account right now. Please try again later.",
         500
     );
 }
@@ -364,13 +357,14 @@ function registrationError(
         <link rel="stylesheet" href="../html/css/shared.css">
         <style>
             body {
-                align-items: center;
-                justify-content: center;
-                padding: 24px;
+                align-items: stretch;
+                justify-content: flex-start;
+                padding: 0;
             }
 
             .registration-error {
                 width: min(100%, 520px);
+                margin: auto;
                 padding: clamp(24px, 6vw, 40px);
                 border: 1px solid var(--border);
                 border-radius: 16px;
@@ -405,6 +399,11 @@ function registrationError(
             <p><?= $safeMessage ?></p>
             <a href="../html/register.html">Back to registration</a>
         </main>
+        <?php
+        $footerPagePrefix = "../html/";
+        $footerVariant = "minimal";
+        require __DIR__ . "/footer.php";
+        ?>
     </body>
     </html>
     <?php

@@ -670,12 +670,14 @@ document.addEventListener(
                     item.className =
                         "faq-item";
 
+                    const answerId = `faq-answer-${faq.id}`;
 
                     item.innerHTML = `
 
                         <button
                             type="button"
                             class="faq-question"
+                            aria-controls="${answerId}"
                             aria-expanded="false">
 
                             <span
@@ -700,6 +702,7 @@ document.addEventListener(
 
                         <div
                             class="faq-answer"
+                            id="${answerId}"
                             style="display:none;">
 
                             <p>

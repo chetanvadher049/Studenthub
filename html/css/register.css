@@ -229,6 +229,11 @@ body {
     cursor: pointer;
 }
 
+.register-submit:disabled {
+    cursor: wait;
+    opacity: 0.75;
+}
+
 .register-submit:hover {
     background: #1d4ed8;
 }

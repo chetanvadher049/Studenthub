@@ -7,7 +7,7 @@
     <title>StudentHub - Login</title>
 
     <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/shared.css?v=5">
 </head>
 
 <body>
@@ -77,20 +77,28 @@
 
         <div class="login-header">
 
-            <p class="section-label">
-                Student Account
-            </p>
+            <p class="section-label" id="loginModeLabel">Student Account</p>
 
             <h1>
                 Welcome Back!
             </h1>
 
-            <p class="login-description">
+            <p class="login-description" id="loginDescription">
                 Sign in to access your StudentHub account.
             </p>
 
         </div>
 
+        <div class="login-mode-tabs" role="tablist" aria-label="Choose login type">
+            <button class="login-mode-tab active" type="button" role="tab"
+                    id="studentLoginTab" aria-selected="true" data-login-mode="student">
+                Student Login
+            </button>
+            <button class="login-mode-tab" type="button" role="tab"
+                    id="adminLoginTab" aria-selected="false" data-login-mode="admin">
+                Admin Login
+            </button>
+        </div>
 
         <form
             class="login-form"
@@ -101,22 +109,22 @@
         >
 
             <input type="hidden" name="return_to" id="return_to" value="">
-
-            <!-- EMAIL -->
+            <input type="hidden" name="user_type" id="user_type" value="student">
+            <input type="hidden" name="csrf_token" id="csrf_token" value="">
+            <p class="login-feedback" id="loginFeedback"
+               role="alert" aria-live="assertive" hidden></p>
 
             <div class="form-group">
 
-                <label for="login-email">
-                    Email Address
-                </label>
+                <label for="login-email" id="loginIdentifierLabel">Email or Username</label>
 
                 <input
-                    type="email"
+                    type="text"
                     id="login-email"
-                    name="email"
-                    placeholder="Enter your registered email"
-                    autocomplete="email"
-                    maxlength="100"
+                    name="identifier"
+                    placeholder="Enter your email or username"
+                    autocomplete="username"
+                    maxlength="255"
                     required
                 >
 
@@ -190,17 +198,18 @@
 </main>
 
 
-<footer class="site-footer">
-
-    <p>
-        &copy; 2026 StudentHub.
-        All rights reserved.
-    </p>
-
+<footer class="studenthub-footer studenthub-footer--compact">
+    <nav aria-label="Account help links">
+        <a href="index.html">Home</a>
+        <a href="register.html">Create an account</a>
+        <a href="contact.html">Help</a>
+    </nav>
+    <p class="studenthub-footer__legal">&copy; 2026 StudentHub.</p>
 </footer>
 
 
-<script src="../javascript/login.js?v=2" defer></script>
+<script src="../javascript/login.js?v=3" defer></script>
 
+<script src="../javascript/session-nav.js" defer></script>
 </body>
 </html>

@@ -9,8 +9,9 @@ StudentHub Portal is a multi-page student portal prototype developed as a Web De
 - **Primary Technologies:** HTML5 + CSS3 + JavaScript + PHP
 - **Implemented Pages:** 10
 - **JavaScript:** Implemented for page interactions
-- **Backend:** PHP login and registration endpoints included
+- **Backend:** PHP login, registration, contact, and event endpoints included
 - **Database:** Local setup/configuration required
+- **Shared footer:** Available across site pages with navigation and contact links
 - **Authentication:** Prototype; not production-hardened
 
 ---
@@ -182,7 +183,7 @@ StudentHub Portal
 
 **CSS:** `html/css/contact.css`
 
-**Limitation:** Form submission is not connected to a backend.
+Contact form submissions are saved through the PHP backend. The shared site footer provides site navigation and contact links.
 
 ---
 
@@ -391,12 +392,20 @@ StudentHub/
 │   └── register.js
 │
 ├── 📁 php/
+│   ├── footer.php
 │   ├── dbconnect.php
 │   ├── login.php
-│   └── register.php
-│
+│   ├── register.php
+│   ├── logout.php
+│   └── session-status.php
 └── 📁 wireframe/
 ```
+
+The shared `php/footer.php` partial is rendered on static and PHP-generated pages.
+
+When a student signs in, the shared session navigation displays Profile and Log out in the page header instead of Login and Register.
+
+Public information pages use the full footer. Login and registration pages and signed-in student pages use a compact footer, while generated result pages show only the copyright line.
 
 ---
 

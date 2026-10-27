@@ -12,20 +12,38 @@ document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.getElementById("sidebar");
 
     if (menuToggle && sidebar) {
+        const menuContainer = menuToggle.closest(".menu-container");
+
+        function closeMenu() {
+            sidebar.classList.remove("show");
+            menuToggle.classList.remove("active");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Open navigation menu");
+        }
 
         menuToggle.addEventListener("click", function () {
-
-            sidebar.classList.toggle("active");
-
-            // Change hamburger icon
-            if (sidebar.classList.contains("active")) {
-                menuToggle.innerHTML = "✕";
-            } else {
-                menuToggle.innerHTML = "☰";
-            }
-
+            const isOpen = sidebar.classList.toggle("show");
+            menuToggle.classList.toggle("active", isOpen);
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );
         });
 
+        document.addEventListener("click", function (event) {
+            if (
+                sidebar.classList.contains("show") &&
+                menuContainer &&
+                !menuContainer.contains(event.target)
+            ) {
+                closeMenu();
+            }
+        });
+
+        sidebar.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", closeMenu);
+        });
     }
 
 

@@ -1,0 +1,222 @@
+STUDENTHUB - DATABASE DESIGN AND MYSQL CONNECTION
+====================================================
+
+Aim:
+Design the StudentHub database with students, events and registrations tables,
+and create a PHP database connection using MySQL statements.
+
+The following code is extracted from the existing StudentHub project.
+
+
+1. DATABASE DESIGN - database/studenthub_db.sql
+------------------------------------------------
+
+CREATE DATABASE IF NOT EXISTS studenthub_db
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+USE studenthub_db;
+
+-- Students table
+CREATE TABLE IF NOT EXISTS students (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    full_name VARCHAR(100) NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NULL,
+    gender VARCHAR(10) NULL,
+    course VARCHAR(100) NULL,
+    academic_year VARCHAR(30) NULL,
+    enrollment_number VARCHAR(50) NULL,
+    profile_image VARCHAR(255) NULL,
+    status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_students_username (username),
+    UNIQUE KEY uq_students_email (email),
+    UNIQUE KEY uq_students_enrollment_number (enrollment_number)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Events table
+CREATE TABLE IF NOT EXISTS events (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    title VARCHAR(200) NOT NULL,
+    description TEXT NOT NULL,
+    event_date DATETIME NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NULL,
+    organizer VARCHAR(150) NULL,
+    poster_path VARCHAR(255) NULL,
+    created_by INT UNSIGNED NULL,
+    status ENUM('upcoming', 'completed', 'cancelled')
+        NOT NULL DEFAULT 'upcoming',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_events_event_date (event_date),
+    KEY idx_events_status (status),
+    KEY idx_events_category (category)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Registrations table
+CREATE TABLE IF NOT EXISTS registrations (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    student_id INT UNSIGNED NOT NULL,
+    event_id INT UNSIGNED NOT NULL,
+    registration_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('registered', 'cancelled')
+        NOT NULL DEFAULT 'registered',
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_registrations_student_event (student_id, event_id),
+    KEY idx_registrations_student (student_id),
+    KEY idx_registrations_event (event_id),
+    KEY idx_registrations_status (status),
+    CONSTRAINT fk_registrations_student
+        FOREIGN KEY (student_id) REFERENCES students (id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT fk_registrations_event
+        FOREIGN KEY (event_id) REFERENCES events (id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+2. PHP MYSQL DATABASE CONNECTION - php/dbconnect.php
+------------------------------------------------------
+
+<?php
+function studenthub_db(?string $databaseOverride = null): mysqli
+{
+    static $connections = [];
+
+    // Make MySQLi report connection and query errors.
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+    $host = getenv("STUDENTHUB_DB_HOST") ?: "127.0.0.1";
+    $username = getenv("STUDENTHUB_DB_USER") ?: "root";
+    $password = getenv("STUDENTHUB_DB_PASSWORD") ?: "";
+    $database = $databaseOverride
+        ?? (getenv("STUDENTHUB_DB_NAME") ?: "studenthub_db");
+    $port = (int) (getenv("STUDENTHUB_DB_PORT") ?: 3306);
+
+    $connection = new mysqli(
+        $host,
+        $username,
+        $password,
+        $database,
+        $port
+    );
+
+    // Support Unicode data safely.
+    $connection->set_charset("utf8mb4");
+
+    return $connection;
+}
+?>
+
+
+3. MYSQL STATEMENT TO INSERT A STUDENT - php/register.php
+-----------------------------------------------------------
+
+$passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+$stmt = $conn->prepare(
+    "INSERT INTO students
+    (
+        full_name,
+        username,
+        email,
+        password_hash,
+        phone,
+        gender,
+        course,
+        academic_year
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+);
+
+$stmt->bind_param(
+    "ssssssss",
+    $studentName,
+    $username,
+    $email,
+    $passwordHash,
+    $mobileNumber,
+    $gender,
+    $course,
+    $academicYear
+);
+
+$stmt->execute();
+
+
+4. MYSQL STATEMENT TO READ EVENTS - php/events.php
+---------------------------------------------------
+
+$connection = studenthub_db();
+
+$result = $connection->query(
+    "SELECT id,
+            title,
+            DATE_FORMAT(event_date, '%Y-%m-%d') AS date,
+            DATE_FORMAT(event_date, '%h:%i %p') AS time,
+            location AS venue,
+            COALESCE(category, '') AS category,
+            COALESCE(organizer, '') AS organizer,
+            description,
+            poster_path AS image,
+            status
+     FROM events
+     WHERE status <> 'cancelled'
+     ORDER BY event_date, id"
+);
+
+$events = $result->fetch_all(MYSQLI_ASSOC);
+
+
+5. MYSQL STATEMENT TO REGISTER A STUDENT FOR AN EVENT
+   - php/event-registration.php
+------------------------------------------------------
+
+// Check whether the student is already registered.
+$statement = $connection->prepare(
+    "SELECT id
+     FROM registrations
+     WHERE student_id = ? AND event_id = ?
+     LIMIT 1"
+);
+
+$statement->bind_param("ii", $studentId, $eventId);
+$statement->execute();
+
+// Insert a new registration.
+$statement = $connection->prepare(
+    "INSERT INTO registrations (student_id, event_id, status)
+     VALUES (?, ?, 'registered')"
+);
+
+$statement->bind_param("ii", $studentId, $eventId);
+$statement->execute();
+
+
+6. DATABASE RELATIONSHIP
+------------------------
+
+students (id)
+       |
+       | one student can have many registrations
+       v
+registrations (student_id, event_id)
+       ^
+       | one event can have many registrations
+       |
+events (id)
+
+The registrations table is the linking table between students and events.
+The unique key on (student_id, event_id) prevents the same student from
+registering for the same event more than once.
